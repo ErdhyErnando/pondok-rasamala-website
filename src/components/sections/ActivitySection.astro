@@ -1,0 +1,112 @@
+---
+import { activities, tx } from "../../data/home";
+import { localizePath, type Locale } from "../../lib/i18n";
+
+// Editorial two-column: text panel left, activity cards right.
+// No sticky-scroll theatrics — static grid, staggered CSS reveals.
+interface Props {
+	locale?: Locale;
+}
+
+const { locale = "id" } = Astro.props;
+const L = (p: string) => localizePath(p, locale);
+const icons = [
+	'<circle cx="12" cy="8" r="3.2" /><path d="M5 20c1.2-3.4 4-5 7-5s5.8 1.6 7 5" />',
+	'<path d="M3 18 9 11l4 4 3-3 5 6H3Z" /><circle cx="16.5" cy="8.5" r="2" />',
+	'<path d="M12 3c.8 3.2 3 5.6 6.5 6.5-2 .5-3.5 2-4.2 4.2-.5 1.6-.6 3.5-.6 5.3h-3.4c0-1.8-.1-3.7-.6-5.3-.7-2.2-2.2-3.7-4.2-4.2C8 9 10.2 6.6 11 3.5c.2-.5 1-.4 1-.5Z" />',
+];
+---
+
+<section class="activities">
+	<div class="container activities-grid">
+		<div class="activities-copy">
+			<p class="eyebrow reveal">{tx(activities.eyebrow, locale)}</p>
+			<h2 class="reveal">{tx(activities.title, locale)}</h2>
+			<p class="lead reveal">{tx(activities.description, locale)}</p>
+			<a href={L("/package/outbound/")} class="btn btn-primary btn-lg reveal">
+				{tx(activities.cta, locale)}
+			</a>
+		</div>
+		<ul class="activity-cards">
+			{activities.cards.map((c, i) => (
+				<li class="activity-card reveal">
+					<span class="icon-tile" aria-hidden="true">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={icons[i]} />
+					</span>
+					<div>
+						<h3>{tx(c.title, locale)}</h3>
+						<p>{tx(c.body, locale)}</p>
+					</div>
+				</li>
+			))}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.activities {
+		padding: var(--section-pad) 0;
+	}
+	.activities-grid {
+		display: grid;
+		grid-template-columns: 1fr 1.1fr;
+		gap: var(--spacing-3xl);
+		align-items: start;
+	}
+	.eyebrow {
+		font-size: var(--font-size-xs);
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--color-brand);
+		margin-bottom: var(--spacing-sm);
+	}
+	.activities-copy h2 {
+		font-size: var(--font-size-3xl);
+		font-weight: var(--font-weight-display);
+		letter-spacing: var(--tracking-tight);
+		text-wrap: balance;
+	}
+	.lead {
+		margin-top: var(--spacing-md);
+		font-size: var(--font-size-lg);
+		color: var(--color-muted);
+		line-height: var(--leading-relaxed);
+	}
+	.activities-copy .btn {
+		margin-top: var(--spacing-xl);
+	}
+	.activity-cards {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-md);
+		list-style: none;
+	}
+	.activity-card {
+		display: flex;
+		gap: var(--spacing-lg);
+		padding: var(--spacing-xl);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+	}
+	.activity-card h3 {
+		font-size: var(--font-size-lg);
+		margin-bottom: var(--spacing-xs);
+	}
+	.activity-card p {
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+		line-height: var(--leading-relaxed);
+	}
+	.activity-card svg {
+		width: 24px;
+		height: 24px;
+	}
+	@media (max-width: 900px) {
+		.activities-grid {
+			grid-template-columns: 1fr;
+			gap: var(--spacing-2xl);
+		}
+	}
+</style>

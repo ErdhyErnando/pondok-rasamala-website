@@ -1,0 +1,102 @@
+---
+import Badge from "../ui/Badge.astro";
+import PhotoPlaceholder from "../ui/PhotoPlaceholder.astro";
+import WhatsAppButton from "../ui/WhatsAppButton.astro";
+import { hero, tx } from "../../data/home";
+import type { Locale } from "../../lib/i18n";
+
+// Split editorial hero (inspo lock): serif H1 + CTA on paper left,
+// large rounded visual right. Stacks vertically on mobile.
+interface Props {
+	locale?: Locale;
+}
+
+const { locale = "id" } = Astro.props;
+const message =
+	locale === "en"
+		? "Hello Pondok Rasamala, I'd like to ask about staying over. Thank you."
+		: "Halo Pondok Rasamala, saya mau bertanya tentang menginap. Terima kasih.";
+---
+
+<section class="hero">
+	<div class="hero-grid">
+		<div class="hero-copy">
+			<Badge label={tx(hero.eyebrow, locale)} />
+			<h1 class="reveal">{tx(hero.title, locale)}</h1>
+			<p class="hero-sub reveal">{tx(hero.sub, locale)}</p>
+			<div class="hero-actions reveal">
+				<WhatsAppButton message={message} locale={locale} size="lg" />
+			</div>
+			<ul class="trust-row reveal" aria-label="Fasilitas">
+				{hero.trust.map((item) => <li>{tx(item, locale)}</li>)}
+			</ul>
+		</div>
+		<div class="hero-visual reveal">
+			<PhotoPlaceholder label={tx(hero.visualLabel, locale)} ratio="4 / 3" />
+		</div>
+	</div>
+</section>
+
+<style>
+	.hero {
+		padding: var(--section-pad) 0;
+	}
+	.hero-grid {
+		max-width: var(--wide-width);
+		margin: 0 auto;
+		padding: 0 var(--spacing-lg);
+		display: grid;
+		grid-template-columns: 1.05fr 1fr;
+		gap: var(--spacing-3xl);
+		align-items: center;
+	}
+	.hero-copy h1 {
+		font-size: clamp(2.5rem, 5vw, 4.5rem);
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-tight);
+		font-weight: var(--font-weight-display);
+		margin: var(--spacing-md) 0 var(--spacing-lg);
+		text-wrap: balance;
+	}
+	.hero-sub {
+		font-size: var(--font-size-lg);
+		color: var(--color-muted);
+		line-height: var(--leading-relaxed);
+		max-width: 46ch;
+	}
+	.hero-actions {
+		margin-top: var(--spacing-xl);
+	}
+	.trust-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--spacing-sm) var(--spacing-lg);
+		margin-top: var(--spacing-xl);
+		list-style: none;
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+	}
+	.trust-row li {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+	}
+	.trust-row li::before {
+		content: "";
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: var(--color-brand);
+		flex-shrink: 0;
+	}
+	.hero-visual :global(.photo-placeholder) {
+		border-radius: var(--radius-lg);
+		min-height: 320px;
+	}
+	@media (max-width: 900px) {
+		.hero-grid {
+			grid-template-columns: 1fr;
+			gap: var(--spacing-2xl);
+		}
+	}
+</style>

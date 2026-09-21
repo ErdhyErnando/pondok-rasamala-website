@@ -1,0 +1,170 @@
+---
+import { location, tx } from "../../data/home";
+import { localizePath, type Locale } from "../../lib/i18n";
+
+// Single restrained dark card: copy + click-to-load map facade.
+// Facade keeps the Maps iframe off the critical path (perf + privacy).
+interface Props {
+	locale?: Locale;
+}
+
+const { locale = "id" } = Astro.props;
+const L = (p: string) => localizePath(p, locale);
+const mapsQuery = encodeURIComponent("Pondok Rasamala, Gunung Salak Endah, Pamijahan, Bogor");
+const embedSrc = `https://www.google.com/maps?q=${mapsQuery}&output=embed`;
+const mapsHref = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
+---
+
+<section class="location-section">
+	<div class="container">
+		<div class="location-card reveal">
+			<div class="location-copy">
+				<p class="eyebrow">{tx(location.eyebrow, locale)}</p>
+				<h2>{tx(location.title, locale)}</h2>
+				<p class="lead">{tx(location.body, locale)}</p>
+				<address>{tx(location.address, locale)}</address>
+				<div class="location-actions">
+					<a href={mapsHref} target="_blank" rel="noopener" class="btn btn-map">
+						{tx(location.mapsLink, locale)}
+					</a>
+					<a href={L("/location/")} class="location-detail">
+						{tx(location.detail, locale)} →
+					</a>
+				</div>
+			</div>
+			<div class="map-facade" data-embed={embedSrc}>
+				<button type="button" class="map-button" data-map-button>
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+						<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z" />
+						<path d="M9 4v14M15 6v14" />
+					</svg>
+					<span>{tx(location.mapLabel, locale)}</span>
+				</button>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	// Click-to-load: swap the facade for the live Maps iframe on demand.
+	document.querySelectorAll<HTMLDivElement>("[data-embed]").forEach((slot) => {
+		const btn = slot.querySelector<HTMLButtonElement>("[data-map-button]");
+		btn?.addEventListener("click", () => {
+			const frame = document.createElement("iframe");
+			frame.src = slot.dataset.embed ?? "";
+			frame.title = "Google Maps";
+			frame.loading = "lazy";
+			frame.referrerPolicy = "no-referrer-when-downgrade";
+			frame.allowFullscreen = true;
+			slot.replaceChildren(frame);
+		}, { once: true });
+	});
+</script>
+
+<style>
+	.location-section {
+		padding: var(--section-pad) 0;
+	}
+	.location-card {
+		display: grid;
+		grid-template-columns: 1fr 1.1fr;
+		gap: var(--spacing-2xl);
+		padding: var(--spacing-3xl);
+		background: var(--color-brand-strong);
+		color: var(--color-on-brand);
+		border-radius: var(--radius-lg);
+		align-items: stretch;
+	}
+	.eyebrow {
+		font-size: var(--font-size-xs);
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		opacity: 0.8;
+		margin-bottom: var(--spacing-sm);
+	}
+	.location-copy h2 {
+		font-size: var(--font-size-3xl);
+		font-weight: var(--font-weight-display);
+		letter-spacing: var(--tracking-tight);
+		text-wrap: balance;
+	}
+	.lead {
+		margin-top: var(--spacing-md);
+		line-height: var(--leading-relaxed);
+		opacity: 0.9;
+	}
+	.location-copy address {
+		margin-top: var(--spacing-md);
+		font-style: normal;
+		font-size: var(--font-size-sm);
+		opacity: 0.8;
+	}
+	.location-actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--spacing-lg);
+		margin-top: var(--spacing-xl);
+	}
+	.btn-map {
+		color: var(--color-brand-strong);
+		background: var(--color-bg);
+		border-radius: var(--radius-full);
+	}
+	.btn-map:hover {
+		box-shadow: var(--shadow-lg);
+	}
+	.location-detail {
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+	.map-facade {
+		position: relative;
+		min-height: 320px;
+		border-radius: var(--radius);
+		overflow: hidden;
+		background: color-mix(in srgb, currentColor 8%, transparent);
+		border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+	}
+	.map-facade iframe {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		border: 0;
+	}
+	.map-button {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: var(--spacing-sm);
+		width: 100%;
+		background: transparent;
+		border: 0;
+		color: inherit;
+		font-family: inherit;
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		cursor: pointer;
+	}
+	.map-button svg {
+		width: 40px;
+		height: 40px;
+		opacity: 0.8;
+	}
+	.map-button:hover svg {
+		opacity: 1;
+	}
+	@media (max-width: 900px) {
+		.location-card {
+			grid-template-columns: 1fr;
+			padding: var(--spacing-2xl);
+		}
+	}
+</style>
