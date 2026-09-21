@@ -1,0 +1,142 @@
+---
+import PhotoPlaceholder from "./PhotoPlaceholder.astro";
+
+// Photo strip + native <dialog> lightbox, vanilla JS only.
+// Works with label-only entries until Day-6 keepers land (src optional).
+// Wiring is per-instance via DOM data (no define:vars, no framework).
+interface Props {
+	items: Array<{ label: string; src?: string }>;
+	closeLabel: string;
+}
+
+const { items, closeLabel } = Astro.props;
+---
+
+<div class="photo-strip" data-strip data-items={JSON.stringify(items.map((i) => i.label))}>
+	{items.map((item, i) => (
+		<button type="button" class="strip-item" data-index={i} aria-label={item.label}>
+			{item.src ? (
+				<img src={item.src} alt={item.label} loading="lazy" />
+			) : (
+				<PhotoPlaceholder label={item.label} ratio="4 / 3" />
+			)}
+		</button>
+	))}
+</div>
+
+<dialog class="lightbox" aria-label={closeLabel}>
+	<div class="lightbox-inner" data-full>
+		<PhotoPlaceholder label={items[0]?.label ?? ""} ratio="16 / 10" />
+		<p class="lightbox-caption" data-caption>{items[0]?.label ?? ""}</p>
+	</div>
+	<div class="lightbox-bar">
+		<button type="button" data-prev aria-label="←">←</button>
+		<span data-count>1 / {items.length}</span>
+		<button type="button" data-next aria-label="→">→</button>
+		<button type="button" data-close>{closeLabel}</button>
+	</div>
+</dialog>
+
+<script>
+	document.querySelectorAll<HTMLElement>("[data-strip]").forEach((strip) => {
+		const labels = JSON.parse(strip.dataset.items ?? "[]") as string[];
+		const dialog = strip.nextElementSibling;
+		if (!(dialog instanceof HTMLDialogElement)) return;
+		const full = dialog.querySelector("[data-full]");
+		const caption = dialog.querySelector("[data-caption]");
+		const count = dialog.querySelector("[data-count]");
+		let index = 0;
+
+		function render() {
+			const label = labels[index];
+			if (!full || label === undefined) return;
+			full.querySelector(".photo-placeholder span")?.replaceChildren(label);
+			full.querySelector(".photo-placeholder")?.setAttribute("aria-label", label);
+			if (caption) caption.textContent = label;
+			if (count) count.textContent = `${index + 1} / ${labels.length}`;
+		}
+
+		strip.querySelectorAll("[data-index]").forEach((btn) => {
+			btn.addEventListener("click", () => {
+				index = Number(btn.getAttribute("data-index"));
+				render();
+				dialog.showModal();
+			});
+		});
+		dialog.querySelector("[data-prev]")?.addEventListener("click", () => {
+			index = (index - 1 + labels.length) % labels.length;
+			render();
+		});
+		dialog.querySelector("[data-next]")?.addEventListener("click", () => {
+			index = (index + 1) % labels.length;
+			render();
+		});
+		dialog.querySelector("[data-close]")?.addEventListener("click", () => dialog.close());
+		dialog.addEventListener("click", (e) => {
+			if (e.target === dialog) dialog.close();
+		});
+	});
+</script>
+
+<style>
+	.photo-strip {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--spacing-md);
+	}
+	.strip-item {
+		background: transparent;
+		border: 0;
+		padding: 0;
+		cursor: zoom-in;
+		font: inherit;
+	}
+	.strip-item img {
+		border-radius: var(--radius);
+		aspect-ratio: 4 / 3;
+		object-fit: cover;
+		width: 100%;
+	}
+	.lightbox {
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		background: var(--color-bg);
+		color: var(--color-text);
+		padding: var(--spacing-lg);
+		max-width: min(880px, 92vw);
+		width: 100%;
+	}
+	.lightbox::backdrop {
+		background: rgb(0 0 0 / 0.6);
+	}
+	.lightbox-caption {
+		margin-top: var(--spacing-sm);
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+		text-align: center;
+	}
+	.lightbox-bar {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: var(--spacing-lg);
+		margin-top: var(--spacing-md);
+	}
+	.lightbox-bar button {
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		color: var(--color-text);
+		border-radius: var(--radius-sm);
+		min-width: 44px;
+		min-height: 44px;
+		padding: 0 var(--spacing-md);
+		font: inherit;
+		font-weight: 600;
+		cursor: pointer;
+	}
+	@media (max-width: 600px) {
+		.photo-strip {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+</style>

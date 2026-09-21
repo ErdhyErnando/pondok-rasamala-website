@@ -1,0 +1,257 @@
+---
+import Base from "./Base.astro";
+import GlampingCard from "../components/ui/GlampingCard.astro";
+import Lightbox from "../components/ui/Lightbox.astro";
+import PhotoPlaceholder from "../components/ui/PhotoPlaceholder.astro";
+import VillaCard from "../components/ui/VillaCard.astro";
+import WhatsAppButton from "../components/ui/WhatsAppButton.astro";
+import { localizePath, type Locale } from "../lib/i18n";
+import type { StayPage, StayCard } from "../lib/stay";
+
+// Shared villa / glamping / campsite / aula layout, fed by src/lib/stay.ts.
+// No bespoke per-unit templates: hero → content + price sidebar → gallery → related.
+interface Props {
+	locale?: Locale;
+	stay: StayPage;
+	related: StayCard[];
+}
+
+const { locale = "id", stay, related } = Astro.props;
+const L = (p: string) => localizePath(p, locale);
+const note = locale === "en" ? "Price confirmed via WhatsApp" : "Harga konfirmasi via WhatsApp";
+---
+
+<Base title={stay.name} description={stay.metaDescription} locale={locale}>
+	<div class="container">
+		<nav class="breadcrumb reveal" aria-label="Breadcrumb">
+			<a href={L("/")}>{stay.labels.home}</a>
+			{stay.category && stay.categoryHref && (
+				<>
+					<span aria-hidden="true">›</span>
+					<a href={stay.categoryHref}>{stay.category}</a>
+				</>
+			)}
+			<span aria-hidden="true">›</span>
+			<span aria-current="page">{stay.name}</span>
+		</nav>
+
+		<div class="detail-hero reveal">
+			<PhotoPlaceholder
+				label={locale === "en" ? `${stay.name} — hero photo to follow` : `${stay.name} — foto utama menyusul`}
+				ratio="16 / 8"
+			/>
+		</div>
+
+		<div class="detail-grid">
+			<div class="detail-main">
+				<p class="eyebrow">{stay.category ?? stay.name}</p>
+				<h1>{stay.name}</h1>
+				<p class="tagline">{stay.tagline}</p>
+				<p class="description">{stay.description}</p>
+
+				<h2>{stay.labels.specs}</h2>
+				<dl class="specs">
+					{stay.specs.map((s) => (
+						<div class="spec-row">
+							<dt>{s.label}</dt>
+							<dd>{s.value}</dd>
+						</div>
+					))}
+				</dl>
+
+				<h2>{stay.labels.gallery}</h2>
+				<Lightbox items={stay.gallery} closeLabel={stay.labels.close} />
+			</div>
+
+			<aside class="detail-sidebar">
+				<div class="price-card">
+					<h2>{stay.labels.prices}</h2>
+					<ul>
+						{stay.prices.map((p) => (
+							<li>
+								<span>{p.label}</span>
+								<strong>{p.price}</strong>
+							</li>
+						))}
+					</ul>
+					<p class="price-note">{stay.priceNote}</p>
+					<WhatsAppButton
+						message={stay.waMessage}
+						label={stay.labels.book}
+						locale={locale}
+						size="lg"
+						class="sidebar-cta"
+					/>
+				</div>
+			</aside>
+		</div>
+
+		<section class="related">
+			<h2>{stay.labels.related}</h2>
+			<div class="related-grid">
+				{related.map((c) =>
+					c.kind === "glamping" ? (
+						<GlampingCard
+							href={c.href}
+							name={c.name}
+							eyebrow={c.eyebrow}
+							fromPrice={c.price}
+							priceNote={note}
+							imageLabel={c.imageLabel}
+						/>
+					) : (
+						<VillaCard
+							href={c.href}
+							name={c.name}
+							eyebrow={c.eyebrow}
+							price={c.price}
+							priceNote={note}
+							imageLabel={c.imageLabel}
+						/>
+					),
+				)}
+			</div>
+		</section>
+	</div>
+</Base>
+
+<style>
+	.breadcrumb {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		padding: var(--spacing-xl) 0 var(--spacing-md);
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+	}
+	.breadcrumb a:hover {
+		color: var(--color-brand);
+	}
+	.breadcrumb [aria-current="page"] {
+		color: var(--color-text);
+		font-weight: 600;
+	}
+	.detail-hero :global(.photo-placeholder) {
+		min-height: min(60vh, 520px);
+	}
+	.detail-grid {
+		display: grid;
+		grid-template-columns: 1.6fr 1fr;
+		gap: var(--spacing-3xl);
+		margin-top: var(--spacing-2xl);
+		align-items: start;
+	}
+	.eyebrow {
+		font-size: var(--font-size-xs);
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--color-brand);
+	}
+	.detail-main h1 {
+		font-size: clamp(2rem, 4vw, 3rem);
+		letter-spacing: var(--tracking-tight);
+		margin-top: var(--spacing-sm);
+		text-wrap: balance;
+	}
+	.tagline {
+		margin-top: var(--spacing-xs);
+		font-size: var(--font-size-lg);
+		color: var(--color-muted);
+	}
+	.description {
+		margin-top: var(--spacing-lg);
+		line-height: var(--leading-relaxed);
+	}
+	.detail-main h2 {
+		margin-top: var(--spacing-2xl);
+		margin-bottom: var(--spacing-md);
+		font-size: var(--font-size-2xl);
+	}
+	.specs {
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+	}
+	.spec-row {
+		display: flex;
+		justify-content: space-between;
+		gap: var(--spacing-md);
+		padding: var(--spacing-md) var(--spacing-lg);
+		background: var(--color-surface);
+	}
+	.spec-row + .spec-row {
+		border-top: 1px solid var(--color-border);
+	}
+	.spec-row dt {
+		color: var(--color-muted);
+	}
+	.spec-row dd {
+		font-weight: 700;
+		text-align: right;
+	}
+	.price-card {
+		position: sticky;
+		top: 96px;
+		padding: var(--spacing-xl);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+	}
+	.price-card h2 {
+		font-size: var(--font-size-xl);
+		margin-bottom: var(--spacing-md);
+	}
+	.price-card ul {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-sm);
+	}
+	.price-card li {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: var(--spacing-md);
+		font-size: var(--font-size-sm);
+	}
+	.price-card li strong {
+		font-size: var(--font-size-lg);
+		letter-spacing: var(--tracking-snug);
+		white-space: nowrap;
+	}
+	.price-note {
+		margin-top: var(--spacing-md);
+		font-size: var(--font-size-xs);
+		color: var(--color-muted);
+	}
+	.price-card :global(.sidebar-cta) {
+		width: 100%;
+		margin-top: var(--spacing-md);
+	}
+	.related {
+		padding: var(--section-pad) 0;
+	}
+	.related h2 {
+		font-size: var(--font-size-2xl);
+		margin-bottom: var(--spacing-xl);
+	}
+	.related-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--spacing-xl);
+	}
+	@media (max-width: 900px) {
+		.detail-grid {
+			grid-template-columns: 1fr;
+		}
+		.price-card {
+			position: static;
+		}
+		.related-grid {
+			grid-template-columns: 1fr;
+			max-width: 560px;
+		}
+	}
+</style>

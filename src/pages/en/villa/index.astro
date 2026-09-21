@@ -1,0 +1,66 @@
+---
+import Base from "../../../layouts/Base.astro";
+import SectionHeader from "../../../components/ui/SectionHeader.astro";
+import VillaCard from "../../../components/ui/VillaCard.astro";
+import { villas, villaPath } from "../../../data/villas";
+import { formatIDR } from "../../../lib/format";
+import { localizePath } from "../../../lib/i18n";
+
+export const prerender = true;
+
+const locale = "en" as const;
+const L = (p: string) => localizePath(p, locale);
+const rows = villas.filter((v) => v.type === "villa");
+const copy = {
+	title: "All Villas",
+	eyebrow: "Stay",
+	description:
+		"14 bamboo and timber villas inside Gunung Halimun Salak National Park — from cosy ones for small families to Villa Cendana for 28 guests.",
+	meta: "All Pondok Rasamala villas: 14 bamboo & timber units, nightly rates, capacity. Book via WhatsApp.",
+};
+---
+
+<Base title={copy.title} description={copy.meta} locale={locale}>
+	<div class="container index-head">
+		<SectionHeader
+			eyebrow={copy.eyebrow}
+			title={copy.title}
+			description={copy.description}
+		/>
+		<div class="card-grid">
+			{rows.map((v) => (
+				<VillaCard
+					href={L(villaPath(v.slug))}
+					name={`Villa ${v.name}`}
+					eyebrow={`Villa · sleeps ${v.paxMax}`}
+					price={formatIDR(v.price)}
+					priceNote="Price confirmed via WhatsApp"
+					blurb={v.tagline.en}
+					imageLabel={`Villa ${v.name} — photo to follow`}
+				/>
+			))}
+		</div>
+	</div>
+</Base>
+
+<style>
+	.index-head {
+		padding-top: var(--section-pad);
+		padding-bottom: var(--section-pad);
+	}
+	.card-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--spacing-2xl) var(--spacing-xl);
+	}
+	@media (max-width: 960px) {
+		.card-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+	@media (max-width: 600px) {
+		.card-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

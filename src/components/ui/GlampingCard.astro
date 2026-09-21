@@ -1,0 +1,81 @@
+---
+import PhotoPlaceholder from "./PhotoPlaceholder.astro";
+
+// Glamping card: same anatomy as VillaCard, tiered "from" price.
+// Shared by /glamping/ index and detail-page related cards.
+interface Props {
+	href: string;
+	name: string;
+	eyebrow: string;
+	fromPrice: string;
+	priceNote: string;
+	blurb?: string;
+	imageLabel: string;
+}
+
+const { href, name, eyebrow, fromPrice, priceNote, blurb, imageLabel } = Astro.props;
+---
+
+<article class="stay-card">
+	<a href={href} class="card-visual" aria-hidden="true" tabindex="-1">
+		<PhotoPlaceholder label={imageLabel} ratio="16 / 10" />
+	</a>
+	<p class="card-eyebrow">{eyebrow}</p>
+	<h3><a href={href}>{name}</a></h3>
+	{blurb && <p class="card-blurb">{blurb}</p>}
+	<p class="card-price">{fromPrice} <span class="price-note">/ {priceNote}</span></p>
+</article>
+
+<style>
+	.stay-card {
+		display: flex;
+		flex-direction: column;
+	}
+	.card-visual {
+		display: block;
+	}
+	.card-visual :global(.photo-placeholder) {
+		border-radius: var(--radius);
+		transition: transform var(--transition-base);
+	}
+	.stay-card:hover .card-visual :global(.photo-placeholder) {
+		transform: translateY(-2px);
+	}
+	.card-eyebrow {
+		margin-top: var(--spacing-md);
+		font-size: var(--font-size-xs);
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--color-brand);
+	}
+	.stay-card h3 {
+		margin-top: var(--spacing-xs);
+		font-size: var(--font-size-xl);
+	}
+	.stay-card h3 a:hover {
+		color: var(--color-brand);
+	}
+	.card-blurb {
+		margin-top: var(--spacing-xs);
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+		line-height: var(--leading-relaxed);
+		flex-grow: 1;
+	}
+	.card-price {
+		margin-top: var(--spacing-sm);
+		font-weight: 700;
+		letter-spacing: var(--tracking-snug);
+	}
+	.price-note {
+		font-weight: 500;
+		font-size: var(--font-size-xs);
+		color: var(--color-muted);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.card-visual :global(.photo-placeholder) {
+			transition: none;
+		}
+	}
+</style>

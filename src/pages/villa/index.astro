@@ -1,0 +1,66 @@
+---
+import Base from "../../layouts/Base.astro";
+import SectionHeader from "../../components/ui/SectionHeader.astro";
+import VillaCard from "../../components/ui/VillaCard.astro";
+import { villas, villaPath } from "../../data/villas";
+import { formatIDR } from "../../lib/format";
+import { localizePath } from "../../lib/i18n";
+
+export const prerender = true;
+
+const locale = "id" as const;
+const L = (p: string) => localizePath(p, locale);
+const rows = villas.filter((v) => v.type === "villa");
+const copy = {
+	title: "Semua Villa",
+	eyebrow: "Menginap",
+	description:
+		"14 villa bambu dan kayu di dalam Taman Nasional Gunung Halimun Salak — dari yang mungil untuk keluarga kecil sampai Villa Cendana untuk 28 orang.",
+	meta: "Semua villa Pondok Rasamala: 14 unit bambu & kayu, harga per malam, kapasitas. Pesan via WhatsApp.",
+};
+---
+
+<Base title={copy.title} description={copy.meta} locale={locale}>
+	<div class="container index-head">
+		<SectionHeader
+			eyebrow={copy.eyebrow}
+			title={copy.title}
+			description={copy.description}
+		/>
+		<div class="card-grid">
+			{rows.map((v) => (
+				<VillaCard
+					href={L(villaPath(v.slug))}
+					name={`Villa ${v.name}`}
+					eyebrow={`Villa · maks ${v.paxMax} orang`}
+					price={formatIDR(v.price)}
+					priceNote="Harga konfirmasi via WhatsApp"
+					blurb={v.tagline.id}
+					imageLabel={`Villa ${v.name} — foto menyusul`}
+				/>
+			))}
+		</div>
+	</div>
+</Base>
+
+<style>
+	.index-head {
+		padding-top: var(--section-pad);
+		padding-bottom: var(--section-pad);
+	}
+	.card-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--spacing-2xl) var(--spacing-xl);
+	}
+	@media (max-width: 960px) {
+		.card-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+	@media (max-width: 600px) {
+		.card-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
