@@ -1,0 +1,99 @@
+---
+import Base from "../../../layouts/Base.astro";
+import PhotoPlaceholder from "../../../components/ui/PhotoPlaceholder.astro";
+import SectionHeader from "../../../components/ui/SectionHeader.astro";
+import { posts, postPath } from "../../../data/posts";
+import { localizePath } from "../../../lib/i18n";
+
+export const prerender = true;
+
+const locale = "en" as const;
+const L = (p: string) => localizePath(p, locale);
+const copy = {
+	title: "Blog",
+	eyebrow: "Stories & guides",
+	meta: "Pondok Rasamala blog: camping guides, villas, waterfalls, and stories from the foot of Mount Salak.",
+	description: "Practical guides and stories from the foot of Mount Salak.",
+	read: "Read",
+};
+---
+
+<Base title={copy.title} description={copy.meta} locale={locale}>
+	<div class="container page">
+		<SectionHeader
+			eyebrow={copy.eyebrow}
+			title={copy.title}
+			description={copy.description}
+		/>
+		<div class="post-grid">
+			{posts.map((p) => (
+				<article class="post-card reveal">
+					<a href={L(postPath(p.slug))} class="card-visual" aria-hidden="true" tabindex="-1">
+						<PhotoPlaceholder label={`${p.title.en} — image to follow`} ratio="16 / 10" />
+					</a>
+					<p class="card-eyebrow">{p.category.en}</p>
+					<h2><a href={L(postPath(p.slug))}>{p.title.en}</a></h2>
+					<p class="card-excerpt">{p.excerpt.en}</p>
+					<a href={L(postPath(p.slug))} class="card-link">{copy.read} →</a>
+				</article>
+			))}
+		</div>
+	</div>
+</Base>
+
+<style>
+	.page {
+		padding-top: var(--section-pad);
+		padding-bottom: var(--section-pad);
+	}
+	.post-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--spacing-2xl) var(--spacing-xl);
+	}
+	.card-visual {
+		display: block;
+	}
+	.card-visual :global(.photo-placeholder) {
+		border-radius: var(--radius);
+	}
+	.card-eyebrow {
+		margin-top: var(--spacing-md);
+		font-size: var(--font-size-xs);
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--color-brand);
+	}
+	.post-card h2 {
+		margin-top: var(--spacing-xs);
+		font-size: var(--font-size-xl);
+		line-height: 1.35;
+	}
+	.post-card h2 a:hover {
+		color: var(--color-brand);
+	}
+	.card-excerpt {
+		margin-top: var(--spacing-xs);
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+		line-height: var(--leading-relaxed);
+	}
+	.card-link {
+		display: inline-block;
+		margin-top: var(--spacing-sm);
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		color: var(--color-brand);
+	}
+	@media (max-width: 960px) {
+		.post-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+	@media (max-width: 600px) {
+		.post-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
