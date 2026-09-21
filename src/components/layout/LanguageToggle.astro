@@ -1,0 +1,56 @@
+---
+import { getStrings, localizePath, type Locale } from "../../lib/i18n";
+
+// ID/EN switch. Links the same path across locale trees (no client state).
+interface Props {
+	locale?: Locale;
+	path?: string;
+	class?: string;
+}
+
+const { locale = "id", path = "/", class: className = "" } = Astro.props;
+const t = getStrings(locale);
+---
+
+<nav class={`lang-toggle ${className}`} aria-label={t.footer.language}>
+	<a
+		href={localizePath(path, "id")}
+		aria-current={locale === "id" ? "true" : undefined}
+		class:list={[{ active: locale === "id" }]}>ID</a
+	>
+	<span aria-hidden="true">/</span>
+	<a
+		href={localizePath(path, "en")}
+		aria-current={locale === "en" ? "true" : undefined}
+		class:list={[{ active: locale === "en" }]}>EN</a
+	>
+</nav>
+
+<style>
+	.lang-toggle {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+	}
+	.lang-toggle span {
+		opacity: 0.4;
+	}
+	.lang-toggle a {
+		opacity: 0.55;
+		padding: 0.25rem 0.125rem;
+	}
+	.lang-toggle a:hover {
+		opacity: 1;
+	}
+	.lang-toggle a.active {
+		opacity: 1;
+		color: var(--color-brand);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+	.site-footer .lang-toggle a.active {
+		color: inherit;
+	}
+</style>

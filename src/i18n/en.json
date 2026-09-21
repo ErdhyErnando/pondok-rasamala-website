@@ -1,0 +1,39 @@
+{
+	"skipToContent": "Skip to main content",
+	"nav": {
+		"home": "Home",
+		"about": "About Us",
+		"location": "Location",
+		"villa": "Villa",
+		"allVillas": "All Villas",
+		"glamping": "Glamping",
+		"allGlamping": "All Glamping",
+		"campsite": "Campsite",
+		"packages": "Packages",
+		"allPackages": "All Packages",
+		"packageOutbound": "Outbound",
+		"packageSchool": "School Package",
+		"packageCompany": "Company Outing",
+		"packageFamily": "Family Package",
+		"attractions": "Attractions",
+		"gallery": "Gallery",
+		"blog": "Blog",
+		"contact": "Contact",
+		"mainMenu": "Main menu"
+	},
+	"actions": {
+		"bookNow": "Book via WhatsApp",
+		"viewAll": "View All",
+		"openMenu": "Open menu",
+		"closeMenu": "Close menu"
+	},
+	"footer": {
+		"brandTagline": "A Countryside Nature Resort",
+		"explore": "Explore",
+		"stay": "Stay",
+		"contact": "Contact Us",
+		"follow": "Follow Us",
+		"rights": "All rights reserved.",
+		"language": "Language"
+	}
+}

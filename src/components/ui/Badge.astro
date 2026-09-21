@@ -1,0 +1,40 @@
+---
+// Micro-accent pill: eyebrows, capacity labels, category tags.
+// One hint color per viewport — pick forest by default, amber sparingly.
+interface Props {
+	label: string;
+	tone?: "forest" | "amber" | "neutral";
+	class?: string;
+}
+
+const { label, tone = "forest", class: className = "" } = Astro.props;
+---
+
+<span class={`badge tone-${tone} ${className}`}>{label}</span>
+
+<style>
+	.badge {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.25rem 0.75rem;
+		font-size: var(--font-size-xs);
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		border-radius: var(--radius-full);
+		white-space: nowrap;
+	}
+	.tone-forest {
+		color: var(--color-brand);
+		background: var(--color-brand-soft);
+	}
+	.tone-amber {
+		color: #7a4a00;
+		background: var(--color-accent-soft);
+	}
+	.tone-neutral {
+		color: var(--color-muted);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+	}
+</style>

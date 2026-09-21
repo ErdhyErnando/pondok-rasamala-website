@@ -1,0 +1,250 @@
+---
+import { getStrings, localizePath, type Locale } from "../../lib/i18n";
+import { SITE } from "../../lib/constants";
+import { waGeneral } from "../../lib/whatsapp";
+import LanguageToggle from "./LanguageToggle.astro";
+
+// 4-column calm footer on deep forest. Contact / explore / stay / brand.
+// No curtain-reveal theatrics — static, quiet, one accent.
+interface Props {
+	locale?: Locale;
+	currentPath?: string;
+}
+
+const { locale = "id", currentPath = "/" } = Astro.props;
+const t = getStrings(locale);
+const L = (p: string) => localizePath(p, locale);
+
+const exploreLinks = [
+	{ href: L("/about-us/"), label: t.nav.about },
+	{ href: L("/location/"), label: t.nav.location },
+	{ href: L("/attractions/"), label: t.nav.attractions },
+	{ href: L("/gallery/"), label: t.nav.gallery },
+	{ href: L("/blog/"), label: t.nav.blog },
+	{ href: L("/contact-us/"), label: t.nav.contact },
+];
+const stayLinks = [
+	{ href: L("/villa/"), label: t.nav.allVillas },
+	{ href: L("/glamping/"), label: t.nav.allGlamping },
+	{ href: L("/campsite/"), label: t.nav.campsite },
+	{ href: L("/package/"), label: t.nav.allPackages },
+];
+const socials = [
+	{
+		href: SITE.socials.instagram,
+		label: "Instagram",
+		icon: '<rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none" />',
+	},
+	{
+		href: SITE.socials.tiktok,
+		label: "TikTok",
+		icon: '<path d="M14 4v10.5a3.5 3.5 0 1 1-3.5-3.5" /><path d="M14 4c.4 2.6 2 4.3 4.5 4.7" />',
+	},
+	{
+		href: SITE.socials.youtube,
+		label: "YouTube",
+		icon: '<path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" /><path d="m10 15 5-3-5-3z" />',
+	},
+	{
+		href: SITE.socials.facebook,
+		label: "Facebook",
+		icon: '<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />',
+	},
+];
+---
+
+<footer class="site-footer">
+	<div class="footer-grid">
+		<div class="footer-brand">
+			<a href={L("/")} class="brand">
+				<img
+					src="/brand/rasamala-badge.png"
+					alt=""
+					width="44"
+					height="44"
+					class="brand-badge"
+				/>
+				<span class="wordmark">Pondok Rasamala</span>
+			</a>
+			<p class="tagline">{t.footer.brandTagline}</p>
+			<address>{SITE.address}</address>
+		</div>
+
+		<nav aria-label={t.footer.explore}>
+			<h3>{t.footer.explore}</h3>
+			<ul>
+				{exploreLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+			</ul>
+		</nav>
+
+		<nav aria-label={t.footer.stay}>
+			<h3>{t.footer.stay}</h3>
+			<ul>
+				{stayLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+			</ul>
+		</nav>
+
+		<div class="footer-contact">
+			<h3>{t.footer.contact}</h3>
+			<ul class="contact-list">
+				<li>
+					<a href={waGeneral()} target="_blank" rel="noopener">
+						WhatsApp: +{SITE.whatsapp}
+					</a>
+				</li>
+				<li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+				{SITE.phones.map((p) => <li><a href={`tel:+62${p.replace(/\D/g, "").slice(1)}`}>{p}</a></li>)}
+			</ul>
+			<p class="social-label">{t.footer.follow}</p>
+			<ul class="socials">
+				{socials.map((s) => (
+					<li>
+						<a href={s.href} target="_blank" rel="noopener" aria-label={s.label}>
+							<svg
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="1.8"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								aria-hidden="true"
+								set:html={s.icon}
+							/>
+						</a>
+					</li>
+				))}
+			</ul>
+		</div>
+	</div>
+
+	<div class="footer-bottom">
+		<p>&copy; {new Date().getFullYear()} Pondok Rasamala. {t.footer.rights}</p>
+		<LanguageToggle locale={locale} path={currentPath} />
+	</div>
+</footer>
+
+<style>
+	.site-footer {
+		background: var(--color-brand-strong);
+		color: var(--color-on-brand);
+	}
+	.footer-grid {
+		max-width: var(--wide-width);
+		margin: 0 auto;
+		padding: var(--spacing-3xl) var(--spacing-lg) var(--spacing-2xl);
+		display: grid;
+		grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+		gap: var(--spacing-2xl);
+	}
+	.brand {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--spacing-sm);
+	}
+	.brand-badge {
+		width: 44px;
+		height: 44px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+	.wordmark {
+		font-family: var(--font-heading);
+		font-size: var(--font-size-xl);
+		font-weight: var(--font-weight-heading);
+		letter-spacing: var(--tracking-snug);
+		white-space: nowrap;
+	}
+	.tagline {
+		margin-top: var(--spacing-sm);
+		font-size: var(--font-size-sm);
+		opacity: 0.85;
+	}
+	.footer-brand address {
+		margin-top: var(--spacing-md);
+		font-size: var(--font-size-sm);
+		font-style: normal;
+		line-height: var(--leading-relaxed);
+		opacity: 0.75;
+		max-width: 32ch;
+	}
+	.site-footer h3 {
+		font-family: var(--font-body);
+		font-size: var(--font-size-sm);
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		margin-bottom: var(--spacing-md);
+		opacity: 0.9;
+	}
+	.site-footer ul {
+		list-style: none;
+	}
+	.site-footer nav a,
+	.contact-list a {
+		display: inline-block;
+		font-size: var(--font-size-sm);
+		padding: 0.3rem 0;
+		opacity: 0.75;
+	}
+	.site-footer nav a:hover,
+	.contact-list a:hover {
+		opacity: 1;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+	.social-label {
+		margin-top: var(--spacing-lg);
+		font-size: var(--font-size-sm);
+		font-weight: 700;
+		opacity: 0.9;
+	}
+	.socials {
+		display: flex;
+		gap: var(--spacing-sm);
+		margin-top: var(--spacing-sm);
+	}
+	.socials a {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 44px;
+		height: 44px;
+		border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+		border-radius: 50%;
+		opacity: 0.85;
+	}
+	.socials a:hover {
+		opacity: 1;
+		background: color-mix(in srgb, currentColor 12%, transparent);
+	}
+	.socials svg {
+		width: 20px;
+		height: 20px;
+	}
+	.footer-bottom {
+		max-width: var(--wide-width);
+		margin: 0 auto;
+		padding: var(--spacing-lg);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: var(--spacing-md);
+		font-size: var(--font-size-sm);
+		border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+		opacity: 0.9;
+	}
+	@media (max-width: 900px) {
+		.footer-grid {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+	@media (max-width: 560px) {
+		.footer-grid {
+			grid-template-columns: 1fr;
+		}
+		.footer-bottom {
+			flex-direction: column;
+			text-align: center;
+		}
+	}
+</style>

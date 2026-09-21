@@ -1,0 +1,39 @@
+{
+	"skipToContent": "Lewati ke konten utama",
+	"nav": {
+		"home": "Beranda",
+		"about": "Tentang Kami",
+		"location": "Lokasi",
+		"villa": "Villa",
+		"allVillas": "Semua Villa",
+		"glamping": "Glamping",
+		"allGlamping": "Semua Glamping",
+		"campsite": "Campsite",
+		"packages": "Paket",
+		"allPackages": "Semua Paket",
+		"packageOutbound": "Outbound",
+		"packageSchool": "Paket Sekolah",
+		"packageCompany": "Company Outing",
+		"packageFamily": "Paket Keluarga",
+		"attractions": "Atraksi",
+		"gallery": "Galeri",
+		"blog": "Blog",
+		"contact": "Kontak",
+		"mainMenu": "Menu utama"
+	},
+	"actions": {
+		"bookNow": "Pesan via WhatsApp",
+		"viewAll": "Lihat Semua",
+		"openMenu": "Buka menu",
+		"closeMenu": "Tutup menu"
+	},
+	"footer": {
+		"brandTagline": "Resort Bernuansa Alam Pedesaan",
+		"explore": "Jelajahi",
+		"stay": "Menginap",
+		"contact": "Hubungi Kami",
+		"follow": "Ikuti Kami",
+		"rights": "Hak cipta dilindungi.",
+		"language": "Bahasa"
+	}
+}
