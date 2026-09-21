@@ -3,17 +3,20 @@
 	"name": "pondok-rasamala",
 	"main": "./src/worker.ts",
 	"compatibility_date": "2026-02-24",
-	"compatibility_flags": ["nodejs_compat"],
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
 	"d1_databases": [
 		{
 			"binding": "DB",
-			"database_name": "pondok-rasamala",
-		},
+			"database_name": "pondok-rasamala-website",
+			"database_id": "71baa8b4-8794-46bd-90e9-df8b93f5f5b9"
+		}
 	],
 	"r2_buckets": [
 		{
 			"binding": "MEDIA",
-			"bucket_name": "pondok-rasamala-media",
-		},
+			"bucket_name": "pondok-rasamala-website-media"
+		}
 	],
 }

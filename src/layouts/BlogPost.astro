@@ -1,0 +1,186 @@
+---
+import Base from "./Base.astro";
+import PhotoPlaceholder from "../components/ui/PhotoPlaceholder.astro";
+import { localizePath, type Locale } from "../lib/i18n";
+import { posts, postPath, type PostRow } from "../data/posts";
+
+// Prose wrapper: ~720px column, hero visual, meta, body, related + Article JSON-LD.
+interface Props {
+	locale?: Locale;
+	post: PostRow;
+}
+
+const { locale = "id", post } = Astro.props;
+const L = (p: string) => localizePath(p, locale);
+const en = locale === "en";
+const t = {
+	home: en ? "Home" : "Beranda",
+	blog: en ? "Blog" : "Blog",
+	related: en ? "Related posts" : "Artikel terkait",
+	readMore: en ? "Read" : "Baca",
+	by: en ? "By" : "Oleh",
+};
+const related = posts.filter((p) => p.slug !== post.slug).slice(0, 2);
+const jsonLd = {
+	"@context": "https://schema.org",
+	"@type": "Article",
+	headline: post.title[locale],
+	description: post.excerpt[locale],
+	author: { "@type": "Organization", name: post.author },
+	datePublished: post.pubDate,
+	inLanguage: locale,
+};
+const pubDate = new Date(post.pubDate + "T00:00:00").toLocaleDateString(
+	locale === "en" ? "en-US" : "id-ID",
+	{ day: "numeric", month: "long", year: "numeric" },
+);
+---
+
+<Base
+	title={post.title[locale]}
+	description={post.excerpt[locale]}
+	locale={locale}
+	jsonLd={jsonLd}
+>
+	<div class="container post">
+		<nav class="breadcrumb" aria-label="Breadcrumb">
+			<a href={L("/")}>{t.home}</a>
+			<span aria-hidden="true">›</span>
+			<a href={L("/blog/")}>{t.blog}</a>
+			<span aria-hidden="true">›</span>
+			<span aria-current="page">{post.category[locale]}</span>
+		</nav>
+		<header class="post-head">
+			<p class="eyebrow">{post.category[locale]}</p>
+			<h1>{post.title[locale]}</h1>
+			<p class="meta">{t.by} {post.author} · {pubDate}</p>
+		</header>
+		<div class="post-hero">
+			<PhotoPlaceholder
+				label={en ? `${post.title.en} — hero image to follow` : `${post.title.id} — gambar utama menyusul`}
+				ratio="16 / 8"
+			/>
+		</div>
+		<div class="prose">
+			{post.body[locale].map((para) => <p>{para}</p>)}
+		</div>
+		<section class="related">
+			<h2>{t.related}</h2>
+			<div class="related-grid">
+				{related.map((r) => (
+					<article class="related-card">
+						<p class="card-eyebrow">{r.category[locale]}</p>
+						<h3><a href={L(postPath(r.slug))}>{r.title[locale]}</a></h3>
+						<p class="card-excerpt">{r.excerpt[locale]}</p>
+						<a href={L(postPath(r.slug))} class="card-link">{t.readMore} →</a>
+					</article>
+				))}
+			</div>
+		</section>
+	</div>
+</Base>
+
+<style>
+	.post {
+		max-width: 880px;
+		padding-top: var(--spacing-xl);
+		padding-bottom: var(--section-pad);
+	}
+	.breadcrumb {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		padding: var(--spacing-md) 0;
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+	}
+	.breadcrumb a:hover {
+		color: var(--color-brand);
+	}
+	.breadcrumb [aria-current="page"] {
+		color: var(--color-text);
+		font-weight: 600;
+	}
+	.eyebrow {
+		font-size: var(--font-size-xs);
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--color-brand);
+	}
+	.post-head h1 {
+		font-size: clamp(1.9rem, 4vw, 2.9rem);
+		letter-spacing: var(--tracking-tight);
+		line-height: 1.2;
+		margin-top: var(--spacing-sm);
+		text-wrap: balance;
+	}
+	.meta {
+		margin-top: var(--spacing-sm);
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+	}
+	.post-hero {
+		margin-top: var(--spacing-xl);
+	}
+	.prose {
+		max-width: var(--max-width);
+		margin-top: var(--spacing-xl);
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-md);
+		line-height: var(--leading-relaxed);
+		font-size: var(--font-size-lg);
+	}
+	.related {
+		margin-top: var(--spacing-3xl);
+	}
+	.related h2 {
+		font-size: var(--font-size-2xl);
+		margin-bottom: var(--spacing-lg);
+	}
+	.related-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--spacing-xl);
+	}
+	.related-card {
+		padding: var(--spacing-xl);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+	}
+	.card-eyebrow {
+		font-size: var(--font-size-xs);
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--color-brand);
+	}
+	.related-card h3 {
+		margin-top: var(--spacing-xs);
+		font-size: var(--font-size-lg);
+	}
+	.related-card h3 a:hover {
+		color: var(--color-brand);
+	}
+	.card-excerpt {
+		margin-top: var(--spacing-xs);
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+		line-height: var(--leading-relaxed);
+	}
+	.card-link {
+		display: inline-block;
+		margin-top: var(--spacing-sm);
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		color: var(--color-brand);
+	}
+	@media (max-width: 700px) {
+		.related-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

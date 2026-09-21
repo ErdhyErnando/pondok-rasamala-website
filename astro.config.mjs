@@ -1,5 +1,6 @@
 import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
+import sitemap from "@astrojs/sitemap";
 import { d1, r2 } from "@emdash-cms/cloudflare";
 import icon from "astro-iconset";
 import { defineConfig, fontProviders } from "astro/config";
@@ -7,6 +8,7 @@ import tailwindcss from "@tailwindcss/vite";
 import emdash from "emdash/astro";
 
 export default defineConfig({
+	site: "https://pondokrasamala.com",
 	output: "server",
 	adapter: cloudflare(),
 	image: {
@@ -25,6 +27,9 @@ export default defineConfig({
 		},
 	},
 	integrations: [
+		sitemap({
+			i18n: { defaultLocale: "id", locales: { id: "id-ID", en: "en-US" } },
+		}),
 		react(),
 		icon({
 			// Only ship the Phosphor icons actually referenced in templates,

@@ -1,0 +1,19 @@
+---
+import BlogPost from "../../layouts/BlogPost.astro";
+import { posts } from "../../data/posts";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+	return posts.map((post) => ({
+		params: { slug: post.slug },
+		props: { slug: post.slug, locale: "id" as const },
+	}));
+}
+
+const { slug, locale } = Astro.props;
+const post = posts.find((p) => p.slug === slug);
+if (!post) throw new Error(`Unknown post: ${slug}`);
+---
+
+<BlogPost locale={locale} post={post} />
