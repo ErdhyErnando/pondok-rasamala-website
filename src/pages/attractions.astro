@@ -1,0 +1,83 @@
+---
+import Base from "../layouts/Base.astro";
+import PhotoPlaceholder from "../components/ui/PhotoPlaceholder.astro";
+import SectionHeader from "../components/ui/SectionHeader.astro";
+import { attractions } from "../data/attractions";
+
+export const prerender = true;
+
+const locale = "id" as const;
+const copy = {
+	title: "Atraksi Terdekat",
+	eyebrow: "Jelajahi",
+	meta: "Atraksi dekat Pondok Rasamala: Kawah Ratu, Curug Seribu, Curug Ngumpet, Curug Cigamea, Air Panas Ciparay, Curug Goa Lumut + tips kunjungan.",
+	description: "Kawah, curug, dan pemandian air panas — semua dalam jangkauan perjalanan dari resort.",
+	tipLabel: "Tips",
+};
+---
+
+<Base title={copy.title} description={copy.meta} locale={locale}>
+	<div class="container page">
+		<SectionHeader
+			eyebrow={copy.eyebrow}
+			title={copy.title}
+			description={copy.description}
+		/>
+		<div class="attraction-grid">
+			{attractions.map((a) => (
+				<article class="attraction-card reveal">
+					<PhotoPlaceholder
+						label={`${a.name.id} — foto menyusul`}
+						ratio="16 / 10"
+					/>
+					<h2>{a.name.id}</h2>
+					<p>{a.description.id}</p>
+					<p class="tip"><strong>{copy.tipLabel}:</strong> {a.tip.id}</p>
+				</article>
+			))}
+		</div>
+	</div>
+</Base>
+
+<style>
+	.page {
+		padding-top: var(--section-pad);
+		padding-bottom: var(--section-pad);
+	}
+	.attraction-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--spacing-2xl) var(--spacing-xl);
+	}
+	.attraction-card :global(.photo-placeholder) {
+		border-radius: var(--radius);
+	}
+	.attraction-card h2 {
+		margin-top: var(--spacing-md);
+		font-size: var(--font-size-xl);
+	}
+	.attraction-card p {
+		margin-top: var(--spacing-xs);
+		color: var(--color-muted);
+		line-height: var(--leading-relaxed);
+		font-size: var(--font-size-sm);
+	}
+	.tip {
+		color: var(--color-text) !important;
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+		padding: var(--spacing-sm) var(--spacing-md);
+		margin-top: var(--spacing-sm) !important;
+	}
+	@media (max-width: 960px) {
+		.attraction-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+	@media (max-width: 600px) {
+		.attraction-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

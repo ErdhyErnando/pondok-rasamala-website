@@ -1,27 +1,27 @@
 ---
-import Base from "../layouts/Base.astro";
-import MapFacade from "../components/ui/MapFacade.astro";
-import SectionHeader from "../components/ui/SectionHeader.astro";
-import WhatsAppButton from "../components/ui/WhatsAppButton.astro";
-import { SITE } from "../lib/constants";
+import Base from "../../layouts/Base.astro";
+import MapFacade from "../../components/ui/MapFacade.astro";
+import SectionHeader from "../../components/ui/SectionHeader.astro";
+import WhatsAppButton from "../../components/ui/WhatsAppButton.astro";
+import { SITE } from "../../lib/constants";
 
 export const prerender = true;
 
-const locale = "id" as const;
+const locale = "en" as const;
 const mapsQuery = encodeURIComponent("Pondok Rasamala, Gunung Salak Endah, Pamijahan, Bogor");
 const copy = {
-	title: "Hubungi Kami",
-	eyebrow: "Kontak",
-	meta: "Hubungi Pondok Rasamala: WhatsApp, telepon, email, alamat, dan media sosial. Tanpa formulir — langsung terhubung.",
-	description: "Tanpa formulir, tanpa antre — langsung terhubung ke tim kami.",
-	waTitle: "WhatsApp (tercepat)",
-	phoneTitle: "Telepon",
-	addressTitle: "Alamat",
-	socialTitle: "Media sosial",
-	hours: "Setiap hari, 08.00–20.00 WIB",
-	mapLabel: "Muat peta",
+	title: "Contact Us",
+	eyebrow: "Contact",
+	meta: "Contact Pondok Rasamala: WhatsApp, phone, email, address, and socials. No forms — straight through to our team.",
+	description: "No forms, no queues — straight through to our team.",
+	waTitle: "WhatsApp (fastest)",
+	phoneTitle: "Phone",
+	addressTitle: "Address",
+	socialTitle: "Socials",
+	hours: "Daily, 08.00–20.00 WIB",
+	mapLabel: "Load map",
 };
-const waMessage = "Halo Pondok Rasamala, saya mau bertanya. Terima kasih.";
+const waMessage = "Hello Pondok Rasamala, I'd like to ask something. Thank you.";
 const socials = [
 	{ href: SITE.socials.instagram, label: "Instagram" },
 	{ href: SITE.socials.tiktok, label: "TikTok" },
@@ -59,7 +59,7 @@ const socials = [
 						<a
 							href={`https://www.google.com/maps/search/?api=1&query=${mapsQuery}`}
 							target="_blank"
-							rel="noopener">Buka di Google Maps →</a
+							rel="noopener">Open in Google Maps →</a
 						>
 					</p>
 				</article>

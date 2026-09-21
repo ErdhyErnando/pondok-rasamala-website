@@ -1,0 +1,192 @@
+---
+import Base from "../layouts/Base.astro";
+import Lightbox from "../components/ui/Lightbox.astro";
+import SectionHeader from "../components/ui/SectionHeader.astro";
+import { galleryCategories, galleryItems } from "../data/gallery-items";
+
+export const prerender = true;
+
+const locale = "id" as const;
+const copy = {
+	title: "Galeri",
+	eyebrow: "Suasana",
+	meta: "Galeri foto Pondok Rasamala: villa, glamping, aktivitas, alam, dan acara. Filter per kategori.",
+	description: "Potongan suasana resort — dari teras villa sampai api unggun. (Foto final menyusul Day 6.)",
+	all: "Semua",
+	categories: {
+		villa: "Villa",
+		glamping: "Glamping",
+		activities: "Aktivitas",
+		nature: "Alam",
+		events: "Acara",
+	} as Record<string, string>,
+	close: "Tutup",
+};
+const lightboxItems = galleryItems.map((g) => ({ label: g.caption.id }));
+---
+
+<Base title={copy.title} description={copy.meta} locale={locale}>
+	<div class="gallery-page">
+		<div class="container">
+			<SectionHeader
+				eyebrow={copy.eyebrow}
+				title={copy.title}
+				description={copy.description}
+			/>
+			<div class="filter-pills reveal" role="group" aria-label="Filter">
+				<button type="button" data-filter="all" class="active">{copy.all}</button>
+				{galleryCategories.map((c) => (
+					<button type="button" data-filter={c}>{copy.categories[c]}</button>
+				))}
+			</div>
+		</div>
+		<div class="container">
+			<div class="scrap-grid" data-grid>
+				{galleryItems.map((g, i) => (
+					<figure class="scrap-item reveal" data-category={g.category} data-index={i}>
+						<button type="button" class="scrap-btn" data-lightbox-open={i} aria-label={g.caption.id}>
+							<span class="scrap-photo">{g.label.id}</span>
+						</button>
+						<figcaption>{g.caption.id}</figcaption>
+					</figure>
+				))}
+			</div>
+			<div class="lightbox-mount">
+				<Lightbox items={lightboxItems} closeLabel={copy.close} />
+			</div>
+		</div>
+	</div>
+</Base>
+
+<script>
+	// Category filter pills (vanilla). Lightbox strip stays hidden; figures open it by index.
+	const pills = document.querySelectorAll<HTMLButtonElement>("[data-filter]");
+	const figures = document.querySelectorAll<HTMLElement>(".scrap-item[data-category]");
+	pills.forEach((pill) => {
+		pill.addEventListener("click", () => {
+			pills.forEach((p) => p.classList.remove("active"));
+			pill.classList.add("active");
+			const f = pill.dataset.filter;
+			figures.forEach((fig) => {
+				fig.hidden = f !== "all" && fig.dataset.category !== f;
+			});
+		});
+	});
+	document.querySelectorAll<HTMLButtonElement>("[data-lightbox-open]").forEach((btn) => {
+		btn.addEventListener("click", () => {
+			const strip = document.querySelector<HTMLElement>(".lightbox-mount [data-strip]");
+			const target = strip?.querySelector<HTMLElement>(
+				`[data-index="${btn.dataset.lightboxOpen}"]`,
+			);
+			(target as HTMLButtonElement | null)?.click();
+		});
+	});
+</script>
+
+<style>
+	.gallery-page {
+		padding-top: var(--section-pad);
+		padding-bottom: var(--section-pad);
+		background: var(--color-surface);
+		border-bottom: 1px solid var(--color-border);
+	}
+	.filter-pills {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: var(--spacing-sm);
+		margin-bottom: var(--spacing-2xl);
+	}
+	.filter-pills button {
+		font: inherit;
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		padding: 0.5rem 1.125rem;
+		border-radius: var(--radius-full);
+		border: 1px solid var(--color-border);
+		background: var(--color-bg);
+		color: var(--color-muted);
+		cursor: pointer;
+		min-height: 44px;
+	}
+	.filter-pills button:hover {
+		color: var(--color-text);
+		border-color: var(--color-muted);
+	}
+	.filter-pills button.active {
+		background: var(--color-brand);
+		border-color: var(--color-brand);
+		color: var(--color-on-brand);
+	}
+	.scrap-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--spacing-xl);
+	}
+	.scrap-item {
+		margin: 0;
+		padding: var(--spacing-sm);
+		background: var(--color-bg);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-sm);
+		box-shadow: var(--shadow-sm);
+	}
+	.scrap-item:nth-child(odd) {
+		transform: rotate(-1.2deg);
+	}
+	.scrap-item:nth-child(even) {
+		transform: rotate(1.1deg);
+	}
+	.scrap-btn {
+		display: block;
+		width: 100%;
+		background: transparent;
+		border: 0;
+		padding: 0;
+		cursor: zoom-in;
+		font: inherit;
+	}
+	.scrap-photo {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		aspect-ratio: 1 / 1;
+		font-size: var(--font-size-xs);
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		text-align: center;
+		padding: var(--spacing-md);
+		color: var(--color-wood);
+		background: var(--color-surface);
+		border: 1px dashed var(--color-border);
+		border-radius: 2px;
+	}
+	.scrap-item figcaption {
+		padding: var(--spacing-sm) var(--spacing-xs) var(--spacing-xs);
+		font-size: var(--font-size-sm);
+		font-style: italic;
+		color: var(--color-muted);
+		line-height: 1.5;
+	}
+	.lightbox-mount {
+		display: none;
+	}
+	@media (max-width: 900px) {
+		.scrap-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+	@media (max-width: 560px) {
+		.scrap-grid {
+			grid-template-columns: 1fr;
+			max-width: 420px;
+			margin: 0 auto;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.scrap-item {
+			transform: none !important;
+		}
+	}
+</style>

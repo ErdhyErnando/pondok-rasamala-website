@@ -1,0 +1,148 @@
+---
+import Base from "../layouts/Base.astro";
+import MapFacade from "../components/ui/MapFacade.astro";
+import SectionHeader from "../components/ui/SectionHeader.astro";
+
+export const prerender = true;
+
+const locale = "id" as const;
+const copy = {
+	title: "Lokasi & Rute",
+	eyebrow: "Menuju ke sini",
+	meta: "Rute ke Pondok Rasamala dari Jakarta & Bogor: via Tol Sentul Selatan, BORR, Dramaga IPB. ±90 km dari Jakarta, ±30 km dari Kota Bogor.",
+	description: "Di kawasan wisata Gunung Salak Endah, Pamijahan, Bogor — ±90 km dari Jakarta, ±30 km dari Kota Bogor.",
+	routes: [
+		{
+			title: "Dari Jakarta (±2 jam)",
+			steps: [
+				"Keluar Tol Jagorawi di Sentul Selatan, masuk Tol Lingkar Luar Bogor (BORR) arah Kedung Badak.",
+				"Keluar BORR, ambil arah Jalan Baru (Jl. KH Soleh Iskandar) menuju Dramaga / Kampus IPB.",
+				"Lewati Kampus IPB Dramaga ±4 km, cari pertigaan Cikampak (patokan Indomaret–Alfamart berhadapan), belok kiri.",
+				"Ikuti jalan menuju kawasan wisata Gunung Salak Endah sampai gerbang Pondok Rasamala.",
+			],
+		},
+		{
+			title: "Dari Bogor (±1,5 jam)",
+			steps: [
+				"Dari pusat Kota Bogor menuju Dramaga / Kampus IPB (±30 km ke kawasan).",
+				"Lanjut ke pertigaan Cikampak, belok menuju kawasan wisata Gunung Salak Endah.",
+				"Ikuti jalan utama kawasan sampai Pondok Rasamala.",
+			],
+		},
+	],
+	transportTitle: "Kendaraan umum",
+	transport: [
+		"Bus jurusan Curug Luhur dari Bogor melewati kawasan Gunung Bunder.",
+		"Dari titik turun, lanjut ojek lokal sampai gerbang resort.",
+		"Rombongan besar disarankan bawa bus sendiri — parkir tersedia.",
+	],
+	tipsTitle: "Tips perjalanan",
+	tips: [
+		"Berangkat pagi untuk menghindari macet Jagorawi & Sentul.",
+		"Sinyal seluler melemah di beberapa titik — unduh peta offline.",
+		"Jalan menanjak di segmen akhir; pastikan rem & bahan bakar aman.",
+	],
+	verify: "Rute dari arsip web & blog wisatawan — mohon koreksi via WhatsApp bila ada perubahan.",
+	mapLabel: "Muat peta",
+};
+---
+
+<Base title={copy.title} description={copy.meta} locale={locale}>
+	<div class="container page">
+		<SectionHeader
+			eyebrow={copy.eyebrow}
+			title={copy.title}
+			description={copy.description}
+		/>
+		<div class="route-grid">
+			{copy.routes.map((r) => (
+				<article class="route-card reveal">
+					<h2>{r.title}</h2>
+					<ol>
+						{r.steps.map((s) => <li>{s}</li>)}
+					</ol>
+				</article>
+			))}
+		</div>
+		<div class="two-col">
+			<article class="info-card reveal">
+				<h2>{copy.transportTitle}</h2>
+				<ul>
+					{copy.transport.map((item) => <li>{item}</li>)}
+				</ul>
+			</article>
+			<article class="info-card reveal">
+				<h2>{copy.tipsTitle}</h2>
+				<ul>
+					{copy.tips.map((item) => <li>{item}</li>)}
+				</ul>
+			</article>
+		</div>
+		<p class="verify-note reveal">{copy.verify}</p>
+		<div class="map-wrap reveal">
+			<MapFacade loadLabel={copy.mapLabel} />
+		</div>
+	</div>
+</Base>
+
+<style>
+	.page {
+		padding-top: var(--section-pad);
+		padding-bottom: var(--section-pad);
+	}
+	.route-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--spacing-xl);
+	}
+	.route-card,
+	.info-card {
+		padding: var(--spacing-xl);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+	}
+	.route-card h2,
+	.info-card h2 {
+		font-size: var(--font-size-xl);
+		margin-bottom: var(--spacing-md);
+	}
+	.route-card ol {
+		padding-left: 1.25rem;
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-sm);
+		line-height: var(--leading-relaxed);
+	}
+	.two-col {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--spacing-xl);
+		margin-top: var(--spacing-xl);
+	}
+	.info-card ul {
+		padding-left: 1.25rem;
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-sm);
+		line-height: var(--leading-relaxed);
+	}
+	.verify-note {
+		margin-top: var(--spacing-xl);
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+		font-style: italic;
+	}
+	.map-wrap {
+		margin-top: var(--spacing-md);
+	}
+	.map-wrap :global(.map-facade) {
+		border: 1px solid var(--color-border);
+	}
+	@media (max-width: 900px) {
+		.route-grid,
+		.two-col {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

@@ -1,0 +1,148 @@
+---
+import Base from "../../layouts/Base.astro";
+import MapFacade from "../../components/ui/MapFacade.astro";
+import SectionHeader from "../../components/ui/SectionHeader.astro";
+
+export const prerender = true;
+
+const locale = "en" as const;
+const copy = {
+	title: "Location & Directions",
+	eyebrow: "Getting here",
+	meta: "Routes to Pondok Rasamala from Jakarta & Bogor: via Sentul Selatan toll, BORR, Dramaga IPB. ±90 km from Jakarta, ±30 km from Bogor city.",
+	description: "In the Gunung Salak Endah tourism area, Pamijahan, Bogor — ±90 km from Jakarta, ±30 km from Bogor city.",
+	routes: [
+		{
+			title: "From Jakarta (±2 hours)",
+			steps: [
+				"Exit the Jagorawi toll at Sentul Selatan, join the Bogor Outer Ring Road (BORR) toward Kedung Badak.",
+				"Exit BORR onto Jalan Baru (Jl. KH Soleh Iskandar) toward Dramaga / IPB Campus.",
+				"Pass IPB Dramaga for ±4 km, find the Cikampak junction (Indomaret–Alfamart landmark), turn left.",
+				"Follow the road into the Gunung Salak Endah tourism area to Pondok Rasamala's gate.",
+			],
+		},
+		{
+			title: "From Bogor (±1.5 hours)",
+			steps: [
+				"From central Bogor head to Dramaga / IPB Campus (±30 km to the area).",
+				"Continue to the Cikampak junction, turn toward Gunung Salak Endah.",
+				"Follow the area's main road to Pondok Rasamala.",
+			],
+		},
+	],
+	transportTitle: "Public transport",
+	transport: [
+		"Curug Luhur-bound buses from Bogor pass through Gunung Bunder.",
+		"From the drop point, take a local ojek to the resort gate.",
+		"Large groups should bring their own bus — parking available.",
+	],
+	tipsTitle: "Travel tips",
+	tips: [
+		"Leave early to beat Jagorawi & Sentul traffic.",
+		"Mobile signal drops in spots — download offline maps.",
+		"The final stretch climbs; check brakes & fuel.",
+	],
+	verify: "Routes from web archives & traveller blogs — please correct via WhatsApp if anything changed.",
+	mapLabel: "Load map",
+};
+---
+
+<Base title={copy.title} description={copy.meta} locale={locale}>
+	<div class="container page">
+		<SectionHeader
+			eyebrow={copy.eyebrow}
+			title={copy.title}
+			description={copy.description}
+		/>
+		<div class="route-grid">
+			{copy.routes.map((r) => (
+				<article class="route-card reveal">
+					<h2>{r.title}</h2>
+					<ol>
+						{r.steps.map((s) => <li>{s}</li>)}
+					</ol>
+				</article>
+			))}
+		</div>
+		<div class="two-col">
+			<article class="info-card reveal">
+				<h2>{copy.transportTitle}</h2>
+				<ul>
+					{copy.transport.map((item) => <li>{item}</li>)}
+				</ul>
+			</article>
+			<article class="info-card reveal">
+				<h2>{copy.tipsTitle}</h2>
+				<ul>
+					{copy.tips.map((item) => <li>{item}</li>)}
+				</ul>
+			</article>
+		</div>
+		<p class="verify-note reveal">{copy.verify}</p>
+		<div class="map-wrap reveal">
+			<MapFacade loadLabel={copy.mapLabel} />
+		</div>
+	</div>
+</Base>
+
+<style>
+	.page {
+		padding-top: var(--section-pad);
+		padding-bottom: var(--section-pad);
+	}
+	.route-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--spacing-xl);
+	}
+	.route-card,
+	.info-card {
+		padding: var(--spacing-xl);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+	}
+	.route-card h2,
+	.info-card h2 {
+		font-size: var(--font-size-xl);
+		margin-bottom: var(--spacing-md);
+	}
+	.route-card ol {
+		padding-left: 1.25rem;
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-sm);
+		line-height: var(--leading-relaxed);
+	}
+	.two-col {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--spacing-xl);
+		margin-top: var(--spacing-xl);
+	}
+	.info-card ul {
+		padding-left: 1.25rem;
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-sm);
+		line-height: var(--leading-relaxed);
+	}
+	.verify-note {
+		margin-top: var(--spacing-xl);
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+		font-style: italic;
+	}
+	.map-wrap {
+		margin-top: var(--spacing-md);
+	}
+	.map-wrap :global(.map-facade) {
+		border: 1px solid var(--color-border);
+	}
+	@media (max-width: 900px) {
+		.route-grid,
+		.two-col {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
