@@ -1,0 +1,20 @@
+---
+import AccommodationDetail from "../../layouts/AccommodationDetail.astro";
+import { getRelated, getStaySegments, resolveStay } from "../../lib/stay";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+	return getStaySegments().map((segment) => ({
+		params: { accommodation: segment },
+		props: { segment, locale: "en" as const },
+	}));
+}
+
+const { segment, locale } = Astro.props;
+const stay = resolveStay(segment, locale);
+if (!stay) throw new Error(`Unknown stay segment: ${segment}`);
+const related = getRelated(segment, locale);
+---
+
+<AccommodationDetail locale={locale} stay={stay} related={related} />
