@@ -1,0 +1,55 @@
+---
+// Calm-premium button. Renders an <a> when href is set, else a <button>.
+// Visual: single pill CTA (forest) or quiet secondary outline.
+interface Props {
+	href?: string;
+	variant?: "primary" | "secondary" | "whatsapp";
+	size?: "md" | "lg";
+	target?: string;
+	rel?: string;
+	class?: string;
+}
+
+const {
+	href,
+	variant = "primary",
+	size = "md",
+	target,
+	rel,
+	class: className = "",
+} = Astro.props;
+
+const classes = ["btn", `btn-${variant}`, size === "lg" ? "btn-lg" : "", className]
+	.filter(Boolean)
+	.join(" ");
+---
+
+{
+	href ? (
+		<a href={href} target={target} rel={rel} class={classes}>
+			<slot />
+		</a>
+	) : (
+		<button type="button" class={classes}>
+			<slot />
+		</button>
+	)
+}
+
+<style>
+	.btn-whatsapp {
+		color: var(--color-on-brand);
+		background: var(--color-brand);
+		border: none;
+		border-radius: var(--radius-full);
+	}
+	.btn-whatsapp:hover {
+		background: var(--color-brand-strong);
+		box-shadow: var(--shadow-lg);
+	}
+	.btn :global(svg) {
+		width: 1.1em;
+		height: 1.1em;
+		flex-shrink: 0;
+	}
+</style>

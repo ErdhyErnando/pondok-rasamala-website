@@ -1,38 +1,47 @@
 ---
-import { getMenu, getSiteSettings } from "emdash";
+import { getSiteSettings } from "emdash";
 import { EmDashHead } from "emdash/ui";
 import { createPublicPageContext } from "emdash/page";
 import { Font } from "astro:assets";
+import Navbar from "../components/layout/Navbar.astro";
+import Footer from "../components/layout/Footer.astro";
+import { SITE } from "../lib/constants";
+import { getStrings, localizePath, type Locale } from "../lib/i18n";
 import "../styles/tokens.css";
 import "../styles/theme.css";
 
+// Calm-premium shell: locale-aware head (hreflang id/en/x-default, OG,
+// JSON-LD slots), frosted Navbar, deep-forest Footer, CSS-only reveals.
+// EmDash wiring kept for admin-published titles/settings; visual chrome
+// is data-file + i18n driven.
 interface Props {
 	title?: string;
 	description?: string;
 	image?: string;
+	locale?: Locale;
+	canonical?: string;
+	jsonLd?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
-const { title, description, image } = Astro.props;
+const { title, description, image, locale = "id", canonical, jsonLd } = Astro.props;
+const t = getStrings(locale);
 const settings = await getSiteSettings();
-const siteTitle = settings?.title || "Acme";
+const siteTitle = settings?.title || SITE.name;
 const fullTitle = title ? `${title} — ${siteTitle}` : siteTitle;
-const siteDescription =
-	settings?.tagline || "Build products people actually want";
-const siteLogo = (settings?.logo as any)?.url ? settings.logo as
-	{ mediaId: string; alt?: string; url: string } : null;
+const metaDescription =
+	description || settings?.tagline || `${SITE.name}: ${SITE.tagline}`;
 
-const [menu, footerProduct, footerCompany, footerSupport] = await Promise.all([
-	getMenu("primary"),
-	getMenu("footer_product"),
-	getMenu("footer_company"),
-	getMenu("footer_support"),
-]);
-
-const footerColumns = [
-	{ heading: "Product", menu: footerProduct },
-	{ heading: "Company", menu: footerCompany },
-	{ heading: "Support", menu: footerSupport },
-].filter((col) => col.menu && col.menu.items.length > 0);
+const path = Astro.url.pathname;
+const origin = Astro.url.origin;
+const canonicalUrl = canonical ?? Astro.url.href;
+const idUrl = `${origin}${localizePath(path, "id")}`;
+const enUrl = `${origin}${localizePath(path, "en")}`;
+const ogLocale = locale === "en" ? "en_US" : "id_ID";
+const ogImage = image
+	? image.startsWith("http")
+		? image
+		: `${origin}${image}`
+	: undefined;
 
 const pageCtx = createPublicPageContext({
 	Astro,
@@ -40,166 +49,81 @@ const pageCtx = createPublicPageContext({
 	pageType: "website",
 	title: fullTitle,
 	pageTitle: title ?? siteTitle,
-	description: description || siteDescription,
-	canonical: Astro.url.href,
+	description: metaDescription,
+	canonical: canonicalUrl,
 	image,
 	seo: { ogImage: image },
 	siteName: siteTitle,
 });
+
+const beaconToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>{fullTitle}</title>
-		<EmDashHead page={pageCtx} />
+		<meta name="description" content={metaDescription} />
+		<link rel="canonical" href={canonicalUrl} />
+		<link rel="alternate" hreflang="id" href={idUrl} />
+		<link rel="alternate" hreflang="en" href={enUrl} />
+		<link rel="alternate" hreflang="x-default" href={idUrl} />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={siteTitle} />
+		<meta property="og:title" content={fullTitle} />
+		<meta property="og:description" content={metaDescription} />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:locale" content={ogLocale} />
+		{
+			ogLocale === "id_ID" ? (
+				<meta property="og:locale:alternate" content="en_US" />
+			) : (
+				<meta property="og:locale:alternate" content="id_ID" />
+			)
+		}
+		{ogImage && <meta property="og:image" content={ogImage} />}
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={fullTitle} />
+		<meta name="twitter:description" content={metaDescription} />
+		{ogImage && <meta name="twitter:image" content={ogImage} />}
+		<meta name="theme-color" content="#016747" />
+		<link rel="icon" href="/favicon.ico" sizes="32x32" />
+		<link rel="icon" href="/favicon/favicon-32x32.png" type="image/png" sizes="32x32" />
+		<link rel="icon" href="/favicon/favicon-16x16.png" type="image/png" sizes="16x16" />
+		<link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
+		<link rel="manifest" href="/site.webmanifest" />
 		<Font cssVariable="--font-body" preload />
-		<script is:inline>
-			// Apply an explicit theme choice immediately to prevent flash.
-			// With no cookie, color-scheme: light dark follows the OS.
-			(function () {
-				var c = document.cookie;
-				var i = c.indexOf("theme=");
-				var theme = i >= 0 ? c.slice(i + 6).split(";")[0] : null;
-				if (theme === "dark" || theme === "light") {
-					document.documentElement.classList.add(theme);
-				}
-			})();
-		</script>
+		<Font cssVariable="--font-heading" preload />
+		<EmDashHead page={pageCtx} />
+		{
+			jsonLd && (
+				<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+			)
+		}
+		<slot name="jsonld" />
+		{
+			beaconToken && (
+				<script
+					defer
+					src="https://static.cloudflareinsights.com/beacon.min.js"
+					data-cf-beacon={JSON.stringify({ token: beaconToken })}
+				/>
+			)
+		}
 	</head>
 	<body>
-		<header class="site-header">
-			<nav class="nav">
-				<a href="/" class="site-logo">
-					{siteLogo
-						? <img src={siteLogo.url} alt={siteLogo.alt || siteTitle} class="site-logo-img" />
-						: siteTitle
-					}
-				</a>
-				<div class="nav-links">
-					{
-						menu?.items.map((item) => (
-							<a href={item.url} target={item.target}>
-								{item.label}
-							</a>
-						))
-					}
-				</div>
-				<div class="nav-actions">
-					<a href="/_emdash/admin" class="nav-admin">Admin</a>
-					<a href="/signup" class="btn btn-primary nav-cta">Get Started</a>
-				</div>
-			</nav>
-		</header>
-
-		<main>
+		<a class="skip-link" href="#main-content">{t.skipToContent}</a>
+		<Navbar locale={locale} currentPath={path} />
+		<main id="main-content">
 			<slot />
 		</main>
-
-		<footer class="site-footer">
-			<div class="footer-content">
-				<div class="footer-brand">
-					<span class="footer-logo">
-						{siteLogo
-							? <img src={siteLogo.url} alt={siteLogo.alt || siteTitle} class="footer-logo-img" />
-							: siteTitle
-						}
-					</span>
-					<p class="footer-tagline">
-						{settings?.tagline || "Build something amazing"}
-					</p>
-				</div>
-				<div class="footer-links">
-					{
-						footerColumns.map((col) => (
-							<div class="footer-col">
-								<h4>{col.heading}</h4>
-								{col.menu!.items.map((item) => (
-									<a
-										href={item.url}
-										target={item.target}
-										rel={item.target ? "noopener noreferrer" : undefined}>
-										{item.label}
-									</a>
-								))}
-							</div>
-						))
-					}
-				</div>
-			</div>
-			<div class="footer-bottom">
-				<p>
-					&copy; {new Date().getFullYear()}
-					{siteTitle}. All rights reserved.
-				</p>
-				<div class="theme-switcher">
-					<button
-						type="button"
-						class="theme-btn"
-						data-theme="light"
-						aria-label="Light mode">Light</button
-					>
-					<button
-						type="button"
-						class="theme-btn"
-						data-theme="dark"
-						aria-label="Dark mode">Dark</button
-					>
-					<button
-						type="button"
-						class="theme-btn"
-						data-theme="system"
-						aria-label="System theme">System</button
-					>
-				</div>
-				<p class="footer-powered">
-					Powered by <a href="https://emdashcms.com">EmDash</a>
-				</p>
-			</div>
-		</footer>
+		<Footer locale={locale} currentPath={path} />
 
 		<script>
-			// Theme switcher
-			const THEME_REGEX = /theme=([^;]+)/;
-			const themeBtns =
-				document.querySelectorAll<HTMLButtonElement>(".theme-btn");
-			const root = document.documentElement;
-
-			function setTheme(theme: string) {
-				const secure = location.protocol === "https:" ? "; Secure" : "";
-				if (theme === "system") {
-					document.cookie = `theme=; path=/; max-age=0; SameSite=Lax${secure}`;
-					root.classList.remove("light", "dark");
-				} else {
-					document.cookie = `theme=${theme}; path=/; max-age=31536000; SameSite=Lax${secure}`;
-					root.classList.remove("light", "dark");
-					root.classList.add(theme);
-				}
-				updateActiveBtn(theme);
-			}
-
-			function updateActiveBtn(theme: string) {
-				themeBtns.forEach((btn) => {
-					btn.classList.toggle("active", btn.dataset.theme === theme);
-				});
-			}
-
-			function getStoredTheme(): string {
-				const match = document.cookie.match(THEME_REGEX);
-				return match ? match[1] : "system";
-			}
-
-			// Initialize - apply stored theme on load
-			const storedTheme = getStoredTheme();
-			setTheme(storedTheme);
-
-			themeBtns.forEach((btn) => {
-				btn.addEventListener("click", () => {
-					setTheme(btn.dataset.theme || "system");
-				});
-			});
+			import { initReveals } from "../lib/reveal";
+			initReveals();
 		</script>
 
 		<style is:global>
@@ -220,12 +144,9 @@ const pageCtx = createPublicPageContext({
 				}
 
 				/*
-				 * Design tokens live in src/styles/tokens.css. Colors are
-				 * defined with light-dark(); these rules pin the scheme when
-				 * the footer switcher sets an explicit choice. With no class,
-				 * color-scheme: light dark follows the OS preference. The
-				 * @supports guard keeps the toggle from forcing dark UA form
-				 * controls on browsers stuck on the plain-light fallback.
+				 * Colors use light-dark(); these rules pin the scheme only if
+				 * an explicit theme class is ever set. With no class,
+				 * color-scheme: light dark follows the OS preference.
 				 */
 				@supports (color: light-dark(#000, #fff)) {
 					:root.light {
@@ -295,6 +216,13 @@ const pageCtx = createPublicPageContext({
 				}
 				h4 {
 					font-size: var(--font-size-xl);
+				}
+
+				/* Accessibility: visible keyboard focus everywhere */
+				:focus-visible {
+					outline: 2px solid var(--color-brand);
+					outline-offset: 2px;
+					border-radius: 2px;
 				}
 
 				/* Utility classes */
@@ -394,203 +322,29 @@ const pageCtx = createPublicPageContext({
 					font-size: var(--font-size-base);
 				}
 			}
-		</style>
 
-		<style>
-			.site-header {
-				position: sticky;
-				top: 0;
-				z-index: 100;
-				background: var(--color-bg);
-				border-bottom: 1px solid var(--color-border);
-			}
-
-			.nav {
-				max-width: var(--wide-width);
-				margin: 0 auto;
-				padding: var(--spacing-md) var(--spacing-lg);
-				display: flex;
-				flex-wrap: nowrap;
-				align-items: center;
-				gap: var(--spacing-lg);
-			}
-
-			.site-logo {
-				font-size: var(--font-size-xl);
-				font-weight: var(--font-weight-display);
-				letter-spacing: var(--tracking-tight);
-				background: var(--gradient-brand);
-				-webkit-background-clip: text;
-				-webkit-text-fill-color: transparent;
-				background-clip: text;
-			}
-
-			.site-logo-img {
-				height: 48px;
-				width: auto;
-				display: block;
-				margin: -8px 0;
-			}
-
-			.nav-links {
-				display: flex;
-				flex-wrap: wrap;
-				gap: var(--spacing-lg);
-				margin-left: auto;
-			}
-
-			.nav-links a {
+			.skip-link {
+				position: absolute;
+				left: var(--spacing-md);
+				top: -100px;
+				z-index: 200;
+				background: var(--color-brand);
+				color: var(--color-on-brand);
 				font-size: var(--font-size-sm);
-				font-weight: 500;
-				color: var(--color-muted);
-				transition: color var(--transition-fast);
-			}
-
-			.nav-links a:hover {
-				color: var(--color-text);
-			}
-
-			.nav-actions {
-				display: flex;
-				align-items: center;
-				gap: var(--spacing-lg);
-			}
-
-			.nav-admin {
-				font-size: var(--font-size-sm);
-				color: var(--color-muted);
-				opacity: 0.5;
-			}
-
-			/* Compact variant of .btn.btn-primary for the header */
-			.nav-cta {
+				font-weight: 600;
 				padding: var(--spacing-sm) var(--spacing-md);
 				border-radius: var(--radius-sm);
+				transition: top var(--transition-fast);
+			}
+			.skip-link:focus {
+				top: var(--spacing-md);
 			}
 
 			main {
 				min-height: calc(100vh - 200px);
 			}
 
-			.site-footer {
-				background: var(--color-surface);
-				border-top: 1px solid var(--color-border);
-			}
-
-			.footer-content {
-				max-width: var(--wide-width);
-				margin: 0 auto;
-				padding: var(--spacing-4xl) var(--spacing-lg) var(--spacing-2xl);
-				display: grid;
-				grid-template-columns: 1fr 2fr;
-				gap: var(--spacing-4xl);
-			}
-
-			.footer-logo {
-				font-size: var(--font-size-xl);
-				font-weight: var(--font-weight-display);
-				letter-spacing: var(--tracking-tight);
-			}
-
-			.footer-logo-img {
-				height: 24px;
-				width: auto;
-			}
-
-			.footer-tagline {
-				margin-top: var(--spacing-sm);
-				font-size: var(--font-size-sm);
-				color: var(--color-muted);
-			}
-
-			.footer-links {
-				display: grid;
-				grid-template-columns: repeat(3, 1fr);
-				gap: var(--spacing-xl);
-			}
-
-			.footer-col h4 {
-				font-size: var(--font-size-sm);
-				font-weight: 600;
-				margin-bottom: var(--spacing-md);
-			}
-
-			.footer-col a {
-				display: block;
-				font-size: var(--font-size-sm);
-				color: var(--color-muted);
-				padding: var(--spacing-xs) 0;
-				transition: color var(--transition-fast);
-			}
-
-			.footer-col a:hover {
-				color: var(--color-text);
-			}
-
-			.footer-bottom {
-				max-width: var(--wide-width);
-				margin: 0 auto;
-				padding: var(--spacing-lg);
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				font-size: var(--font-size-sm);
-				color: var(--color-muted);
-				border-top: 1px solid var(--color-border);
-			}
-
-			.footer-powered a {
-				color: var(--color-text);
-			}
-
-			.theme-switcher {
-				display: flex;
-				gap: var(--spacing-xs);
-			}
-
-			.theme-btn {
-				background: transparent;
-				border: 1px solid var(--color-border);
-				color: var(--color-muted);
-				font-family: var(--font-body);
-				font-size: var(--font-size-sm);
-				padding: var(--spacing-xs) var(--spacing-sm);
-				border-radius: var(--radius-sm);
-				cursor: pointer;
-				transition: all var(--transition-fast);
-			}
-
-			.theme-btn:hover {
-				color: var(--color-text);
-				border-color: var(--color-text);
-			}
-
-			.theme-btn.active {
-				background: var(--color-bg);
-				color: var(--color-text);
-				border-color: var(--color-brand);
-			}
-
 			@media (max-width: 768px) {
-				.footer-content {
-					grid-template-columns: 1fr;
-					gap: var(--spacing-2xl);
-				}
-
-				.footer-links {
-					grid-template-columns: repeat(2, 1fr);
-				}
-
-				.footer-bottom {
-					flex-direction: column;
-					gap: var(--spacing-md);
-					text-align: center;
-				}
-
-				.theme-switcher {
-					order: -1;
-				}
-
 				h1 {
 					font-size: var(--font-size-4xl);
 				}
@@ -599,24 +353,9 @@ const pageCtx = createPublicPageContext({
 				}
 			}
 
-			@media (max-width: 540px) {
-				.nav {
-					flex-wrap: wrap;
-					row-gap: var(--spacing-md);
-					justify-content: space-between;
-				}
-
-				.nav-links {
-					order: 3;
-					width: 100%;
-					justify-content: flex-end;
-					margin-left: 0;
-				}
-			}
-
-			@media (max-width: 480px) {
-				.footer-links {
-					grid-template-columns: 1fr;
+			@media (prefers-reduced-motion: reduce) {
+				html {
+					scroll-behavior: auto;
 				}
 			}
 		</style>

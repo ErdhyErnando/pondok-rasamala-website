@@ -1,0 +1,40 @@
+---
+// Centered (or left-aligned) block intro shared by all sections.
+// One idea per section; eyebrow carries the small-caps forest accent.
+interface Props {
+	eyebrow?: string;
+	title: string;
+	description?: string;
+	align?: "center" | "left";
+}
+
+const { eyebrow, title, description, align = "center" } = Astro.props;
+---
+
+<div class={`section-intro align-${align}`}>
+	{eyebrow && <p class="eyebrow">{eyebrow}</p>}
+	<h2 class="section-headline">{title}</h2>
+	{description && <p class="section-subheadline">{description}</p>}
+</div>
+
+<style>
+	.section-intro {
+		max-width: var(--max-width);
+		margin: 0 auto var(--spacing-2xl);
+	}
+	.align-center {
+		text-align: center;
+	}
+	.align-left {
+		text-align: left;
+		margin-left: 0;
+	}
+	.eyebrow {
+		font-size: var(--font-size-xs);
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--color-brand);
+		margin-bottom: var(--spacing-sm);
+	}
+</style>

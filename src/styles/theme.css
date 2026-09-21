@@ -42,6 +42,12 @@
 	--section-pad: clamp(3rem, 8vw, 7.5rem);
 }
 
+/* Text selection carries the forest hint */
+::selection {
+	background: var(--color-brand-soft);
+	color: var(--color-text);
+}
+
 /* Scroll reveals (JS adds .is-visible; see src/lib/reveal.ts) */
 .reveal {
 	opacity: 0;
