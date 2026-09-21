@@ -1,0 +1,56 @@
+---
+import WhatsAppButton from "../ui/WhatsAppButton.astro";
+import { ctaSection, tx } from "../../data/home";
+import type { Locale } from "../../lib/i18n";
+
+// Centered closing CTA — the only gradient-free loud moment on the page:
+// one forest pill, one honesty note. Footer follows directly.
+interface Props {
+	locale?: Locale;
+}
+
+const { locale = "id" } = Astro.props;
+const message =
+	locale === "en"
+		? "Hello Pondok Rasamala, I'd like to check availability for an upcoming weekend. Thank you."
+		: "Halo Pondok Rasamala, saya mau cek ketersediaan untuk akhir pekan. Terima kasih.";
+---
+
+<section class="cta">
+	<div class="container cta-inner reveal">
+		<h2>{tx(ctaSection.title, locale)}</h2>
+		<p>{tx(ctaSection.body, locale)}</p>
+		<WhatsAppButton message={message} locale={locale} size="lg" />
+		<p class="cta-note">{tx(ctaSection.note, locale)}</p>
+	</div>
+</section>
+
+<style>
+	.cta {
+		padding: var(--section-pad) 0;
+	}
+	.cta-inner {
+		text-align: center;
+		max-width: var(--max-width);
+		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: var(--spacing-md);
+	}
+	.cta-inner h2 {
+		font-size: var(--font-size-3xl);
+		font-weight: var(--font-weight-display);
+		letter-spacing: var(--tracking-tight);
+		text-wrap: balance;
+	}
+	.cta-inner p {
+		color: var(--color-muted);
+		font-size: var(--font-size-lg);
+		line-height: var(--leading-relaxed);
+	}
+	.cta-note {
+		font-size: var(--font-size-sm) !important;
+		color: var(--color-muted);
+	}
+</style>

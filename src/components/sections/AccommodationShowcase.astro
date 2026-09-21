@@ -1,0 +1,176 @@
+---
+import SectionHeader from "../ui/SectionHeader.astro";
+import PhotoPlaceholder from "../ui/PhotoPlaceholder.astro";
+import { featured, showcase, tx, type Featured } from "../../data/home";
+import { glamping, glampingPath } from "../../data/glamping";
+import { villas, villaPath } from "../../data/villas";
+import { formatIDR } from "../../lib/format";
+import { localizePath, type Locale } from "../../lib/i18n";
+
+// Card anatomy from hero-structure rails: eyebrow / serif name / price.
+interface Props {
+	locale?: Locale;
+}
+
+const { locale = "id" } = Astro.props;
+const L = (p: string) => localizePath(p, locale);
+
+interface Card {
+	href: string;
+	eyebrow: string;
+	name: string;
+	blurb: string;
+	price: string;
+	imageLabel: string;
+}
+
+const cards: Card[] = featured.map((f: Featured) => {
+	if (f.kind === "villa") {
+		const v = villas.find((x) => x.slug === f.slug)!;
+		return {
+			href: L(villaPath(v.slug)),
+			eyebrow:
+				locale === "en"
+					? `Villa · sleeps ${v.paxMax}`
+					: `Villa · maks ${v.paxMax} orang`,
+			name: `Villa ${v.name}`,
+			blurb: tx(f.blurb, locale),
+			price: formatIDR(v.price),
+			imageLabel: `Villa ${v.name} — foto menyusul`,
+		};
+	}
+	const g = glamping.find((x) => x.slug === f.slug)!;
+	const min = Math.min(...g.tiers.map((tier) => tier.price));
+	const pax = g.tiers.map((tier) => tier.pax);
+	return {
+		href: L(glampingPath(g.slug)),
+		eyebrow:
+			locale === "en"
+				? `Glamping · ${Math.min(...pax)}–${Math.max(...pax)} guests`
+				: `Glamping · ${Math.min(...pax)}–${Math.max(...pax)} orang`,
+		name: `Glamping ${g.name}`,
+		blurb: tx(f.blurb, locale),
+		price: `${tx(showcase.from, locale)} ${formatIDR(min)}`,
+		imageLabel: `Glamping ${g.name} — foto menyusul`,
+	};
+});
+---
+
+<section class="showcase">
+	<div class="container">
+		<SectionHeader
+			eyebrow={tx(showcase.eyebrow, locale)}
+			title={tx(showcase.title, locale)}
+			description={tx(showcase.description, locale)}
+		/>
+		<div class="card-grid">
+			{cards.map((c) => (
+				<article class="stay-card reveal">
+					<a href={c.href} class="card-visual" aria-hidden="true" tabindex="-1">
+						<PhotoPlaceholder label={c.imageLabel} ratio="16 / 10" />
+					</a>
+					<p class="card-eyebrow">{c.eyebrow}</p>
+					<h3><a href={c.href}>{c.name}</a></h3>
+					<p class="card-blurb">{c.blurb}</p>
+					<p class="card-price">
+						{c.price}
+						<span class="price-note"> / {tx(showcase.priceNote, locale)}</span>
+					</p>
+					<a href={c.href} class="card-link">{tx(showcase.detail, locale)} →</a>
+				</article>
+			))}
+		</div>
+		<div class="showcase-ctas reveal">
+			<a href={L("/villa/")} class="btn btn-secondary btn-lg">{tx(showcase.allVillas, locale)}</a>
+			<a href={L("/glamping/")} class="btn btn-secondary btn-lg">{tx(showcase.allGlamping, locale)}</a>
+		</div>
+	</div>
+</section>
+
+<style>
+	.showcase {
+		padding: var(--section-pad) 0;
+		background: var(--color-surface);
+		border-block: 1px solid var(--color-border);
+	}
+	.card-grid {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: var(--spacing-xl);
+	}
+	.stay-card {
+		display: flex;
+		flex-direction: column;
+	}
+	.card-visual {
+		display: block;
+	}
+	.card-visual :global(.photo-placeholder) {
+		border-radius: var(--radius);
+		transition: transform var(--transition-base);
+	}
+	.stay-card:hover .card-visual :global(.photo-placeholder) {
+		transform: translateY(-2px);
+	}
+	.card-eyebrow {
+		margin-top: var(--spacing-md);
+		font-size: var(--font-size-xs);
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--color-brand);
+	}
+	.stay-card h3 {
+		margin-top: var(--spacing-xs);
+		font-size: var(--font-size-xl);
+	}
+	.stay-card h3 a:hover {
+		color: var(--color-brand);
+	}
+	.card-blurb {
+		margin-top: var(--spacing-xs);
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+		line-height: var(--leading-relaxed);
+		flex-grow: 1;
+	}
+	.card-price {
+		margin-top: var(--spacing-sm);
+		font-weight: 700;
+		letter-spacing: var(--tracking-snug);
+	}
+	.price-note {
+		font-weight: 500;
+		font-size: var(--font-size-xs);
+		color: var(--color-muted);
+	}
+	.card-link {
+		margin-top: var(--spacing-xs);
+		display: inline-block;
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		color: var(--color-brand);
+	}
+	.showcase-ctas {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: var(--spacing-md);
+		margin-top: var(--spacing-2xl);
+	}
+	@media (max-width: 1100px) {
+		.card-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+	@media (max-width: 600px) {
+		.card-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.card-visual :global(.photo-placeholder) {
+			transition: none;
+		}
+	}
+</style>
