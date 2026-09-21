@@ -1,0 +1,63 @@
+/*
+  theme.css — Pondok Rasamala calm-premium overrides.
+  Monochrome dominant (ink/paper/grays) + hints sampled from the logo badge:
+  forest #016747, amber #E8930C (softened from #ff9900), woody #6E8051.
+  Gradients flattened to solids. Do not edit tokens.css or Base.astro.
+*/
+@import "tailwindcss";
+
+:root {
+	/* Base monochrome (warm paper, not stark white) */
+	--color-bg: light-dark(#f7f5f1, #161a17);
+	--color-text: light-dark(#232323, #ece8e0);
+	--color-muted: light-dark(#6b645a, #a8a29a);
+	--color-border: light-dark(#e4ded4, #2e332e);
+	--color-surface: light-dark(#fffdf9, #1d211d);
+
+	/* Forest hint — primary actions, eyebrows, active states */
+	--color-brand: light-dark(#016747, #4caf7d);
+	--color-brand-strong: light-dark(#014d35, #3d9c6c);
+	--color-brand-soft: light-dark(#dce8dd, #24402f);
+	--color-on-brand: white;
+	--color-brand-ring: color-mix(in srgb, var(--color-brand) 12%, transparent);
+
+	/* Amber hint — micro-highlights only (stars, eyebrows, badges) */
+	--color-accent: #e8930c;
+	--color-accent-soft: #f6d9a8;
+
+	/* Woody hint — dividers, captions, footer wash */
+	--color-wood: light-dark(#6e8051, #9aa583);
+
+	/* Flat calm: gradients resolve to solids */
+	--gradient-brand: var(--color-brand);
+	--gradient-brand-strong: var(--color-brand-strong);
+	--gradient-brand-soft: var(--color-brand-soft);
+	--gradient-headline: none;
+
+	/* Editorial serif headlines, quieter than the SaaS default */
+	--font-weight-display: 600;
+	--font-weight-heading: 600;
+
+	/* Calm section rhythm */
+	--section-pad: clamp(3rem, 8vw, 7.5rem);
+}
+
+/* Scroll reveals (JS adds .is-visible; see src/lib/reveal.ts) */
+.reveal {
+	opacity: 0;
+	transform: translateY(12px);
+	transition:
+		opacity 0.7s ease,
+		transform 0.7s ease;
+}
+.reveal.is-visible {
+	opacity: 1;
+	transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+	.reveal {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+}

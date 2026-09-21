@@ -1,0 +1,8 @@
+# Legacy WordPress URLs → new. Mirror of src/lib/constants.ts REDIRECTS.
+/category/type-of-villa/ /villa/ 301
+/category/glamping/ /glamping/ 301
+/category/campsite/ /campsite/ 301
+/outbound/ /package/outbound/ 301
+/special-school-package/ /package/special-school-package/ 301
+/dexter / 301
+/author/adminpondok/ / 301
