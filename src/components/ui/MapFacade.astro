@@ -1,0 +1,80 @@
+---
+// Click-to-load Google Maps facade (perf + privacy: no iframe until asked).
+// Reused by homepage LocationSection, /location/, and /contact-us/.
+interface Props {
+	loadLabel: string;
+	class?: string;
+}
+
+const { loadLabel, class: className = "" } = Astro.props;
+const mapsQuery = encodeURIComponent("Pondok Rasamala, Gunung Salak Endah, Pamijahan, Bogor");
+---
+
+<div class={`map-facade ${className}`} data-embed={`https://www.google.com/maps?q=${mapsQuery}&output=embed`}>
+	<button type="button" class="map-button" data-map-button>
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+			<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z" />
+			<path d="M9 4v14M15 6v14" />
+		</svg>
+		<span>{loadLabel}</span>
+	</button>
+</div>
+
+<script>
+	document.querySelectorAll<HTMLDivElement>(".map-facade[data-embed]").forEach((slot) => {
+		slot.querySelector<HTMLButtonElement>("[data-map-button]")?.addEventListener(
+			"click",
+			() => {
+				const frame = document.createElement("iframe");
+				frame.src = slot.dataset.embed ?? "";
+				frame.title = "Google Maps";
+				frame.loading = "lazy";
+				frame.referrerPolicy = "no-referrer-when-downgrade";
+				frame.allowFullscreen = true;
+				slot.replaceChildren(frame);
+			},
+			{ once: true },
+		);
+	});
+</script>
+
+<style>
+	.map-facade {
+		position: relative;
+		min-height: 320px;
+		border-radius: var(--radius);
+		overflow: hidden;
+	}
+	.map-facade iframe {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		border: 0;
+	}
+	.map-button {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: var(--spacing-sm);
+		width: 100%;
+		background: transparent;
+		border: 0;
+		color: inherit;
+		font-family: inherit;
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		cursor: pointer;
+	}
+	.map-button svg {
+		width: 40px;
+		height: 40px;
+		opacity: 0.8;
+	}
+	.map-button:hover svg {
+		opacity: 1;
+	}
+</style>

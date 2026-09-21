@@ -1,0 +1,19 @@
+---
+import PackageDetail from "../../layouts/PackageDetail.astro";
+import { packages } from "../../data/packages";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+	return packages.map((pkg) => ({
+		params: { slug: pkg.slug },
+		props: { slug: pkg.slug, locale: "id" as const },
+	}));
+}
+
+const { slug, locale } = Astro.props;
+const pkg = packages.find((p) => p.slug === slug);
+if (!pkg) throw new Error(`Unknown package: ${slug}`);
+---
+
+<PackageDetail locale={locale} pkg={pkg} />

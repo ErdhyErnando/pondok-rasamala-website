@@ -1,0 +1,62 @@
+---
+import Base from "../../layouts/Base.astro";
+import SectionHeader from "../../components/ui/SectionHeader.astro";
+import PackageCard from "../../components/ui/PackageCard.astro";
+import { packages, packagePath } from "../../data/packages";
+import { formatIDR } from "../../lib/format";
+import { localizePath } from "../../lib/i18n";
+
+export const prerender = true;
+
+const locale = "id" as const;
+const L = (p: string) => localizePath(p, locale);
+const copy = {
+	title: "Semua Paket",
+	eyebrow: "Gathering & aktivitas",
+	meta: "Paket Pondok Rasamala: outbound, sekolah, company outing, keluarga. Harga per orang & penawaran khusus via WhatsApp.",
+	description: "Dari outbound sehari sampai gathering menginap — semua diatur dari satu pintu.",
+};
+---
+
+<Base title={copy.title} description={copy.meta} locale={locale}>
+	<div class="container page">
+		<SectionHeader
+			eyebrow={copy.eyebrow}
+			title={copy.title}
+			description={copy.description}
+		/>
+		<div class="card-grid">
+			{packages.map((p) => (
+				<PackageCard
+					href={L(packagePath(p.slug))}
+					name={p.name.id}
+					tagline={p.tagline.id}
+					duration={p.duration.id}
+					priceSummary={
+						p.tiers[0]?.price != null
+							? `Mulai ${formatIDR(Math.min(...p.tiers.map((tier) => tier.price as number)))}`
+							: "Penawaran khusus"
+					}
+					imageLabel={`${p.name.id} — foto menyusul`}
+				/>
+			))}
+		</div>
+	</div>
+</Base>
+
+<style>
+	.page {
+		padding-top: var(--section-pad);
+		padding-bottom: var(--section-pad);
+	}
+	.card-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: var(--spacing-2xl) var(--spacing-xl);
+	}
+	@media (max-width: 700px) {
+		.card-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

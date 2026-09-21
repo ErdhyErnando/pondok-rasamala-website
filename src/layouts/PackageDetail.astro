@@ -1,0 +1,281 @@
+---
+import Base from "./Base.astro";
+import PackageCard from "../components/ui/PackageCard.astro";
+import PhotoPlaceholder from "../components/ui/PhotoPlaceholder.astro";
+import WhatsAppButton from "../components/ui/WhatsAppButton.astro";
+import { formatIDR } from "../lib/format";
+import { localizePath, type Locale } from "../lib/i18n";
+import { packages, packagePath, type PackageRow } from "../data/packages";
+
+// Shared package detail wrapper: hero → includes + tiers + activities → CTA.
+interface Props {
+	locale?: Locale;
+	pkg: PackageRow;
+}
+
+const { locale = "id", pkg } = Astro.props;
+const L = (p: string) => localizePath(p, locale);
+const en = locale === "en";
+const t = {
+	home: en ? "Home" : "Beranda",
+	allPackages: en ? "All Packages" : "Semua Paket",
+	includes: en ? "What's included" : "Termasuk dalam paket",
+	tiers: en ? "Options & pricing" : "Pilihan & harga",
+	activities: en ? "Activities" : "Aktivitas",
+	other: en ? "Other packages" : "Paket lainnya",
+	verifyNote: en ? "Web anchor — confirmed via WhatsApp" : "Acuan web — konfirmasi via WhatsApp",
+	quoteCta: en ? "Request a quote" : "Minta penawaran",
+	perEvent: (u: string) => u,
+};
+const priceSummary = (p: PackageRow): string =>
+	p.tiers[0]?.price != null
+		? `${en ? "From" : "Mulai"} ${formatIDR(Math.min(...p.tiers.map((tier) => tier.price as number)))}`
+		: en ? "Custom quote" : "Penawaran khusus";
+const waMessage = en
+	? `Hello Pondok Rasamala, I'd like to ask about the ${pkg.name.en} package. Thank you.`
+	: `Halo Pondok Rasamala, saya mau bertanya tentang ${pkg.name.id}. Terima kasih.`;
+const others = packages.filter((p) => p.slug !== pkg.slug);
+---
+
+<Base title={pkg.name[locale]} description={pkg.tagline[locale]} locale={locale}>
+	<div class="container">
+		<nav class="breadcrumb" aria-label="Breadcrumb">
+			<a href={L("/")}>{t.home}</a>
+			<span aria-hidden="true">›</span>
+			<a href={L("/package/")}>{t.allPackages}</a>
+			<span aria-hidden="true">›</span>
+			<span aria-current="page">{pkg.name[locale]}</span>
+		</nav>
+
+		<div class="pkg-hero">
+			<PhotoPlaceholder
+				label={en ? `${pkg.name.en} — hero photo to follow` : `${pkg.name.id} — foto utama menyusul`}
+				ratio="16 / 8"
+			/>
+		</div>
+
+		<div class="pkg-grid">
+			<div class="pkg-main">
+				<p class="eyebrow">{pkg.duration[locale]}</p>
+				<h1>{pkg.name[locale]}</h1>
+				<p class="tagline">{pkg.tagline[locale]}</p>
+				<p class="description">{pkg.description[locale]}</p>
+
+				<h2>{t.includes}</h2>
+				<ul class="check-list">
+					{pkg.includes[locale].map((item) => <li>{item}</li>)}
+				</ul>
+
+				<h2>{t.activities}</h2>
+				<ul class="pill-list">
+					{pkg.activities[locale].map((item) => <li>{item}</li>)}
+				</ul>
+			</div>
+
+			<aside class="pkg-sidebar">
+				<div class="price-card">
+					<h2>{t.tiers}</h2>
+					<ul>
+						{pkg.tiers.map((tier) => (
+							<li>
+								<span>{tier.name[locale]}</span>
+								{tier.price != null ? (
+									<strong>
+										{formatIDR(tier.price)}
+										<em>{tier.unit[locale]}</em>
+										{tier.verify && <span class="verify">*</span>}
+									</strong>
+								) : (
+									<strong class="on-request">{t.quoteCta}</strong>
+								)}
+							</li>
+						))}
+					</ul>
+					{pkg.tiers.some((tier) => tier.verify) && (
+						<p class="price-note">* {t.verifyNote}</p>
+					)}
+					<WhatsAppButton message={waMessage} locale={locale} size="lg" class="sidebar-cta" />
+				</div>
+			</aside>
+		</div>
+
+		<section class="related">
+			<h2>{t.other}</h2>
+			<div class="related-grid">
+				{others.map((o) => (
+					<PackageCard
+						href={L(packagePath(o.slug))}
+						name={o.name[locale]}
+						tagline={o.tagline[locale]}
+						duration={o.duration[locale]}
+						priceSummary={priceSummary(o)}
+						imageLabel={en ? `${o.name.en} — photo to follow` : `${o.name.id} — foto menyusul`}
+					/>
+				))}
+			</div>
+		</section>
+	</div>
+</Base>
+
+<style>
+	.breadcrumb {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		padding: var(--spacing-xl) 0 var(--spacing-md);
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+	}
+	.breadcrumb a:hover {
+		color: var(--color-brand);
+	}
+	.breadcrumb [aria-current="page"] {
+		color: var(--color-text);
+		font-weight: 600;
+	}
+	.pkg-hero :global(.photo-placeholder) {
+		min-height: min(50vh, 440px);
+	}
+	.pkg-grid {
+		display: grid;
+		grid-template-columns: 1.6fr 1fr;
+		gap: var(--spacing-3xl);
+		margin-top: var(--spacing-2xl);
+		align-items: start;
+	}
+	.eyebrow {
+		font-size: var(--font-size-xs);
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--color-brand);
+	}
+	.pkg-main h1 {
+		font-size: clamp(2rem, 4vw, 3rem);
+		letter-spacing: var(--tracking-tight);
+		margin-top: var(--spacing-sm);
+	}
+	.tagline {
+		margin-top: var(--spacing-xs);
+		font-size: var(--font-size-lg);
+		color: var(--color-muted);
+	}
+	.description {
+		margin-top: var(--spacing-lg);
+		line-height: var(--leading-relaxed);
+	}
+	.pkg-main h2 {
+		margin-top: var(--spacing-2xl);
+		margin-bottom: var(--spacing-md);
+		font-size: var(--font-size-2xl);
+	}
+	.check-list {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-sm);
+	}
+	.check-list li {
+		display: flex;
+		gap: var(--spacing-sm);
+		align-items: baseline;
+	}
+	.check-list li::before {
+		content: "✓";
+		color: var(--color-brand);
+		font-weight: 700;
+	}
+	.pill-list {
+		list-style: none;
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--spacing-sm);
+	}
+	.pill-list li {
+		padding: 0.375rem 0.875rem;
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		background: var(--color-brand-soft);
+		color: var(--color-brand);
+		border-radius: var(--radius-full);
+	}
+	.price-card {
+		position: sticky;
+		top: 96px;
+		padding: var(--spacing-xl);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+	}
+	.price-card h2 {
+		font-size: var(--font-size-xl);
+		margin-bottom: var(--spacing-md);
+	}
+	.price-card ul {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-md);
+	}
+	.price-card li {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: var(--spacing-md);
+		font-size: var(--font-size-sm);
+	}
+	.price-card li strong {
+		font-size: var(--font-size-lg);
+		letter-spacing: var(--tracking-snug);
+		white-space: nowrap;
+		text-align: right;
+	}
+	.price-card li em {
+		display: block;
+		font-style: normal;
+		font-weight: 500;
+		font-size: var(--font-size-xs);
+		color: var(--color-muted);
+	}
+	.verify {
+		color: var(--color-brand);
+	}
+	.on-request {
+		font-size: var(--font-size-base) !important;
+		color: var(--color-brand);
+	}
+	.price-note {
+		margin-top: var(--spacing-md);
+		font-size: var(--font-size-xs);
+		color: var(--color-muted);
+	}
+	.price-card :global(.sidebar-cta) {
+		width: 100%;
+		margin-top: var(--spacing-md);
+	}
+	.related {
+		padding: var(--section-pad) 0;
+	}
+	.related h2 {
+		font-size: var(--font-size-2xl);
+		margin-bottom: var(--spacing-xl);
+	}
+	.related-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--spacing-xl);
+	}
+	@media (max-width: 900px) {
+		.pkg-grid {
+			grid-template-columns: 1fr;
+		}
+		.price-card {
+			position: static;
+		}
+		.related-grid {
+			grid-template-columns: 1fr;
+			max-width: 560px;
+		}
+	}
+</style>

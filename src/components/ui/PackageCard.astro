@@ -1,0 +1,74 @@
+---
+import PhotoPlaceholder from "./PhotoPlaceholder.astro";
+
+// Package card: name / duration / price summary. Overview + related.
+interface Props {
+	href: string;
+	name: string;
+	tagline: string;
+	duration: string;
+	priceSummary: string;
+	imageLabel: string;
+}
+
+const { href, name, tagline, duration, priceSummary, imageLabel } = Astro.props;
+---
+
+<article class="package-card">
+	<a href={href} class="card-visual" aria-hidden="true" tabindex="-1">
+		<PhotoPlaceholder label={imageLabel} ratio="16 / 10" />
+	</a>
+	<p class="card-eyebrow">{duration}</p>
+	<h3><a href={href}>{name}</a></h3>
+	<p class="card-blurb">{tagline}</p>
+	<p class="card-price">{priceSummary}</p>
+</article>
+
+<style>
+	.package-card {
+		display: flex;
+		flex-direction: column;
+	}
+	.card-visual {
+		display: block;
+	}
+	.card-visual :global(.photo-placeholder) {
+		border-radius: var(--radius);
+		transition: transform var(--transition-base);
+	}
+	.package-card:hover .card-visual :global(.photo-placeholder) {
+		transform: translateY(-2px);
+	}
+	.card-eyebrow {
+		margin-top: var(--spacing-md);
+		font-size: var(--font-size-xs);
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--color-brand);
+	}
+	.package-card h3 {
+		margin-top: var(--spacing-xs);
+		font-size: var(--font-size-xl);
+	}
+	.package-card h3 a:hover {
+		color: var(--color-brand);
+	}
+	.card-blurb {
+		margin-top: var(--spacing-xs);
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+		line-height: var(--leading-relaxed);
+		flex-grow: 1;
+	}
+	.card-price {
+		margin-top: var(--spacing-sm);
+		font-weight: 700;
+		letter-spacing: var(--tracking-snug);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.card-visual :global(.photo-placeholder) {
+			transition: none;
+		}
+	}
+</style>
