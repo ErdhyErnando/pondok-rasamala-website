@@ -1,0 +1,154 @@
+---
+import { getStrings, type Locale } from "../../lib/i18n";
+
+// Light/dark switch. The whole palette is expressed as light-dark() pairs in
+// tokens.css / theme.css, so flipping a single `color-scheme` on <html>
+// re-resolves every token. data-theme is written by the inline head script in
+// Base.astro (before first paint) and mirrored here on click; without JS the
+// tokens fall back to the OS preference via `color-scheme: light dark`.
+// One label describes the ACTION ("switch to dark mode") rather than the state.
+interface Props {
+	locale?: Locale;
+	class?: string;
+}
+
+const { locale = "id", class: className = "" } = Astro.props;
+const t = getStrings(locale);
+---
+
+<button
+	type="button"
+	class:list={["theme-toggle", className]}
+	data-theme-toggle
+	aria-label={t.actions.switchToDark}
+	data-label-dark={t.actions.switchToDark}
+	data-label-light={t.actions.switchToLight}
+>
+	<svg
+		class="icon-moon"
+		viewBox="0 0 24 24"
+		fill="none"
+		stroke="currentColor"
+		stroke-width="1.7"
+		stroke-linecap="round"
+		aria-hidden="true"
+		focusable="false"
+	>
+		<path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"></path>
+	</svg>
+	<svg
+		class="icon-sun"
+		viewBox="0 0 24 24"
+		fill="none"
+		stroke="currentColor"
+		stroke-width="1.7"
+		stroke-linecap="round"
+		aria-hidden="true"
+		focusable="false"
+	>
+		<circle cx="12" cy="12" r="4.2"></circle>
+		<path d="M12 3v1.8M12 19.2V21M3 12h1.8M19.2 12H21M5.6 5.6l1.3 1.3M17.1 17.1l1.3 1.3M18.4 5.6l-1.3 1.3M6.9 17.1l-1.3 1.3"
+		></path>
+	</svg>
+</button>
+
+<script>
+	// Runs once per page even with several toggles (header + drawer).
+	const STORAGE_KEY = "pr-theme";
+	const root = document.documentElement;
+	const system = window.matchMedia("(prefers-color-scheme: dark)");
+	const buttons = Array.from(
+		document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]"),
+	);
+
+	const stored = (() => {
+		try {
+			return localStorage.getItem(STORAGE_KEY);
+		} catch {
+			return null;
+		}
+	})();
+
+	const mode = () => (root.dataset.theme === "dark" ? "dark" : "light");
+
+	function sync() {
+		const dark = mode() === "dark";
+		for (const btn of buttons) {
+			btn.setAttribute(
+				"aria-label",
+				dark ? (btn.dataset.labelLight ?? "") : (btn.dataset.labelDark ?? ""),
+			);
+			btn.setAttribute("aria-pressed", String(dark));
+		}
+		// Browser chrome follows the page, not the OS, once a mode is picked.
+		const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+		if (meta) meta.content = dark ? "#161a17" : "#016747";
+	}
+
+	for (const btn of buttons) {
+		btn.addEventListener("click", () => {
+			const next = mode() === "dark" ? "light" : "dark";
+			root.dataset.theme = next;
+			try {
+				localStorage.setItem(STORAGE_KEY, next);
+			} catch {
+				/* private mode: the choice lasts for this page only */
+			}
+			sync();
+		});
+	}
+
+	// Follow the OS until the visitor commits to a mode.
+	system.addEventListener("change", (e) => {
+		if (stored) return;
+		root.dataset.theme = e.matches ? "dark" : "light";
+		sync();
+	});
+
+	sync();
+</script>
+
+<style>
+	/* Sized to match the language dropdown pill next to it. */
+	.theme-toggle {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 38px;
+		height: 38px;
+		padding: 0;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-full);
+		background: none;
+		color: var(--color-muted);
+		cursor: pointer;
+		transition:
+			color 0.2s ease,
+			border-color 0.2s ease,
+			background-color 0.2s ease;
+	}
+	.theme-toggle:hover {
+		color: var(--color-text);
+		border-color: var(--color-muted);
+	}
+	.theme-toggle svg {
+		width: 18px;
+		height: 18px;
+		flex-shrink: 0;
+	}
+	/* The visible glyph is the mode you would switch TO. */
+	.icon-sun {
+		display: none;
+	}
+	:global(:root[data-theme="dark"]) .icon-sun {
+		display: block;
+	}
+	:global(:root[data-theme="dark"]) .icon-moon {
+		display: none;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.theme-toggle {
+			transition: none;
+		}
+	}
+</style>

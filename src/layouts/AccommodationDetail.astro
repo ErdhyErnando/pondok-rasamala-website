@@ -37,7 +37,7 @@ const note = locale === "en" ? "Price confirmed via WhatsApp" : "Harga konfirmas
 
 		<div class="detail-hero reveal">
 			<PhotoPlaceholder
-				label={locale === "en" ? `${stay.name} — hero photo to follow` : `${stay.name} — foto utama menyusul`}
+				label={locale === "en" ? `${stay.name}: hero photo to follow` : `${stay.name}: foto utama menyusul`}
 				ratio="16 / 8"
 			/>
 		</div>
@@ -134,13 +134,17 @@ const note = locale === "en" ? "Price confirmed via WhatsApp" : "Harga konfirmas
 	}
 	.detail-hero :global(.photo-placeholder) {
 		min-height: min(60vh, 520px);
+		border-radius: var(--radius-lg);
 	}
 	.detail-grid {
 		display: grid;
 		grid-template-columns: 1.6fr 1fr;
 		gap: var(--spacing-3xl);
-		margin-top: var(--spacing-2xl);
+		margin-top: var(--spacing-3xl);
 		align-items: start;
+	}
+	.detail-main {
+		max-width: 44rem;
 	}
 	.eyebrow {
 		font-size: var(--font-size-xs);
@@ -151,7 +155,8 @@ const note = locale === "en" ? "Price confirmed via WhatsApp" : "Harga konfirmas
 	}
 	.detail-main h1 {
 		font-size: clamp(2rem, 4vw, 3rem);
-		letter-spacing: var(--tracking-tight);
+		line-height: 1.1;
+		letter-spacing: -0.02em;
 		margin-top: var(--spacing-sm);
 		text-wrap: balance;
 	}
@@ -165,30 +170,28 @@ const note = locale === "en" ? "Price confirmed via WhatsApp" : "Harga konfirmas
 		line-height: var(--leading-relaxed);
 	}
 	.detail-main h2 {
-		margin-top: var(--spacing-2xl);
+		margin-top: var(--spacing-3xl);
 		margin-bottom: var(--spacing-md);
-		font-size: var(--font-size-2xl);
+		font-size: var(--font-size-xl);
+		letter-spacing: var(--tracking-snug);
 	}
+	/* Quiet grotesque spec rows: hairlines, no box. */
 	.specs {
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius-lg);
-		overflow: hidden;
+		border-top: 1px solid var(--color-border);
 	}
 	.spec-row {
 		display: flex;
 		justify-content: space-between;
 		gap: var(--spacing-md);
-		padding: var(--spacing-md) var(--spacing-lg);
-		background: var(--color-surface);
-	}
-	.spec-row + .spec-row {
-		border-top: 1px solid var(--color-border);
+		padding: var(--spacing-md) 0;
+		border-bottom: 1px solid var(--color-border);
+		font-size: var(--font-size-sm);
 	}
 	.spec-row dt {
 		color: var(--color-muted);
 	}
 	.spec-row dd {
-		font-weight: 700;
+		font-weight: 600;
 		text-align: right;
 	}
 	.price-card {

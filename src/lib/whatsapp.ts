@@ -1,6 +1,6 @@
 import { SITE } from "./constants";
 
-/** Pre-filled WhatsApp link. Every CTA on the site uses this — no bare wa.me links. */
+/** Pre-filled WhatsApp link. Every CTA on the site uses this, no bare wa.me links. */
 export function waLink(message: string): string {
 	return `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(message)}`;
 }

@@ -1,0 +1,119 @@
+---
+import Base from "../../../layouts/Base.astro";
+import SectionHeader from "../../../components/ui/SectionHeader.astro";
+import CampsiteCard from "../../../components/ui/CampsiteCard.astro";
+import WhatsAppButton from "../../../components/ui/WhatsAppButton.astro";
+import { campsite, campLots } from "../../../data/campsite";
+import { SITE } from "../../../lib/constants";
+import { formatIDR } from "../../../lib/format";
+
+export const prerender = true;
+
+const locale = "en" as const;
+const copy = {
+	title: "All Campsites",
+	eyebrow: "Stay",
+	description:
+		"Six campsite lots and six Riverside Camps by the river at the foot of Mount Salak, tents and breakfast ready. Open a lot to check live availability.",
+	meta: "All Pondok Rasamala campsites: 6 campsite lots + 6 Riverside Camps by the river, tiered per-pax rates. Check live availability.",
+	ratesTitle: "Rates per lot",
+	priceNote: "Price confirmed via WhatsApp",
+	waMessage:
+		"Hello Pondok Rasamala, I'd like to ask about the campsite. Thank you.",
+};
+const riversideBlurb = "Camp by the river, open to check lot availability.";
+---
+
+<Base title={copy.title} description={copy.meta} locale={locale}>
+	<div class="container index-head">
+		<SectionHeader
+			eyebrow={copy.eyebrow}
+			title={copy.title}
+			description={copy.description}
+			align="left"
+		/>
+		<div class="card-grid">
+			{campLots.map((lot) => (
+				<CampsiteCard
+					href={SITE.availability}
+					name={lot.name}
+					eyebrow={lot.area === "riverside" ? "Riverside Camp" : "Campsite"}
+					blurb={lot.area === "riverside" ? riversideBlurb : campsite.tagline.en}
+					imageLabel={`${lot.name}: photo to follow`}
+					ctaLabel="Check availability"
+				/>
+			))}
+		</div>
+		<section class="rates">
+			<h2>{copy.ratesTitle}</h2>
+			<dl class="rate-list">
+				{campsite.tiers.map((tier) => (
+					<div class="rate-row">
+						<dt>{tier.pax} guests / night</dt>
+						<dd>{formatIDR(tier.price)}</dd>
+					</div>
+				))}
+			</dl>
+			<p class="price-note">{copy.priceNote}</p>
+			<WhatsAppButton message={copy.waMessage} locale={locale} />
+		</section>
+	</div>
+</Base>
+
+<style>
+	.index-head {
+		padding-top: var(--section-pad);
+		padding-bottom: var(--section-pad);
+	}
+	/* Same compact grid as villa/glamping: three cards per row. */
+	.card-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--spacing-3xl);
+		border-top: 1px solid var(--color-border);
+		padding-top: var(--spacing-3xl);
+	}
+	.rates {
+		margin-top: var(--spacing-3xl);
+		border-top: 1px solid var(--color-border);
+		padding-top: var(--spacing-2xl);
+		max-width: 40rem;
+	}
+	.rates h2 {
+		font-family: var(--font-heading);
+		font-size: var(--font-size-2xl);
+		letter-spacing: -0.02em;
+	}
+	.rate-list {
+		margin-top: var(--spacing-lg);
+	}
+	.rate-row {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: var(--spacing-md);
+		padding: var(--spacing-sm) 0;
+		border-bottom: 1px dashed var(--color-border);
+	}
+	.rate-row dd {
+		font-weight: 700;
+	}
+	.price-note {
+		margin-top: var(--spacing-md);
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+	}
+	.rates :global(.btn) {
+		margin-top: var(--spacing-md);
+	}
+	@media (max-width: 1100px) {
+		.card-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+	@media (max-width: 700px) {
+		.card-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

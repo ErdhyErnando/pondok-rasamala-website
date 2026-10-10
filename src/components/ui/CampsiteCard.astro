@@ -1,0 +1,90 @@
+---
+import PhotoPlaceholder from "./PhotoPlaceholder.astro";
+
+// Lot card: same anatomy as VillaCard, but the CTA jumps to live
+// availability (per-lot rates are not published), so there is no
+// price line. Shared by the /campsite/ index (ID + EN).
+interface Props {
+	href: string;
+	name: string;
+	eyebrow: string;
+	blurb: string;
+	imageLabel: string;
+	ctaLabel: string;
+}
+
+const { href, name, eyebrow, blurb, imageLabel, ctaLabel } = Astro.props;
+---
+
+<article class="stay-card">
+	<a href={href} target="_blank" rel="noopener" class="card-visual" aria-hidden="true" tabindex="-1">
+		<PhotoPlaceholder label={imageLabel} ratio="16 / 8" />
+	</a>
+	<p class="card-eyebrow">{eyebrow}</p>
+	<h3><a href={href} target="_blank" rel="noopener">{name}</a></h3>
+	<p class="card-blurb">{blurb}</p>
+	<p class="card-cta"><a href={href} target="_blank" rel="noopener">{ctaLabel} →</a></p>
+</article>
+
+<style>
+	.stay-card {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+	}
+	.card-visual {
+		display: block;
+	}
+	.card-visual :global(.photo-placeholder) {
+		border-radius: var(--radius-lg);
+		transition: transform var(--transition-base);
+	}
+	.stay-card:hover .card-visual :global(.photo-placeholder) {
+		transform: translateY(-2px);
+	}
+	.stay-card h3 a::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+	}
+	.card-eyebrow {
+		margin-top: var(--spacing-md);
+		font-size: var(--font-size-xs);
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--color-brand);
+	}
+	.stay-card h3 {
+		margin-top: var(--spacing-xs);
+		font-size: var(--font-size-xl);
+	}
+	.stay-card h3 a:hover {
+		color: var(--color-brand);
+	}
+	.card-blurb {
+		margin-top: var(--spacing-xs);
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+		line-height: var(--leading-relaxed);
+		flex-grow: 1;
+	}
+	.card-cta {
+		margin-top: var(--spacing-sm);
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+	}
+	.card-cta a {
+		color: var(--color-brand);
+		text-decoration: none;
+	}
+	.card-cta a:hover {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.card-visual :global(.photo-placeholder) {
+			transition: none;
+		}
+	}
+</style>

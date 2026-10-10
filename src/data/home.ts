@@ -9,13 +9,14 @@ const T = (id: string, en: string) => ({ id, en });
 
 /** Homepage copy, ID source of truth + EN mirror.
  *  Annotations, alternatives & confidence tags live in docs/day-2-copy.md.
- *  Prices/names resolve from villas.ts + glamping.ts — never duplicated here. */
+ *  Prices/names resolve from villas.ts + glamping.ts, never duplicated here. */
 export const HeroSchema = z.object({
 	eyebrow: text,
 	title: text,
 	sub: text,
 	trust: z.array(text).min(1),
 	visualLabel: text,
+	secondary: text,
 });
 export const hero = HeroSchema.parse({
 	eyebrow: T("TNGHS · ±2 jam dari Jakarta", "TNGHS · ±2 hours from Jakarta"),
@@ -24,8 +25,8 @@ export const hero = HeroSchema.parse({
 		"A Countryside Nature Retreat at the Foot of Mount Salak",
 	),
 	sub: T(
-		"Villa bambu dan kayu, glamping, dan udara gunung yang sejuk — tempat pelan untuk liburan keluarga, gathering, dan kabur akhir pekan.",
-		"Bamboo and timber villas, glamping, and cool mountain air — a slow place for family holidays, gatherings, and weekend escapes.",
+		"Villa bambu dan kayu, glamping, dan udara gunung yang sejuk, tempat yang pelan untuk liburan keluarga, gathering, dan kabur akhir pekan.",
+		"Bamboo and timber villas, glamping, and cool mountain air, a slow place for family holidays, gatherings, and weekend escapes.",
 	),
 	trust: [
 		T("16 villa & cottage", "16 villas & cottages"),
@@ -33,9 +34,10 @@ export const hero = HeroSchema.parse({
 		T("Aula & area outbound", "Hall & outbound grounds"),
 	],
 	visualLabel: T(
-		"Foto resort — menyusul (Day 6)",
-		"Resort photo — to follow (Day 6)",
+		"Foto resort (menyusul, Day 6)",
+		"Resort photo (to follow, Day 6)",
 	),
+	secondary: T("Lihat villa", "View villas"),
 });
 
 export const FeaturedSchema = z.object({
@@ -47,34 +49,42 @@ export type Featured = z.infer<typeof FeaturedSchema>;
 export const featured = z.array(FeaturedSchema).parse([
 	{
 		kind: "villa",
-		slug: "bambu",
+		slug: "bambu-a",
 		blurb: T(
-			"Villa bambu 2 kamar untuk keluarga kecil — bisa disewa per kamar.",
-			"Two-bedroom bamboo villa for small families — rentable per room.",
+			"Villa bambu 2 kamar untuk keluarga kecil, bisa disewa per kamar.",
+			"Two-bedroom bamboo villa for small families, rentable per room.",
 		),
 	},
 	{
 		kind: "villa",
 		slug: "cendana",
 		blurb: T(
-			"Villa 7 kamar untuk rombongan besar — gathering sampai 28 orang.",
-			"Seven-bedroom villa for big groups — gatherings up to 28 people.",
+			"Villa 7 kamar untuk rombongan besar, gathering sampai 28 orang.",
+			"Seven-bedroom villa for big groups, gatherings up to 28 people.",
 		),
 	},
 	{
 		kind: "glamping",
 		slug: "salak",
 		blurb: T(
-			"Glamping untuk 4–6 orang — api unggun dan sarapan termasuk.",
-			"Glamping for 4–6 guests — bonfire and breakfast included.",
+			"Glamping untuk 4–6 orang, api unggun dan sarapan termasuk.",
+			"Glamping for 4–6 guests, bonfire and breakfast included.",
 		),
 	},
 	{
 		kind: "glamping",
 		slug: "cikuray",
 		blurb: T(
-			"Glamping besar untuk 8–10 orang — cocok untuk komunitas.",
-			"Large glamping for 8–10 guests — made for communities.",
+			"Glamping besar untuk 8–10 orang, cocok untuk komunitas.",
+			"Large glamping for 8–10 guests, made for communities.",
+		),
+	},
+	{
+		kind: "glamping",
+		slug: "gede",
+		blurb: T(
+			"Glamping untuk 4–6 orang, nyaman untuk yang baru pertama camping.",
+			"Glamping for 4–6 guests, friendly for first-time campers.",
 		),
 	},
 ]);
@@ -83,11 +93,24 @@ export const showcase = {
 	eyebrow: T("Menginap", "Stay"),
 	title: T("Pilih tempat bermalam", "Choose your stay"),
 	description: T(
-		"Empat favorit tamu — villa, cottage, dan glamping di dalam kawasan Taman Nasional Gunung Halimun Salak.",
-		"Four guest favourites — villas, cottages, and glamping inside Gunung Halimun Salak National Park.",
+		"Pilihan favorit tamu: villa, glamping, dan campsite di dalam kawasan Taman Nasional Gunung Halimun Salak.",
+		"Guest favourites: villas, glamping, and campsite inside Gunung Halimun Salak National Park.",
 	),
 	allVillas: T("Lihat semua villa", "View all villas"),
 	allGlamping: T("Lihat semua glamping", "View all glamping"),
+	allCampsite: T("Lihat campsite", "View campsite"),
+	villaTag: T(
+		"Rumah bambu dan kayu untuk keluarga dan rombongan",
+		"Bamboo and timber houses for families and groups",
+	),
+	glampingTag: T(
+		"Tenda di bawah pinus, api unggun dan sarapan termasuk",
+		"Tents under the pines, bonfire and breakfast included",
+	),
+	campsiteTag: T(
+		"Berkemah tanpa repot bawa tenda",
+		"Camp without hauling tents",
+	),
 	detail: T("Lihat detail", "View details"),
 	from: T("Mulai", "From"),
 	priceNote: T("Konfirmasi via WhatsApp", "Confirm via WhatsApp"),
@@ -97,10 +120,15 @@ export const activities = {
 	eyebrow: T("Aktivitas & Paket", "Activities & Packages"),
 	title: T("Seharian penuh tanpa gadget", "Full days, no gadgets needed"),
 	description: T(
-		"Outbound di lapangan hijau, trekking ke curug, dan malam api unggun — semua bisa diatur dari satu pintu.",
-		"Outbound on green fields, waterfall treks, and bonfire nights — all arranged from one place.",
+		"Outbound di lapangan hijau, trekking ke curug, dan malam api unggun, semua bisa diatur dari satu pintu.",
+		"Outbound on green fields, waterfall treks, and bonfire nights, all arranged from one place.",
 	),
 	cta: T("Lihat paket gathering", "View gathering packages"),
+	dividerTag: T(
+		"Outbound, gathering, dan api unggun, diatur dari satu pintu",
+		"Outbound, gatherings, and bonfires, arranged from one place",
+	),
+	dividerLink: T("Lihat semua paket", "View all packages"),
 	cards: [
 		{
 			title: T("Outbound & team building", "Outbound & team building"),
@@ -112,8 +140,8 @@ export const activities = {
 		{
 			title: T("Trekking curug", "Waterfall treks"),
 			body: T(
-				"Kawah Ratu, Curug Seribu, dan Curug Ngumpet — semua dalam jangkauan singkat.",
-				"Kawah Ratu, Curug Seribu, and Curug Ngumpet — all a short trip away.",
+				"Kawah Ratu, Curug Seribu, dan Curug Ngumpet, semua dalam jangkauan singkat.",
+				"Kawah Ratu, Curug Seribu, and Curug Ngumpet, all a short trip away.",
 			),
 		},
 		{
@@ -138,7 +166,7 @@ export const testimonialsHead = {
 	eyebrow: T("Kata tamu", "Guest words"),
 	title: T("Yang bikin kangen pulang", "What guests remember"),
 } as const;
-/** REAL guest quotes only — curated from public reviews, linked to source.
+/** REAL guest quotes only, curated from public reviews, linked to source.
  *  EN lines are our translation of the guest's words (🟡), ID is verbatim (🟢). */
 export const testimonials = z.array(TestimonialSchema).parse([
 	{
@@ -154,7 +182,7 @@ export const testimonials = z.array(TestimonialSchema).parse([
 	{
 		quote: T(
 			"Hawanya sangat sejuk sepanjang hari. Bahkan sore hingga dini hari, suhu sangat dingin.",
-			"Cool mountain air all day — evenings through dawn get properly cold.",
+			"Cool mountain air all day, evenings through dawn get properly cold.",
 		),
 		name: "Suwandi",
 		context: T("Menginap di Villa Pinus, 2016", "Stayed at Villa Pinus, 2016"),
@@ -177,8 +205,8 @@ export const location = {
 	eyebrow: T("Lokasi", "Location"),
 	title: T("Dekat dari kota, jauh dari bising", "Close to the city, far from noise"),
 	body: T(
-		"Di kawasan wisata Gunung Salak Endah, Pamijahan, Bogor — di dalam Taman Nasional Gunung Halimun Salak. Sekitar 2 jam dari Jakarta, 1,5 jam dari Bogor.",
-		"In the Gunung Salak Endah tourism area, Pamijahan, Bogor — inside Gunung Halimun Salak National Park. About 2 hours from Jakarta, 1.5 hours from Bogor.",
+		"Di kawasan wisata Gunung Salak Endah, Pamijahan, Bogor, di dalam Taman Nasional Gunung Halimun Salak. Sekitar 2 jam dari Jakarta, 1,5 jam dari Bogor.",
+		"In the Gunung Salak Endah tourism area, Pamijahan, Bogor, inside Gunung Halimun Salak National Park. About 2 hours from Jakarta, 1.5 hours from Bogor.",
 	),
 	address: T(
 		"Jl. Raya Gunung Salak Endah, Pamijahan, Kab. Bogor",
@@ -192,8 +220,8 @@ export const location = {
 export const ctaSection = {
 	title: T("Siap kabur akhir pekan ini?", "Ready for a weekend escape?"),
 	body: T(
-		"Ceritakan tanggal dan jumlah rombongan — kami bantu pilihkan villa atau tenda yang pas.",
-		"Tell us your dates and group size — we'll help you pick the right villa or tent.",
+		"Ceritakan tanggal dan jumlah rombongan, kami bantu pilihkan villa atau tenda yang pas.",
+		"Tell us your dates and group size, we'll help you pick the right villa or tent.",
 	),
 	note: T(
 		"Harga & ketersediaan konfirmasi via WhatsApp",
@@ -203,8 +231,8 @@ export const ctaSection = {
 
 export const homeMeta = {
 	title: T(
-		"Pondok Rasamala — Wisata Alam Pedesaan di Gunung Salak Endah, Bogor",
-		"Pondok Rasamala — Countryside Nature Retreat in Gunung Salak Endah, Bogor",
+		"Pondok Rasamala: Wisata Alam Pedesaan di Gunung Salak Endah, Bogor",
+		"Pondok Rasamala: Countryside Nature Retreat in Gunung Salak Endah, Bogor",
 	),
 	description: T(
 		"Villa bambu & kayu, glamping, dan paket gathering di kaki Gunung Salak, ±2 jam dari Jakarta. Pesan langsung via WhatsApp.",

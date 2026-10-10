@@ -1,16 +1,23 @@
 ---
 // Click-to-load Google Maps facade (perf + privacy: no iframe until asked).
+// With `auto`, the iframe lazy-loads itself when scrolled into view
+// (IntersectionObserver, still loading="lazy") — click remains a fallback.
 // Reused by homepage LocationSection, /location/, and /contact-us/.
 interface Props {
 	loadLabel: string;
 	class?: string;
+	auto?: boolean;
 }
 
-const { loadLabel, class: className = "" } = Astro.props;
+const { loadLabel, class: className = "", auto = false } = Astro.props;
 const mapsQuery = encodeURIComponent("Pondok Rasamala, Gunung Salak Endah, Pamijahan, Bogor");
 ---
 
-<div class={`map-facade ${className}`} data-embed={`https://www.google.com/maps?q=${mapsQuery}&output=embed`}>
+<div
+	class={`map-facade ${className}`}
+	data-embed={`https://www.google.com/maps?q=${mapsQuery}&output=embed`}
+	data-auto={auto ? "true" : undefined}
+>
 	<button type="button" class="map-button" data-map-button>
 		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
 			<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z" />
@@ -22,19 +29,35 @@ const mapsQuery = encodeURIComponent("Pondok Rasamala, Gunung Salak Endah, Pamij
 
 <script>
 	document.querySelectorAll<HTMLDivElement>(".map-facade[data-embed]").forEach((slot) => {
+		let loaded = false;
+		const load = () => {
+			if (loaded) return;
+			loaded = true;
+			const frame = document.createElement("iframe");
+			frame.src = slot.dataset.embed ?? "";
+			frame.title = "Google Maps";
+			frame.loading = "lazy";
+			frame.referrerPolicy = "no-referrer-when-downgrade";
+			frame.allowFullscreen = true;
+			slot.replaceChildren(frame);
+		};
 		slot.querySelector<HTMLButtonElement>("[data-map-button]")?.addEventListener(
 			"click",
-			() => {
-				const frame = document.createElement("iframe");
-				frame.src = slot.dataset.embed ?? "";
-				frame.title = "Google Maps";
-				frame.loading = "lazy";
-				frame.referrerPolicy = "no-referrer-when-downgrade";
-				frame.allowFullscreen = true;
-				slot.replaceChildren(frame);
-			},
+			() => load(),
 			{ once: true },
 		);
+		if (slot.dataset.auto === "true" && "IntersectionObserver" in window) {
+			const seen = new IntersectionObserver(
+				(entries) => {
+					if (entries.some((e) => e.isIntersecting)) {
+						load();
+						seen.disconnect();
+					}
+				},
+				{ rootMargin: "200px" },
+			);
+			seen.observe(slot);
+		}
 	});
 </script>
 
@@ -45,7 +68,10 @@ const mapsQuery = encodeURIComponent("Pondok Rasamala, Gunung Salak Endah, Pamij
 		border-radius: var(--radius);
 		overflow: hidden;
 	}
-	.map-facade iframe {
+	/* :global on the iframe: it is injected by JS after load, so it never
+	   carries Astro's scope attribute and a scoped selector would miss it
+	   (iframe fell back to 300x150 in the top-left corner). */
+	.map-facade :global(iframe) {
 		position: absolute;
 		inset: 0;
 		width: 100%;

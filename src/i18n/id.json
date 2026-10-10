@@ -4,28 +4,49 @@
 		"home": "Beranda",
 		"about": "Tentang Kami",
 		"location": "Lokasi",
+		"stay": "Menginap",
 		"villa": "Villa",
 		"allVillas": "Semua Villa",
 		"glamping": "Glamping",
 		"allGlamping": "Semua Glamping",
 		"campsite": "Campsite",
+		"groups": "Rombongan & Acara",
+		"events": "Aula & Pertemuan",
+		"aula": "Aula",
 		"packages": "Paket",
 		"allPackages": "Semua Paket",
 		"packageOutbound": "Outbound",
 		"packageSchool": "Paket Sekolah",
 		"packageCompany": "Company Outing",
 		"packageFamily": "Paket Keluarga",
+		"explore": "Jelajahi",
 		"attractions": "Atraksi",
 		"gallery": "Galeri",
+		"bookCta": "Reservasi",
 		"blog": "Blog",
 		"contact": "Kontak",
 		"mainMenu": "Menu utama"
+	},
+	"navDesc": {
+		"villa": "Rumah bambu dan kayu untuk keluarga dan rombongan, dari kamar sampai satu villa.",
+		"glamping": "Tenda di bawah pinus dengan api unggun dan sarapan.",
+		"campsite": "Bumi perkemahan lapang untuk tenda sendiri dan acara luar ruang.",
+		"aula": "Aula pertemuan dengan soundsystem untuk gathering dan rapat.",
+		"packages": "Paket outbound, sekolah, perusahaan, dan keluarga dalam satu pintu.",
+		"attractions": "Curug, kawah, dan trek di sekitar kawasan wisata.",
+		"location": "Rute dan petunjuk menuju Gunung Salak Endah.",
+		"about": "Cerita dan tim di balik Pondok Rasamala.",
+		"blog": "Cerita tamu, tips, dan kabar terbaru.",
+		"contact": "Hubungi kami untuk tanggal dan rombongan."
 	},
 	"actions": {
 		"bookNow": "Pesan via WhatsApp",
 		"viewAll": "Lihat Semua",
 		"openMenu": "Buka menu",
-		"closeMenu": "Tutup menu"
+		"closeMenu": "Tutup menu",
+		"switchToDark": "Ganti ke mode gelap",
+		"switchToLight": "Ganti ke mode terang",
+		"chooseLanguage": "Pilih bahasa"
 	},
 	"footer": {
 		"brandTagline": "Resort Bernuansa Alam Pedesaan",
@@ -34,6 +55,7 @@
 		"contact": "Hubungi Kami",
 		"follow": "Ikuti Kami",
 		"rights": "Hak cipta dilindungi.",
-		"language": "Bahasa"
+		"language": "Bahasa",
+		"backToTop": "Kembali ke atas"
 	}
 }

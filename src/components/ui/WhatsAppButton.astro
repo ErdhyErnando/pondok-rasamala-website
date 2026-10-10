@@ -4,7 +4,7 @@ import { waLink } from "../../lib/whatsapp";
 import Button from "./Button.astro";
 
 // Every CTA on the site deep-links wa.me with a pre-filled message.
-// No bare wa.me links anywhere — always go through this component.
+// No bare wa.me links anywhere, always go through this component.
 interface Props {
 	message: string;
 	label?: string;
