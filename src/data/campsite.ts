@@ -38,11 +38,27 @@ export const campsite = CampsiteSchema.parse({
 	firePit: true,
 	tagline: T("Berkemah tanpa repot bawa tenda", "Camp without hauling tents"),
 	description: T(
-		"Campsite Pondok Rasamala untuk yang mau berkemah tanpa repot: tenda dan makan pagi sudah disiapkan untuk 4, 6, 8, atau 10 orang. Tinggal pilih jumlah rombongan — harga per lot sudah termasuk semuanya. Paling cocok untuk komunitas, sekolah, dan gathering yang mau api unggun di bawah langit Gunung Salak.",
-		"Pondok Rasamala's campsite is for campers who skip the hassle: tents and breakfast ready for 4, 6, 8, or 10 people. Just pick your group size — the per-lot price covers everything. Best for communities, schools, and gatherings wanting bonfires under Mount Salak's sky.",
+		"Campsite Pondok Rasamala untuk yang mau berkemah tanpa repot: tenda dan makan pagi sudah disiapkan untuk 4, 6, 8, atau 10 orang. Tinggal pilih jumlah rombongan, harga per lot sudah termasuk semuanya. Paling cocok untuk komunitas, sekolah, dan gathering yang mau api unggun di bawah langit Gunung Salak. Di sisi sungai tersedia pula Riverside Camp lot 1–6 untuk pengalaman berkemah tepi air, tanyakan ketersediaannya via WhatsApp.",
+		"Pondok Rasamala's campsite is for campers who skip the hassle: tents and breakfast ready for 4, 6, 8, or 10 people. Just pick your group size, the per-lot price covers everything. Best for communities, schools, and gatherings wanting bonfires under Mount Salak's sky. By the river, Riverside Camp lots 1–6 offer a waterside camping experience, ask about availability via WhatsApp.",
 	),
 	heroImage: "",
 	images: [],
 });
 
 export const campsitePath = () => "/campsite/";
+
+/** Bookable spots mirror the live availability roster verbatim
+ *  (api.pondokrasamala.com/public/availability): 6 campsite lots +
+ *  6 riverside lots. Per-lot rates and capacity are not published
+ *  there, so lot cards link out to live availability instead of
+ *  showing prices. */
+export const campLots = [
+	...[1, 2, 3, 4, 5, 6].map((n) => ({
+		name: `Campsite Lot ${n}`,
+		area: "campsite" as const,
+	})),
+	...[1, 2, 3, 4, 5, 6].map((n) => ({
+		name: `Riverside Camp ${n}`,
+		area: "riverside" as const,
+	})),
+];

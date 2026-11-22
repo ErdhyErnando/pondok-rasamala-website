@@ -3,7 +3,7 @@ import { activities, tx } from "../../data/home";
 import { localizePath, type Locale } from "../../lib/i18n";
 
 // Editorial two-column: text panel left, activity cards right.
-// No sticky-scroll theatrics — static grid, staggered CSS reveals.
+// No sticky-scroll theatrics, static grid, staggered CSS reveals.
 interface Props {
 	locale?: Locale;
 }
@@ -18,6 +18,14 @@ const icons = [
 ---
 
 <section class="activities">
+	<div class="container">
+		<div class="divider-band reveal">
+			<span class="divider-dot" aria-hidden="true"></span>
+			<p class="divider-word">Paket</p>
+			<p class="divider-tag">{tx(activities.dividerTag, locale)}</p>
+			<a href={L("/package/")} class="divider-link">{tx(activities.dividerLink, locale)} →</a>
+		</div>
+	</div>
 	<div class="container activities-grid">
 		<div class="activities-copy">
 			<p class="eyebrow reveal">{tx(activities.eyebrow, locale)}</p>
@@ -46,6 +54,47 @@ const icons = [
 <style>
 	.activities {
 		padding: var(--section-pad) 0;
+	}
+	/* PAKET divider band: completes the VILLA / GLAMPING / PAKET set. */
+	.divider-band {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		gap: var(--spacing-sm);
+		padding-bottom: var(--spacing-2xl);
+		margin-bottom: var(--spacing-2xl);
+		border-bottom: 1px solid var(--color-border);
+	}
+	.divider-dot {
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		background: var(--color-accent);
+		flex-shrink: 0;
+	}
+	.divider-word {
+		font-family: var(--font-heading);
+		font-size: 2.5rem;
+		line-height: 1.05;
+		letter-spacing: -0.02em;
+		font-weight: var(--font-weight-display);
+		color: var(--color-text);
+	}
+	.divider-tag {
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+		line-height: var(--leading-relaxed);
+		max-width: 52ch;
+	}
+	.divider-link {
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		color: var(--color-brand);
+	}
+	.divider-link:hover {
+		text-decoration: underline;
+		text-underline-offset: 3px;
 	}
 	.activities-grid {
 		display: grid;

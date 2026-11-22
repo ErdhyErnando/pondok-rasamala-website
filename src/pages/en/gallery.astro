@@ -11,7 +11,7 @@ const copy = {
 	title: "Gallery",
 	eyebrow: "Atmosphere",
 	meta: "Pondok Rasamala photo gallery: villas, glamping, activities, nature, and events. Filter by category.",
-	description: "Slices of resort life — from villa terraces to bonfires. (Final photos follow on Day 6.)",
+	description: "Slices of resort life, from villa terraces to bonfires. (Final photos follow on Day 6.)",
 	all: "All",
 	categories: {
 		villa: "Villas",
@@ -123,12 +123,28 @@ const lightboxItems = galleryItems.map((g) => ({ label: g.caption.en }));
 		gap: var(--spacing-xl);
 	}
 	.scrap-item {
+		position: relative;
 		margin: 0;
 		padding: var(--spacing-sm);
 		background: var(--color-bg);
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius-sm);
 		box-shadow: var(--shadow-sm);
+	}
+	/* Refined-scrapbook tape cue: single sun-tint strip, no textures. */
+	.scrap-item::before {
+		content: "";
+		position: absolute;
+		top: -10px;
+		left: 50%;
+		width: 72px;
+		height: 20px;
+		transform: translateX(-50%) rotate(-2deg);
+		background: color-mix(in srgb, var(--color-accent) 28%, transparent);
+		border-left: 1px dashed color-mix(in srgb, var(--color-accent) 55%, transparent);
+		border-right: 1px dashed color-mix(in srgb, var(--color-accent) 55%, transparent);
+		border-radius: 1px;
+		pointer-events: none;
 	}
 	.scrap-item:nth-child(odd) {
 		transform: rotate(-1.2deg);

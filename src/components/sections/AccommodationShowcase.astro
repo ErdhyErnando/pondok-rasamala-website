@@ -2,12 +2,18 @@
 import SectionHeader from "../ui/SectionHeader.astro";
 import PhotoPlaceholder from "../ui/PhotoPlaceholder.astro";
 import { featured, showcase, tx, type Featured } from "../../data/home";
+import { campsite } from "../../data/campsite";
 import { glamping, glampingPath } from "../../data/glamping";
 import { villas, villaPath } from "../../data/villas";
 import { formatIDR } from "../../lib/format";
 import { localizePath, type Locale } from "../../lib/i18n";
 
-// Card anatomy from hero-structure rails: eyebrow / serif name / price.
+// Homepage rails (Paper DS v1, Well Traveled ref): one rail per
+// category with a big serif divider cell (dot + VILLA / GLAMPING +
+// tagline + view-all) and photo cards in eyebrow / serif name /
+// meta anatomy, separated by dotted rules. Divider alternates sides
+// per rail like the reference. Paket gets its divider in the
+// activities section below.
 interface Props {
 	locale?: Locale;
 }
@@ -24,7 +30,7 @@ interface Card {
 	imageLabel: string;
 }
 
-const cards: Card[] = featured.map((f: Featured) => {
+const toCard = (f: Featured): Card => {
 	if (f.kind === "villa") {
 		const v = villas.find((x) => x.slug === f.slug)!;
 		return {
@@ -36,7 +42,7 @@ const cards: Card[] = featured.map((f: Featured) => {
 			name: `Villa ${v.name}`,
 			blurb: tx(f.blurb, locale),
 			price: formatIDR(v.price),
-			imageLabel: `Villa ${v.name} — foto menyusul`,
+			imageLabel: `Villa ${v.name}: foto menyusul`,
 		};
 	}
 	const g = glamping.find((x) => x.slug === f.slug)!;
@@ -51,38 +57,123 @@ const cards: Card[] = featured.map((f: Featured) => {
 		name: `Glamping ${g.name}`,
 		blurb: tx(f.blurb, locale),
 		price: `${tx(showcase.from, locale)} ${formatIDR(min)}`,
-		imageLabel: `Glamping ${g.name} — foto menyusul`,
+		imageLabel: `Glamping ${g.name}: foto menyusul`,
 	};
-});
+};
+
+const villaCards = featured.filter((f) => f.kind === "villa").map(toCard);
+const glampingCards = featured.filter((f) => f.kind === "glamping").map(toCard);
+
+// Campsite is one product with per-lot tiers, so its two rail cards are
+// built from the tiers verbatim: the 4-pax lot, then the 6–10 pax lots.
+const [lot4, ...lotRest] = campsite.tiers;
+const restPax = lotRest.map((t) => t.pax);
+const restMin = Math.min(...lotRest.map((t) => t.price));
+const campsiteCards: Card[] = [
+	{
+		href: L("/campsite/"),
+		eyebrow: locale === "en" ? "Campsite · 4 guests" : "Campsite · 4 orang",
+		name: locale === "en" ? "Campsite for 4" : "Campsite 4 Orang",
+		blurb:
+			locale === "en"
+				? "Tent and breakfast for 4 guests, bonfire included."
+				: `${lot4.includes}.`,
+		price: formatIDR(lot4.price),
+		imageLabel: "Campsite 4 orang: foto menyusul",
+	},
+	{
+		href: L("/campsite/"),
+		eyebrow:
+			locale === "en"
+				? `Campsite · ${Math.min(...restPax)}–${Math.max(...restPax)} guests`
+				: `Campsite · ${Math.min(...restPax)}–${Math.max(...restPax)} orang`,
+		name:
+			locale === "en"
+				? `Campsite for ${Math.min(...restPax)}–${Math.max(...restPax)}`
+				: `Campsite ${Math.min(...restPax)}–${Math.max(...restPax)} Orang`,
+		blurb:
+			locale === "en"
+				? `Tents for ${restPax.slice(0, -1).join(", ")} or ${restPax.at(-1)} guests with breakfast and a bonfire.`
+				: `Tenda ${restPax.slice(0, -1).join(", ")} atau ${restPax.at(-1)} pax dengan makan pagi dan api unggun.`,
+		price: `${tx(showcase.from, locale)} ${formatIDR(restMin)}`,
+		imageLabel: "Campsite 6–10 orang: foto menyusul",
+	},
+];
 ---
 
 <section class="showcase">
 	<div class="container">
 		<SectionHeader
-			eyebrow={tx(showcase.eyebrow, locale)}
 			title={tx(showcase.title, locale)}
 			description={tx(showcase.description, locale)}
 		/>
-		<div class="card-grid">
-			{cards.map((c) => (
-				<article class="stay-card reveal">
-					<a href={c.href} class="card-visual" aria-hidden="true" tabindex="-1">
-						<PhotoPlaceholder label={c.imageLabel} ratio="16 / 10" />
-					</a>
-					<p class="card-eyebrow">{c.eyebrow}</p>
-					<h3><a href={c.href}>{c.name}</a></h3>
-					<p class="card-blurb">{c.blurb}</p>
-					<p class="card-price">
-						{c.price}
-						<span class="price-note"> / {tx(showcase.priceNote, locale)}</span>
-					</p>
-					<a href={c.href} class="card-link">{tx(showcase.detail, locale)} →</a>
-				</article>
-			))}
-		</div>
-		<div class="showcase-ctas reveal">
-			<a href={L("/villa/")} class="btn btn-secondary btn-lg">{tx(showcase.allVillas, locale)}</a>
-			<a href={L("/glamping/")} class="btn btn-secondary btn-lg">{tx(showcase.allGlamping, locale)}</a>
+		<div class="rails">
+			<div class="rail">
+				<div class="rail-divider reveal">
+					<span class="divider-dot" aria-hidden="true"></span>
+					<p class="divider-word">Villa</p>
+					<p class="divider-tag">{tx(showcase.villaTag, locale)}</p>
+					<a href={L("/villa/")} class="divider-link">{tx(showcase.allVillas, locale)} →</a>
+				</div>
+				{villaCards.map((c) => (
+					<article class="stay-card reveal">
+						<span class="card-visual" aria-hidden="true">
+							<PhotoPlaceholder label={c.imageLabel} ratio="16 / 8" />
+						</span>
+						<p class="card-eyebrow">{c.eyebrow}</p>
+						<h3 class="card-name"><a href={c.href}>{c.name}</a></h3>
+						<p class="card-blurb">{c.blurb}</p>
+						<p class="card-price">
+							{c.price}
+							<span class="price-note"> / {tx(showcase.priceNote, locale)}</span>
+						</p>
+					</article>
+				))}
+			</div>
+			<div class="rail rail-flip">
+				{glampingCards.map((c) => (
+					<article class="stay-card reveal">
+						<span class="card-visual" aria-hidden="true">
+							<PhotoPlaceholder label={c.imageLabel} ratio="16 / 8" />
+						</span>
+						<p class="card-eyebrow">{c.eyebrow}</p>
+						<h3 class="card-name"><a href={c.href}>{c.name}</a></h3>
+						<p class="card-blurb">{c.blurb}</p>
+						<p class="card-price">
+							{c.price}
+							<span class="price-note"> / {tx(showcase.priceNote, locale)}</span>
+						</p>
+					</article>
+				))}
+				<div class="rail-divider reveal">
+					<span class="divider-dot" aria-hidden="true"></span>
+					<p class="divider-word">Glamping</p>
+					<p class="divider-tag">{tx(showcase.glampingTag, locale)}</p>
+					<a href={L("/glamping/")} class="divider-link">{tx(showcase.allGlamping, locale)} →</a>
+				</div>
+			</div>
+			<div class="rail">
+				<div class="rail-divider reveal">
+					<span class="divider-dot" aria-hidden="true"></span>
+					<p class="divider-word">Campsite</p>
+					<p class="divider-tag">{tx(showcase.campsiteTag, locale)}</p>
+					<a href={L("/campsite/")} class="divider-link">{tx(showcase.allCampsite, locale)} →</a>
+				</div>
+				{campsiteCards.map((c) => (
+					<article class="stay-card reveal">
+						<span class="card-visual" aria-hidden="true">
+							<PhotoPlaceholder label={c.imageLabel} ratio="16 / 8" />
+						</span>
+						<p class="card-eyebrow">{c.eyebrow}</p>
+						<h3 class="card-name"><a href={c.href}>{c.name}</a></h3>
+						<p class="card-blurb">{c.blurb}</p>
+						<p class="card-price">
+							{c.price}
+							<span class="price-note"> / {tx(showcase.priceNote, locale)}</span>
+						</p>
+					</article>
+				))}
+			</div>
 		</div>
 	</div>
 </section>
@@ -93,12 +184,68 @@ const cards: Card[] = featured.map((f: Featured) => {
 		background: var(--color-surface);
 		border-block: 1px solid var(--color-border);
 	}
-	.card-grid {
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: var(--spacing-xl);
+	.rails {
+		border-top: 1px solid var(--color-border);
 	}
+	.rail {
+		display: grid;
+		grid-template-columns: 240px repeat(2, 1fr);
+		border-bottom: 1px solid var(--color-border);
+	}
+	/* Flipped rail holds three glamping cards, divider on the right. */
+	.rail-flip {
+		grid-template-columns: repeat(3, 1fr) 240px;
+	}
+	.rail > * + * {
+		border-left: 1px dashed var(--color-border);
+	}
+	.rail-divider,
 	.stay-card {
+		padding: var(--spacing-xl);
+		min-width: 0;
+	}
+	/* Divider cell: amber micro-dot, big serif word, quiet tagline. */
+	.rail-divider {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		gap: var(--spacing-sm);
+	}
+	.divider-dot {
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		background: var(--color-accent);
+		flex-shrink: 0;
+	}
+	.divider-word {
+		font-family: var(--font-heading);
+		font-size: 2.5rem;
+		line-height: 1.05;
+		letter-spacing: -0.02em;
+		font-weight: var(--font-weight-display);
+		color: var(--color-text);
+	}
+	.divider-tag {
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+		line-height: var(--leading-relaxed);
+		max-width: 24ch;
+	}
+	.divider-link {
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		color: var(--color-brand);
+	}
+	.divider-link:hover {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+	/* Cards: whole-card click target via stretched name link. */
+	.stay-card {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 	}
@@ -120,11 +267,16 @@ const cards: Card[] = featured.map((f: Featured) => {
 		text-transform: uppercase;
 		color: var(--color-brand);
 	}
-	.stay-card h3 {
+	.card-name {
 		margin-top: var(--spacing-xs);
 		font-size: var(--font-size-xl);
 	}
-	.stay-card h3 a:hover {
+	.card-name a::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+	}
+	.stay-card:hover .card-name {
 		color: var(--color-brand);
 	}
 	.card-blurb {
@@ -144,33 +296,64 @@ const cards: Card[] = featured.map((f: Featured) => {
 		font-size: var(--font-size-xs);
 		color: var(--color-muted);
 	}
-	.card-link {
-		margin-top: var(--spacing-xs);
-		display: inline-block;
-		font-size: var(--font-size-sm);
-		font-weight: 600;
-		color: var(--color-brand);
-	}
-	.showcase-ctas {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		gap: var(--spacing-md);
-		margin-top: var(--spacing-2xl);
-	}
-	@media (max-width: 1100px) {
-		.card-grid {
-			grid-template-columns: repeat(2, 1fr);
+	@media (max-width: 900px) {
+		.rails {
+			border-top: none;
 		}
-	}
-	@media (max-width: 600px) {
-		.card-grid {
-			grid-template-columns: 1fr;
+		.rail {
+			display: flex;
+			overflow-x: auto;
+			scroll-snap-type: x mandatory;
+			border: 1px solid var(--color-border);
+			border-radius: var(--radius-lg);
+			margin-bottom: var(--spacing-lg);
+			background: var(--color-bg);
+			scrollbar-width: thin;
+			scrollbar-color: var(--color-accent) transparent;
+		}
+		.rail::-webkit-scrollbar {
+			height: 6px;
+		}
+		.rail::-webkit-scrollbar-button {
+			display: none;
+			width: 0;
+			height: 0;
+		}
+		.rail::-webkit-scrollbar-thumb {
+			background: var(--color-accent);
+			border-radius: 999px;
+		}
+		.rail::-webkit-scrollbar-track {
+			background: transparent;
+		}
+		.rail > * {
+			flex: 0 0 78%;
+			scroll-snap-align: start;
+		}
+		/* Flipped rails keep the divider on the right on desktop, but on
+		   mobile every rail starts with its divider on the left. */
+		.rail-flip .rail-divider {
+			order: -1;
+			border-left: none;
+		}
+		.rail > * + * {
+			border-left: 1px dashed var(--color-border);
+			border-top: none;
+		}
+		.rail-divider {
+			flex-basis: 200px;
+			padding: var(--spacing-lg);
+		}
+		.divider-word {
+			font-size: 2rem;
 		}
 	}
 	@media (prefers-reduced-motion: reduce) {
 		.card-visual :global(.photo-placeholder) {
 			transition: none;
+		}
+		.rail {
+			scroll-snap-type: none;
 		}
 	}
 </style>

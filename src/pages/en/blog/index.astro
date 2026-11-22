@@ -1,7 +1,6 @@
 ---
 import Base from "../../../layouts/Base.astro";
 import PhotoPlaceholder from "../../../components/ui/PhotoPlaceholder.astro";
-import SectionHeader from "../../../components/ui/SectionHeader.astro";
 import { posts, postPath } from "../../../data/posts";
 import { localizePath } from "../../../lib/i18n";
 
@@ -9,32 +8,43 @@ export const prerender = true;
 
 const locale = "en" as const;
 const L = (p: string) => localizePath(p, locale);
+
+// Quiet grotesque list: small-type rows, generous leading, serif
+// titles, hairline dividers. No photos, the words carry it.
 const copy = {
 	title: "Blog",
 	eyebrow: "Stories & guides",
 	meta: "Pondok Rasamala blog: camping guides, villas, waterfalls, and stories from the foot of Mount Salak.",
 	description: "Practical guides and stories from the foot of Mount Salak.",
-	read: "Read",
 };
+const fmt = (d: string) =>
+	new Date(d + "T00:00:00").toLocaleDateString("en-US", {
+		day: "numeric",
+		month: "long",
+		year: "numeric",
+	});
 ---
 
 <Base title={copy.title} description={copy.meta} locale={locale}>
 	<div class="container page">
-		<SectionHeader
-			eyebrow={copy.eyebrow}
-			title={copy.title}
-			description={copy.description}
-		/>
-		<div class="post-grid">
+		<div class="blog-head">
+			<h1 class="reveal">{copy.title}</h1>
+		</div>
+		<div class="page-visual reveal">
+			<PhotoPlaceholder label="Blog: photo to follow" ratio="16 / 8" />
+		</div>
+		<p class="lede reveal">{copy.description}</p>
+		<div class="post-rows">
 			{posts.map((p) => (
-				<article class="post-card reveal">
-					<a href={L(postPath(p.slug))} class="card-visual" aria-hidden="true" tabindex="-1">
-						<PhotoPlaceholder label={`${p.title.en} — image to follow`} ratio="16 / 10" />
-					</a>
-					<p class="card-eyebrow">{p.category.en}</p>
-					<h2><a href={L(postPath(p.slug))}>{p.title.en}</a></h2>
-					<p class="card-excerpt">{p.excerpt.en}</p>
-					<a href={L(postPath(p.slug))} class="card-link">{copy.read} →</a>
+				<article class="post-row reveal">
+					<div class="row-visual" aria-hidden="true">
+						<PhotoPlaceholder label={`${p.title.en}: photo to follow`} ratio="16 / 10" />
+					</div>
+					<div class="row-body">
+						<p class="row-eyebrow">{p.category.en} · {fmt(p.pubDate)}</p>
+						<h2><a href={L(postPath(p.slug))}>{p.title.en}</a></h2>
+						<p class="row-excerpt">{p.excerpt.en}</p>
+					</div>
 				</article>
 			))}
 		</div>
@@ -45,54 +55,76 @@ const copy = {
 	.page {
 		padding-top: var(--section-pad);
 		padding-bottom: var(--section-pad);
+		max-width: 880px;
 	}
-	.post-grid {
+	.blog-head h1 {
+		font-family: var(--font-body);
+		font-weight: 700;
+		font-size: clamp(2rem, 4vw, 3rem);
+		line-height: 1.1;
+		letter-spacing: -0.03em;
+		text-transform: uppercase;
+		text-wrap: balance;
+	}
+	.page-visual {
+		margin-top: var(--spacing-2xl);
+	}
+	.lede {
+		margin-top: var(--spacing-2xl);
+		color: var(--color-muted);
+		font-size: var(--font-size-lg);
+		line-height: var(--leading-relaxed);
+		max-width: 52ch;
+	}
+	.post-rows {
+		margin-top: var(--spacing-3xl);
+		border-top: 1px solid var(--color-border);
+	}
+	.post-row {
+		position: relative;
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: var(--spacing-2xl) var(--spacing-xl);
+		grid-template-columns: 280px 1fr;
+		gap: var(--spacing-xl);
+		align-items: start;
+		padding: var(--spacing-xl) 0;
+		border-bottom: 1px dashed var(--color-border);
 	}
-	.card-visual {
-		display: block;
-	}
-	.card-visual :global(.photo-placeholder) {
+	.row-visual :global(.photo-placeholder) {
 		border-radius: var(--radius);
 	}
-	.card-eyebrow {
-		margin-top: var(--spacing-md);
+	.row-eyebrow {
 		font-size: var(--font-size-xs);
 		font-weight: 700;
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
 		color: var(--color-brand);
 	}
-	.post-card h2 {
+	.post-row h2 {
+		font-family: var(--font-heading);
 		margin-top: var(--spacing-xs);
-		font-size: var(--font-size-xl);
-		line-height: 1.35;
+		font-size: var(--font-size-2xl);
+		letter-spacing: var(--tracking-snug);
+		line-height: 1.25;
+		text-wrap: balance;
+		max-width: 28ch;
 	}
-	.post-card h2 a:hover {
+	.post-row h2 a::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+	}
+	.post-row:hover h2 {
 		color: var(--color-brand);
 	}
-	.card-excerpt {
+	.row-excerpt {
 		margin-top: var(--spacing-xs);
-		font-size: var(--font-size-sm);
+		font-size: var(--font-size-base);
 		color: var(--color-muted);
 		line-height: var(--leading-relaxed);
+		max-width: 60ch;
 	}
-	.card-link {
-		display: inline-block;
-		margin-top: var(--spacing-sm);
-		font-size: var(--font-size-sm);
-		font-weight: 600;
-		color: var(--color-brand);
-	}
-	@media (max-width: 960px) {
-		.post-grid {
-			grid-template-columns: repeat(2, 1fr);
-		}
-	}
-	@media (max-width: 600px) {
-		.post-grid {
+	@media (max-width: 700px) {
+		.post-row {
 			grid-template-columns: 1fr;
 		}
 	}

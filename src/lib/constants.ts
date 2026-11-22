@@ -7,6 +7,8 @@ export const SITE = {
 	email: "info@pondokrasamala.com",
 	address:
 		"Jl. Raya Gunung Salak Endah, Kec. Pamijahan, Kab. Bogor, Jawa Barat",
+	mapsUrl: "https://maps.app.goo.gl/VmLBXn5Ttdx9HRbz7",
+	availability: "https://availability.pondokrasamala.com/",
 	socials: {
 		instagram: "https://www.instagram.com/pondokrasamala",
 		tiktok: "https://www.tiktok.com/@pondokrasamala",

@@ -26,8 +26,10 @@ interface Props {
 const { title, description, image, locale = "id", canonical, jsonLd } = Astro.props;
 const t = getStrings(locale);
 const settings = await getSiteSettings();
-const siteTitle = settings?.title || SITE.name;
-const fullTitle = title ? `${title} — ${siteTitle}` : siteTitle;
+// Guard against DBs seeded before the rebrand (stock "Acme" title).
+const rawTitle = settings?.title || SITE.name;
+const siteTitle = /^acme$/i.test(rawTitle.trim()) ? SITE.name : rawTitle;
+const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle;
 const metaDescription =
 	description || settings?.tagline || `${SITE.name}: ${SITE.tagline}`;
 
@@ -63,6 +65,24 @@ const beaconToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
 <html lang={locale}>
 	<head>
 		<meta charset="UTF-8" />
+		<script is:inline>
+			// Must run before first paint: the whole palette is light-dark(),
+			// which resolves against <html>'s color-scheme. With no stored
+			// choice we take the OS preference; with JS off entirely the
+			// attribute is never set and `color-scheme: light dark` applies.
+			(function () {
+				var stored = null;
+				try {
+					stored = localStorage.getItem("pr-theme");
+				} catch (e) {}
+				if (stored !== "light" && stored !== "dark") {
+					stored = window.matchMedia("(prefers-color-scheme: dark)").matches
+						? "dark"
+						: "light";
+				}
+				document.documentElement.setAttribute("data-theme", stored);
+			})();
+		</script>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>{fullTitle}</title>
 		<meta name="description" content={metaDescription} />

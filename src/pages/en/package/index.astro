@@ -14,7 +14,7 @@ const copy = {
 	title: "All Packages",
 	eyebrow: "Gatherings & activities",
 	meta: "Pondok Rasamala packages: outbound, school, company outing, family. Per-person rates & custom quotes via WhatsApp.",
-	description: "From one-day outbound to stay-over gatherings — all arranged from one place.",
+	description: "From one-day outbound to stay-over gatherings, all arranged from one place.",
 };
 ---
 
@@ -24,6 +24,7 @@ const copy = {
 			eyebrow={copy.eyebrow}
 			title={copy.title}
 			description={copy.description}
+			align="left"
 		/>
 		<div class="card-grid">
 			{packages.map((p) => (
@@ -37,7 +38,7 @@ const copy = {
 							? `From ${formatIDR(Math.min(...p.tiers.map((tier) => tier.price as number)))}`
 							: "Custom quote"
 					}
-					imageLabel={`${p.name.en} — photo to follow`}
+					imageLabel={`${p.name.en}: photo to follow`}
 				/>
 			))}
 		</div>
@@ -49,10 +50,13 @@ const copy = {
 		padding-top: var(--section-pad);
 		padding-bottom: var(--section-pad);
 	}
+	/* Airy editorial: hairline rule, deep gaps. */
 	.card-grid {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
-		gap: var(--spacing-2xl) var(--spacing-xl);
+		gap: var(--spacing-3xl) var(--spacing-2xl);
+		border-top: 1px solid var(--color-border);
+		padding-top: var(--spacing-3xl);
 	}
 	@media (max-width: 700px) {
 		.card-grid {

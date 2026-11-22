@@ -2,21 +2,22 @@
 import Base from "../../../layouts/Base.astro";
 import SectionHeader from "../../../components/ui/SectionHeader.astro";
 import VillaCard from "../../../components/ui/VillaCard.astro";
-import { villas, villaPath } from "../../../data/villas";
+import { isVillaCategory, villas, villaPath } from "../../../data/villas";
 import { formatIDR } from "../../../lib/format";
 import { localizePath } from "../../../lib/i18n";
+import { displayName } from "../../../lib/stay";
 
 export const prerender = true;
 
 const locale = "en" as const;
 const L = (p: string) => localizePath(p, locale);
-const rows = villas.filter((v) => v.type === "villa");
+const rows = villas.filter(isVillaCategory);
 const copy = {
 	title: "All Villas",
 	eyebrow: "Stay",
 	description:
-		"14 bamboo and timber villas inside Gunung Halimun Salak National Park — from cosy ones for small families to Villa Cendana for 28 guests.",
-	meta: "All Pondok Rasamala villas: 14 bamboo & timber units, nightly rates, capacity. Book via WhatsApp.",
+		"Bamboo and timber villas inside Gunung Halimun Salak National Park, from cosy ones for small families to Villa Cendana for 28 guests.",
+	meta: "All Pondok Rasamala villas: bamboo, timber, and cottage units, nightly rates, capacity. Book via WhatsApp.",
 };
 ---
 
@@ -26,17 +27,18 @@ const copy = {
 			eyebrow={copy.eyebrow}
 			title={copy.title}
 			description={copy.description}
+			align="left"
 		/>
 		<div class="card-grid">
 			{rows.map((v) => (
 				<VillaCard
 					href={L(villaPath(v.slug))}
-					name={`Villa ${v.name}`}
+					name={displayName("villa", v.name)}
 					eyebrow={`Villa · sleeps ${v.paxMax}`}
 					price={formatIDR(v.price)}
 					priceNote="Price confirmed via WhatsApp"
 					blurb={v.tagline.en}
-					imageLabel={`Villa ${v.name} — photo to follow`}
+					imageLabel={`${displayName("villa", v.name)}: photo to follow`}
 				/>
 			))}
 		</div>
@@ -48,17 +50,21 @@ const copy = {
 		padding-top: var(--section-pad);
 		padding-bottom: var(--section-pad);
 	}
+	/* Compact editorial: three cards per row, full container width so the
+	   grid aligns with the header, deep gaps for breathing room. */
 	.card-grid {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		gap: var(--spacing-2xl) var(--spacing-xl);
+		gap: var(--spacing-3xl);
+		border-top: 1px solid var(--color-border);
+		padding-top: var(--spacing-3xl);
 	}
-	@media (max-width: 960px) {
+	@media (max-width: 1100px) {
 		.card-grid {
 			grid-template-columns: repeat(2, 1fr);
 		}
 	}
-	@media (max-width: 600px) {
+	@media (max-width: 700px) {
 		.card-grid {
 			grid-template-columns: 1fr;
 		}

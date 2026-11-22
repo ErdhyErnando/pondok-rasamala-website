@@ -18,7 +18,7 @@ export function GET() {
 	const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>${SITE.name} — Blog (EN)</title>
+    <title>${SITE.name}: Blog (EN)</title>
     <link>${SITE.url}/en/blog/</link>
     <description>Guides and stories from the foot of Mount Salak.</description>
     <language>en</language>

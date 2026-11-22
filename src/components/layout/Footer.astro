@@ -4,8 +4,9 @@ import { SITE } from "../../lib/constants";
 import { waGeneral } from "../../lib/whatsapp";
 import LanguageToggle from "./LanguageToggle.astro";
 
-// 4-column calm footer on deep forest. Contact / explore / stay / brand.
-// No curtain-reveal theatrics — static, quiet, one accent.
+// Cyze-style closing panel: inset rounded gradient, centered link
+// rows with solid light type, socials, centered brand lockup, giant
+// paper RASAMALA mark clipped at the bottom edge.
 interface Props {
 	locale?: Locale;
 	currentPath?: string;
@@ -28,6 +29,15 @@ const stayLinks = [
 	{ href: L("/glamping/"), label: t.nav.allGlamping },
 	{ href: L("/campsite/"), label: t.nav.campsite },
 	{ href: L("/package/"), label: t.nav.allPackages },
+];
+const contactLinks = [
+	{ href: waGeneral(), label: `WhatsApp: +${SITE.whatsapp}`, external: true },
+	{ href: `mailto:${SITE.email}`, label: SITE.email, external: false },
+	...SITE.phones.map((p) => ({
+		href: `tel:+62${p.replace(/\D/g, "").slice(1)}`,
+		label: p,
+		external: false,
+	})),
 ];
 const socials = [
 	{
@@ -54,48 +64,41 @@ const socials = [
 ---
 
 <footer class="site-footer">
-	<div class="footer-grid">
-		<div class="footer-brand">
-			<a href={L("/")} class="brand">
-				<img
-					src="/brand/rasamala-badge.png"
-					alt=""
-					width="44"
-					height="44"
-					class="brand-badge"
-				/>
-				<span class="wordmark">Pondok Rasamala</span>
-			</a>
-			<p class="tagline">{t.footer.brandTagline}</p>
-			<address>{SITE.address}</address>
+	<div class="footer-panel">
+		<div class="link-rows">
+			<nav aria-label={t.footer.explore}>
+				<h3>{t.footer.explore}</h3>
+				<ul>
+					{exploreLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+				</ul>
+			</nav>
+
+			<nav aria-label={t.footer.stay}>
+				<h3>{t.footer.stay}</h3>
+				<ul>
+					{stayLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+				</ul>
+			</nav>
+
+			<div class="footer-contact">
+				<h3>{t.footer.contact}</h3>
+				<ul>
+					{contactLinks.map((l) => (
+						<li>
+							<a
+								href={l.href}
+								target={l.external ? "_blank" : undefined}
+								rel={l.external ? "noopener" : undefined}
+							>
+								{l.label}
+							</a>
+						</li>
+					))}
+				</ul>
+			</div>
 		</div>
 
-		<nav aria-label={t.footer.explore}>
-			<h3>{t.footer.explore}</h3>
-			<ul>
-				{exploreLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
-			</ul>
-		</nav>
-
-		<nav aria-label={t.footer.stay}>
-			<h3>{t.footer.stay}</h3>
-			<ul>
-				{stayLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
-			</ul>
-		</nav>
-
-		<div class="footer-contact">
-			<h3>{t.footer.contact}</h3>
-			<ul class="contact-list">
-				<li>
-					<a href={waGeneral()} target="_blank" rel="noopener">
-						WhatsApp: +{SITE.whatsapp}
-					</a>
-				</li>
-				<li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
-				{SITE.phones.map((p) => <li><a href={`tel:+62${p.replace(/\D/g, "").slice(1)}`}>{p}</a></li>)}
-			</ul>
-			<p class="social-label">{t.footer.follow}</p>
+		<div class="footer-socials">
 			<ul class="socials">
 				{socials.map((s) => (
 					<li>
@@ -114,27 +117,146 @@ const socials = [
 					</li>
 				))}
 			</ul>
+			<span class="social-divider" aria-hidden="true"></span>
+			<a href={L("/")} class="brand" aria-label="Pondok Rasamala">
+				<img
+					src="/brand/rasamala-badge.png"
+					alt=""
+					width="34"
+					height="34"
+					class="brand-badge"
+				/>
+				<span class="wordmark">Pondok Rasamala</span>
+			</a>
 		</div>
-	</div>
 
-	<div class="footer-bottom">
-		<p>&copy; {new Date().getFullYear()} Pondok Rasamala. {t.footer.rights}</p>
-		<LanguageToggle locale={locale} path={currentPath} />
+		<div class="footer-bottom">
+			<p>&copy; {new Date().getFullYear()} Pondok Rasamala. {t.footer.rights}</p>
+			<div class="bottom-right">
+				<LanguageToggle locale={locale} path={currentPath} variant="inline" class="footer-lang" />
+				<a href="#main-content" class="to-top">{t.footer.backToTop} ↑</a>
+			</div>
+		</div>
+
+		<p class="footer-mark" aria-hidden="true">Rasamala</p>
 	</div>
 </footer>
 
 <style>
 	.site-footer {
-		background: var(--color-brand-strong);
-		color: var(--color-on-brand);
+		background: var(--color-bg);
+		padding: 0 var(--spacing-sm) var(--spacing-sm);
 	}
-	.footer-grid {
+	.footer-panel {
+		container-type: inline-size;
+		position: relative;
+		overflow: hidden;
 		max-width: var(--wide-width);
 		margin: 0 auto;
-		padding: var(--spacing-3xl) var(--spacing-lg) var(--spacing-2xl);
+		border-radius: var(--radius-lg);
+		color: #ffffff;
+		background:
+			radial-gradient(
+				120% 60% at 50% 0%,
+				color-mix(in srgb, var(--color-brand) 30%, transparent),
+				transparent 55%
+			),
+			radial-gradient(
+				100% 55% at 50% 100%,
+				color-mix(in srgb, var(--color-brand) 38%, transparent),
+				transparent 70%
+			),
+			linear-gradient(
+				180deg,
+				color-mix(in srgb, var(--color-brand-strong) 38%, var(--color-footer)) 0%,
+				var(--color-footer) 60%,
+				color-mix(in srgb, var(--color-brand-strong) 30%, var(--color-footer)) 100%
+			);
+		padding: var(--spacing-3xl) var(--spacing-lg) 0;
+	}
+	/* Centered link rows with room to breathe. */
+	.link-rows {
 		display: grid;
-		grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
-		gap: var(--spacing-2xl);
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: var(--spacing-lg);
+		max-width: 820px;
+		margin: 0 auto;
+		text-align: center;
+	}
+	.site-footer h3 {
+		font-family: var(--font-body);
+		font-size: var(--font-size-xs);
+		font-weight: 700;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		margin-bottom: var(--spacing-sm);
+		opacity: 1;
+		color: #ffffff;
+	}
+	.site-footer ul {
+		list-style: none;
+	}
+	.link-rows a {
+		display: inline-block;
+		font-size: var(--font-size-sm);
+		padding: 0.3rem 0;
+		color: #ffffff;
+	}
+	.link-rows a:hover {
+		text-decoration: underline;
+		text-underline-offset: 4px;
+	}
+	.footer-socials {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: var(--spacing-xl);
+		margin-top: var(--spacing-xl);
+		padding-top: var(--spacing-xl);
+		border-top: 1px solid rgba(255, 255, 255, 0.18);
+		max-width: 820px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.social-divider {
+		width: 1px;
+		align-self: stretch;
+		background: rgba(255, 255, 255, 0.25);
+	}
+	.footer-socials .brand-badge {
+		width: 34px;
+		height: 34px;
+	}
+	.footer-socials .wordmark {
+		font-size: var(--font-size-xs);
+		font-weight: 700;
+		letter-spacing: 0.01em;
+	}
+	.socials {
+		display: flex;
+		gap: var(--spacing-md);
+	}
+	.socials a {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
+		color: #ffffff;
+		border: 1px solid rgba(255, 255, 255, 0.55);
+		border-radius: 50%;
+		transition:
+			transform var(--transition-fast),
+			background-color var(--transition-fast);
+	}
+	.socials a:hover {
+		transform: translateY(-3px);
+		background: rgba(247, 245, 241, 0.12);
+	}
+	.socials svg {
+		width: 18px;
+		height: 18px;
 	}
 	.brand {
 		display: inline-flex;
@@ -142,109 +264,78 @@ const socials = [
 		gap: var(--spacing-sm);
 	}
 	.brand-badge {
-		width: 44px;
-		height: 44px;
 		border-radius: 50%;
 		object-fit: cover;
 	}
 	.wordmark {
 		font-family: var(--font-heading);
-		font-size: var(--font-size-xl);
 		font-weight: var(--font-weight-heading);
 		letter-spacing: var(--tracking-snug);
 		white-space: nowrap;
 	}
-	.tagline {
-		margin-top: var(--spacing-sm);
-		font-size: var(--font-size-sm);
-		opacity: 0.85;
-	}
-	.footer-brand address {
-		margin-top: var(--spacing-md);
-		font-size: var(--font-size-sm);
-		font-style: normal;
-		line-height: var(--leading-relaxed);
-		opacity: 0.75;
-		max-width: 32ch;
-	}
-	.site-footer h3 {
-		font-family: var(--font-body);
-		font-size: var(--font-size-sm);
-		font-weight: 700;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		margin-bottom: var(--spacing-md);
-		opacity: 0.9;
-	}
-	.site-footer ul {
-		list-style: none;
-	}
-	.site-footer nav a,
-	.contact-list a {
-		display: inline-block;
-		font-size: var(--font-size-sm);
-		padding: 0.3rem 0;
-		opacity: 0.75;
-	}
-	.site-footer nav a:hover,
-	.contact-list a:hover {
-		opacity: 1;
-		text-decoration: underline;
-		text-underline-offset: 3px;
-	}
-	.social-label {
-		margin-top: var(--spacing-lg);
-		font-size: var(--font-size-sm);
-		font-weight: 700;
-		opacity: 0.9;
-	}
-	.socials {
-		display: flex;
-		gap: var(--spacing-sm);
-		margin-top: var(--spacing-sm);
-	}
-	.socials a {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 44px;
-		height: 44px;
-		border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
-		border-radius: 50%;
-		opacity: 0.85;
-	}
-	.socials a:hover {
-		opacity: 1;
-		background: color-mix(in srgb, currentColor 12%, transparent);
-	}
-	.socials svg {
-		width: 20px;
-		height: 20px;
-	}
 	.footer-bottom {
-		max-width: var(--wide-width);
-		margin: 0 auto;
-		padding: var(--spacing-lg);
+		position: relative;
+		z-index: 1;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		gap: var(--spacing-md);
+		max-width: 820px;
+		margin: var(--spacing-xl) auto 0;
+		padding: var(--spacing-md) 0;
 		font-size: var(--font-size-sm);
-		border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent);
-		opacity: 0.9;
+		color: #ffffff;
+		border-top: 1px solid rgba(255, 255, 255, 0.25);
 	}
-	@media (max-width: 900px) {
-		.footer-grid {
-			grid-template-columns: 1fr 1fr;
-		}
+	.bottom-right {
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-lg);
+		margin-left: auto;
 	}
-	@media (max-width: 560px) {
-		.footer-grid {
+	.to-top {
+		white-space: nowrap;
+		font-weight: 600;
+		color: inherit;
+	}
+	.to-top:hover {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+	/* Giant mark: container-query sized, paper on forest, clipped edge. */
+	.footer-mark {
+		margin: var(--spacing-sm) 0 0;
+		font-family: var(--font-heading);
+		font-weight: 600;
+		font-size: 12.5cqw;
+		line-height: 0.85;
+		letter-spacing: -0.03em;
+		text-align: center;
+		white-space: nowrap;
+		color: #f7f5f1;
+		user-select: none;
+		pointer-events: none;
+		transform: translateY(0.1em);
+	}
+	@media (max-width: 700px) {
+		.link-rows {
 			grid-template-columns: 1fr;
+			gap: var(--spacing-2xl);
 		}
 		.footer-bottom {
 			flex-direction: column;
 			text-align: center;
+		}
+		.bottom-right {
+			margin-left: 0;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.socials a {
+			transition: none;
+		}
+		.socials a:hover {
+			transform: none;
 		}
 	}
 </style>

@@ -11,7 +11,7 @@ const copy = {
 	title: "Galeri",
 	eyebrow: "Suasana",
 	meta: "Galeri foto Pondok Rasamala: villa, glamping, aktivitas, alam, dan acara. Filter per kategori.",
-	description: "Potongan suasana resort — dari teras villa sampai api unggun. (Foto final menyusul Day 6.)",
+	description: "Potongan suasana resort, dari teras villa sampai api unggun. (Foto final menyusul Day 6.)",
 	all: "Semua",
 	categories: {
 		villa: "Villa",
@@ -124,12 +124,28 @@ const lightboxItems = galleryItems.map((g) => ({ label: g.caption.id }));
 		gap: var(--spacing-xl);
 	}
 	.scrap-item {
+		position: relative;
 		margin: 0;
 		padding: var(--spacing-sm);
 		background: var(--color-bg);
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius-sm);
 		box-shadow: var(--shadow-sm);
+	}
+	/* Refined-scrapbook tape cue: single sun-tint strip, no textures. */
+	.scrap-item::before {
+		content: "";
+		position: absolute;
+		top: -10px;
+		left: 50%;
+		width: 72px;
+		height: 20px;
+		transform: translateX(-50%) rotate(-2deg);
+		background: color-mix(in srgb, var(--color-accent) 28%, transparent);
+		border-left: 1px dashed color-mix(in srgb, var(--color-accent) 55%, transparent);
+		border-right: 1px dashed color-mix(in srgb, var(--color-accent) 55%, transparent);
+		border-radius: 1px;
+		pointer-events: none;
 	}
 	.scrap-item:nth-child(odd) {
 		transform: rotate(-1.2deg);

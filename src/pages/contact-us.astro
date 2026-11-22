@@ -1,19 +1,17 @@
 ---
 import Base from "../layouts/Base.astro";
 import MapFacade from "../components/ui/MapFacade.astro";
-import SectionHeader from "../components/ui/SectionHeader.astro";
 import WhatsAppButton from "../components/ui/WhatsAppButton.astro";
 import { SITE } from "../lib/constants";
 
 export const prerender = true;
 
 const locale = "id" as const;
-const mapsQuery = encodeURIComponent("Pondok Rasamala, Gunung Salak Endah, Pamijahan, Bogor");
 const copy = {
 	title: "Hubungi Kami",
 	eyebrow: "Kontak",
-	meta: "Hubungi Pondok Rasamala: WhatsApp, telepon, email, alamat, dan media sosial. Tanpa formulir — langsung terhubung.",
-	description: "Tanpa formulir, tanpa antre — langsung terhubung ke tim kami.",
+	meta: "Hubungi Pondok Rasamala: WhatsApp, telepon, email, alamat, dan media sosial. Tanpa formulir, langsung terhubung.",
+	description: "Tanpa formulir, tanpa antre, langsung terhubung ke tim kami.",
 	waTitle: "WhatsApp (tercepat)",
 	phoneTitle: "Telepon",
 	addressTitle: "Alamat",
@@ -32,11 +30,8 @@ const socials = [
 
 <Base title={copy.title} description={copy.meta} locale={locale}>
 	<div class="container page">
-		<SectionHeader
-			eyebrow={copy.eyebrow}
-			title={copy.title}
-			description={copy.description}
-		/>
+		<h1 class="page-title reveal">{copy.title}</h1>
+		<p class="lede reveal">{copy.description}</p>
 		<div class="contact-grid">
 			<div class="contact-info">
 				<article class="info-card reveal">
@@ -57,7 +52,7 @@ const socials = [
 					<address>{SITE.address}</address>
 					<p class="hours">
 						<a
-							href={`https://www.google.com/maps/search/?api=1&query=${mapsQuery}`}
+							href={SITE.mapsUrl}
 							target="_blank"
 							rel="noopener">Buka di Google Maps →</a
 						>
@@ -73,7 +68,7 @@ const socials = [
 				</article>
 			</div>
 			<div class="map-wrap reveal">
-				<MapFacade loadLabel={copy.mapLabel} />
+				<MapFacade loadLabel={copy.mapLabel} auto />
 			</div>
 		</div>
 	</div>
@@ -84,11 +79,28 @@ const socials = [
 		padding-top: var(--section-pad);
 		padding-bottom: var(--section-pad);
 	}
+	.page-title {
+		font-family: var(--font-body);
+		font-weight: 700;
+		font-size: clamp(2rem, 4vw, 3rem);
+		line-height: 1.1;
+		letter-spacing: -0.03em;
+		text-transform: uppercase;
+		text-wrap: balance;
+	}
+	.lede {
+		margin-top: var(--spacing-md);
+		color: var(--color-muted);
+		font-size: var(--font-size-lg);
+		line-height: var(--leading-relaxed);
+		max-width: 52ch;
+	}
 	.contact-grid {
 		display: grid;
 		grid-template-columns: 1fr 1.1fr;
 		gap: var(--spacing-xl);
-		align-items: start;
+		align-items: stretch;
+		margin-top: var(--spacing-3xl);
 	}
 	.contact-info {
 		display: flex;
@@ -102,6 +114,7 @@ const socials = [
 		border-radius: var(--radius-lg);
 	}
 	.info-card h2 {
+		font-family: var(--font-heading);
 		font-size: var(--font-size-base);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
@@ -137,13 +150,24 @@ const socials = [
 		flex-wrap: wrap;
 		gap: var(--spacing-md) !important;
 	}
+	.map-wrap {
+		position: sticky;
+		top: 96px;
+		display: flex;
+		flex-direction: column;
+	}
 	.map-wrap :global(.map-facade) {
 		border: 1px solid var(--color-border);
-		min-height: 100%;
+		border-radius: var(--radius-lg);
+		flex: 1;
+		min-height: min(70vh, 560px);
 	}
 	@media (max-width: 900px) {
 		.contact-grid {
 			grid-template-columns: 1fr;
+		}
+		.map-wrap {
+			position: static;
 		}
 	}
 </style>

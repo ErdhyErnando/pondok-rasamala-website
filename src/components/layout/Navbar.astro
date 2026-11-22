@@ -1,13 +1,16 @@
 ---
-import { glamping, glampingPath } from "../../data/glamping";
-import { villas, villaPath } from "../../data/villas";
 import { getStrings, localizePath, type Locale } from "../../lib/i18n";
 import { waGeneral } from "../../lib/whatsapp";
 import LanguageToggle from "./LanguageToggle.astro";
+import ThemeToggle from "./ThemeToggle.astro";
 
-// Calm sticky header: transparent over hero → frosted paper on scroll.
-// Dropdowns are data-driven (villas.ts / glamping.ts); packages are the
-// four Day-4 slugs so the chrome is stable before packages.ts lands.
+// Cream bar: logo left, links centered, ID/EN + green pill flush right.
+// Five top-level links (odd number) sit in the centered track.
+// Dropdowns follow Huts' click-to-open sheet, but the mark is a stemless
+// chevron, hover nudges it, click rotates it down and opens one panel.
+// The label itself does not navigate; index links live in the panel.
+// Galeri is a plain link. Below 1200px the hamburger drawer is unchanged
+// so the long left labels cannot run into the centered wordmark.
 interface Props {
 	locale?: Locale;
 	currentPath?: string;
@@ -16,111 +19,217 @@ interface Props {
 const { locale = "id", currentPath = Astro.url.pathname } = Astro.props;
 const t = getStrings(locale);
 const L = (p: string) => localizePath(p, locale);
-const isActive = (p: string) => currentPath === L(p);
+const here = (href: string) => {
+	const norm = (p: string) => (p.length > 1 ? p.replace(/\/$/, "") : p);
+	return norm(currentPath) === norm(href);
+};
 
-const stayLinks = villas.map((v) => ({ href: L(villaPath(v.slug)), label: v.name }));
-const glampingLinks = glamping.map((g) => ({
-	href: L(glampingPath(g.slug)),
-	label: `Glamping ${g.name}`,
-}));
+// Huts-style mega cards: tile + serif title + short description.
+// data-tile marks the illustration swap point for future AI art.
+interface MegaCard {
+	href: string;
+	title: string;
+	desc: string;
+	tile: string;
+}
+
+const stayCards: MegaCard[] = [
+	{ href: L("/villa/"), title: t.nav.villa, desc: t.navDesc.villa, tile: "villa" },
+	{ href: L("/glamping/"), title: t.nav.glamping, desc: t.navDesc.glamping, tile: "glamping" },
+	{ href: L("/campsite/"), title: t.nav.campsite, desc: t.navDesc.campsite, tile: "campsite" },
+];
+
+const groupCards: MegaCard[] = [
+	{ href: L("/aula/"), title: t.nav.aula, desc: t.navDesc.aula, tile: "aula" },
+	{ href: L("/package/"), title: t.nav.packages, desc: t.navDesc.packages, tile: "package" },
+];
+
+const exploreCards: MegaCard[] = [
+	{ href: L("/attractions/"), title: t.nav.attractions, desc: t.navDesc.attractions, tile: "attractions" },
+	{ href: L("/location/"), title: t.nav.location, desc: t.navDesc.location, tile: "location" },
+	{ href: L("/about-us/"), title: t.nav.about, desc: t.navDesc.about, tile: "about" },
+	{ href: L("/blog/"), title: t.nav.blog, desc: t.navDesc.blog, tile: "blog" },
+];
+
 const packageLinks = [
 	{ slug: "outbound", label: t.nav.packageOutbound },
 	{ slug: "special-school-package", label: t.nav.packageSchool },
 	{ slug: "company-outing", label: t.nav.packageCompany },
 	{ slug: "family", label: t.nav.packageFamily },
 ].map((p) => ({ href: L(`/package/${p.slug}/`), label: p.label }));
+
+const exploreLinks = [
+	{ href: L("/attractions/"), label: t.nav.attractions },
+	{ href: L("/location/"), label: t.nav.location },
+	{ href: L("/about-us/"), label: t.nav.about },
+	{ href: L("/blog/"), label: t.nav.blog },
+];
+
+const stayDetail = /\/(type-|glamping-type-)/.test(currentPath);
+const inGroup = (paths: string[]) => paths.some((p) => currentPath.startsWith(L(p)));
+const activeStay = stayDetail || inGroup(["/villa/", "/glamping/", "/campsite/"]);
+const activeGroups = inGroup(["/aula/", "/package/"]);
+const activeGallery = inGroup(["/gallery/"]);
+const activeExplore = inGroup([
+	"/about-us/",
+	"/location/",
+	"/attractions/",
+	"/blog/",
+]);
+const activeContact = inGroup(["/contact-us/"]);
 ---
 
 <header class="site-header" id="site-header">
 	<nav class="nav" aria-label={t.nav.mainMenu}>
-		<a href={L("/")} class="brand" aria-label="Pondok Rasamala">
-			<img
-				src="/brand/rasamala-badge.png"
-				alt=""
-				width="40"
-				height="40"
-				class="brand-badge"
-			/>
-			<span class="wordmark">Pondok Rasamala</span>
-		</a>
-
 		<ul class="nav-links">
-			<li><a href={L("/")} class:list={[{ active: isActive("/") }]}>{t.nav.home}</a></li>
-			<li class="optional">
-				<a href={L("/about-us/")} class:list={[{ active: isActive("/about-us/") }]}>
-					{t.nav.about}
-				</a>
-			</li>
-			<li class="optional">
-				<a href={L("/location/")} class:list={[{ active: isActive("/location/") }]}>
-					{t.nav.location}
-				</a>
-			</li>
-			<li class="has-dropdown">
-				<a
-					href={L("/villa/")}
-					aria-haspopup="true"
-					class:list={[{ active: currentPath.includes("/type-") || isActive("/villa/") }]}
+			<li class="has-panel">
+				<button
+					type="button"
+					class:list={["nav-trigger", { active: activeStay }]}
+					id="nav-stay"
+					data-nav-trigger
+					aria-expanded="false"
+					aria-controls="nav-panel-stay"
+					aria-current={activeStay ? "true" : undefined}
 				>
-					{t.nav.villa}
-					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
-				</a>
-				<div class="dropdown">
-					<a href={L("/villa/")} class="dropdown-all">{t.nav.allVillas}</a>
-					{stayLinks.map((l) => <a href={l.href}>{l.label}</a>)}
+					{t.nav.stay}
+					<svg class="chevron" viewBox="0 0 10 10" aria-hidden="true" focusable="false">
+						<path fill="currentColor" d="M2.4 1.1 3.7 1.1 7.8 5 3.7 8.9 2.4 8.9 6.2 5Z" />
+					</svg>
+				</button>
+				<div
+					class="nav-panel"
+					id="nav-panel-stay"
+					role="region"
+					aria-labelledby="nav-stay"
+					aria-hidden="true"
+					inert
+				>
+					<div class="mega-grid">
+						{stayCards.map((c) => (
+							<a class="mega-card" href={c.href} aria-current={here(c.href) ? "page" : undefined}>
+								<span class="mega-tile" data-tile={c.tile} aria-hidden="true">
+									<span class="mega-tile-mark"></span>
+								</span>
+								<span class="mega-body">
+									<span class="mega-title">{c.title}</span>
+									<span class="mega-desc">{c.desc}</span>
+								</span>
+							</a>
+						))}
+					</div>
 				</div>
 			</li>
-			<li class="has-dropdown">
-				<a
-					href={L("/glamping/")}
-					aria-haspopup="true"
-					class:list={[{ active: currentPath.includes("/glamping-type-") || isActive("/glamping/") }]}
+
+			<li class="has-panel">
+				<button
+					type="button"
+					class:list={["nav-trigger", { active: activeGroups }]}
+					id="nav-groups"
+					data-nav-trigger
+					aria-expanded="false"
+					aria-controls="nav-panel-groups"
+					aria-current={activeGroups ? "true" : undefined}
 				>
-					{t.nav.glamping}
-					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
-				</a>
-				<div class="dropdown">
-					<a href={L("/glamping/")} class="dropdown-all">{t.nav.allGlamping}</a>
-					{glampingLinks.map((l) => <a href={l.href}>{l.label}</a>)}
+					{t.nav.groups}
+					<svg class="chevron" viewBox="0 0 10 10" aria-hidden="true" focusable="false">
+						<path fill="currentColor" d="M2.4 1.1 3.7 1.1 7.8 5 3.7 8.9 2.4 8.9 6.2 5Z" />
+					</svg>
+				</button>
+				<div
+					class="nav-panel"
+					id="nav-panel-groups"
+					role="region"
+					aria-labelledby="nav-groups"
+					aria-hidden="true"
+					inert
+				>
+				<div class="mega-grid cols-2">
+					{groupCards.map((c) => (
+							<a class="mega-card" href={c.href} aria-current={here(c.href) ? "page" : undefined}>
+								<span class="mega-tile" data-tile={c.tile} aria-hidden="true">
+									<span class="mega-tile-mark"></span>
+								</span>
+								<span class="mega-body">
+									<span class="mega-title">{c.title}</span>
+									<span class="mega-desc">{c.desc}</span>
+								</span>
+							</a>
+						))}
+					</div>
 				</div>
 			</li>
+
+		<li class="has-panel">
+			<button
+				type="button"
+				class:list={["nav-trigger", { active: activeExplore }]}
+				id="nav-explore"
+				data-nav-trigger
+				aria-expanded="false"
+				aria-controls="nav-panel-explore"
+				aria-current={activeExplore ? "true" : undefined}
+			>
+				{t.nav.explore}
+				<svg class="chevron" viewBox="0 0 10 10" aria-hidden="true" focusable="false">
+					<path fill="currentColor" d="M2.4 1.1 3.7 1.1 7.8 5 3.7 8.9 2.4 8.9 6.2 5Z" />
+				</svg>
+			</button>
+			<div
+				class="nav-panel"
+				id="nav-panel-explore"
+				role="region"
+				aria-labelledby="nav-explore"
+				aria-hidden="true"
+				inert
+			>
+				<div class="mega-grid cols-2">
+					{exploreCards.map((c) => (
+						<a class="mega-card" href={c.href} aria-current={here(c.href) ? "page" : undefined}>
+							<span class="mega-tile" data-tile={c.tile} aria-hidden="true">
+								<span class="mega-tile-mark"></span>
+							</span>
+							<span class="mega-body">
+								<span class="mega-title">{c.title}</span>
+								<span class="mega-desc">{c.desc}</span>
+							</span>
+						</a>
+					))}
+				</div>
+			</div>
+		</li>
+
+		<li>
+			<a class="nav-link" href={L("/gallery/")} aria-current={activeGallery ? "page" : undefined}>
+				{t.nav.gallery}
+			</a>
+		</li>
+
 			<li>
-				<a href={L("/campsite/")} class:list={[{ active: isActive("/campsite/") }]}>
-					{t.nav.campsite}
-				</a>
-			</li>
-			<li class="has-dropdown">
-				<a
-					href={L("/package/")}
-					aria-haspopup="true"
-					class:list={[{ active: currentPath.includes("/package") }]}
-				>
-					{t.nav.packages}
-					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
-				</a>
-				<div class="dropdown">
-					<a href={L("/package/")} class="dropdown-all">{t.nav.allPackages}</a>
-					{packageLinks.map((l) => <a href={l.href}>{l.label}</a>)}
-				</div>
-			</li>
-			<li class="optional">
-				<a href={L("/attractions/")} class:list={[{ active: isActive("/attractions/") }]}>
-					{t.nav.attractions}
-				</a>
-			</li>
-			<li><a href={L("/gallery/")} class:list={[{ active: isActive("/gallery/") }]}>{t.nav.gallery}</a></li>
-			<li><a href={L("/blog/")} class:list={[{ active: isActive("/blog/") }]}>{t.nav.blog}</a></li>
-			<li>
-				<a href={L("/contact-us/")} class:list={[{ active: isActive("/contact-us/") }]}>
+				<a class="nav-link" href={L("/contact-us/")} aria-current={activeContact ? "page" : undefined}>
 					{t.nav.contact}
 				</a>
 			</li>
 		</ul>
 
+		<a href={L("/")} class="brand" aria-label="Pondok Rasamala">
+			<img
+				src="/brand/rasamala-badge.png"
+				alt=""
+				width="34"
+				height="34"
+				class="brand-badge"
+			/>
+			<span class="wordmark">Rasamala</span>
+		</a>
+
 		<div class="nav-actions">
-			<LanguageToggle locale={locale} path={currentPath} class="nav-lang" />
-			<a href={waGeneral()} target="_blank" rel="noopener" class="btn btn-whatsapp nav-cta">
-				{t.actions.bookNow}
+			<div class="nav-tools">
+				<LanguageToggle locale={locale} path={currentPath} class="nav-lang" />
+				<ThemeToggle locale={locale} class="nav-theme" />
+			</div>
+			<a href={waGeneral()} target="_blank" rel="noopener" class="nav-cta">
+				{t.nav.bookCta}
 			</a>
 			<button
 				type="button"
@@ -128,6 +237,8 @@ const packageLinks = [
 				aria-expanded="false"
 				aria-controls="mobile-nav"
 				aria-label={t.actions.openMenu}
+				data-label-open={t.actions.openMenu}
+				data-label-close={t.actions.closeMenu}
 			>
 				<svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
 				<svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
@@ -137,35 +248,38 @@ const packageLinks = [
 
 	<div class="mobile-nav" id="mobile-nav" hidden>
 		<div class="mobile-nav-inner">
-			<p class="mobile-group">{t.footer.stay}</p>
+			<p class="mobile-group">{t.nav.stay}</p>
 			<a href={L("/villa/")}>{t.nav.allVillas}</a>
 			<a href={L("/glamping/")}>{t.nav.allGlamping}</a>
 			<a href={L("/campsite/")}>{t.nav.campsite}</a>
-			<p class="mobile-group">{t.nav.packages}</p>
+			<p class="mobile-group">{t.nav.groups}</p>
+			<a href={L("/aula/")}>{t.nav.aula}</a>
 			<a href={L("/package/")}>{t.nav.allPackages}</a>
 			{packageLinks.map((l) => <a href={l.href}>{l.label}</a>)}
-			<p class="mobile-group">{t.footer.explore}</p>
-			<a href={L("/about-us/")}>{t.nav.about}</a>
-			<a href={L("/location/")}>{t.nav.location}</a>
-			<a href={L("/attractions/")}>{t.nav.attractions}</a>
+			<p class="mobile-group">{t.nav.explore}</p>
 			<a href={L("/gallery/")}>{t.nav.gallery}</a>
-			<a href={L("/blog/")}>{t.nav.blog}</a>
+			{exploreLinks.map((l) => <a href={l.href}>{l.label}</a>)}
 			<a href={L("/contact-us/")}>{t.nav.contact}</a>
 			<div class="mobile-cta">
-				<a href={waGeneral()} target="_blank" rel="noopener" class="btn btn-whatsapp btn-lg">
-					{t.actions.bookNow}
+				<a href={waGeneral()} target="_blank" rel="noopener" class="nav-cta nav-cta-lg">
+					{t.nav.bookCta}
 				</a>
-				<LanguageToggle locale={locale} path={currentPath} />
+				<div class="mobile-tools">
+					<LanguageToggle locale={locale} path={currentPath} class="mobile-lang" />
+					<ThemeToggle locale={locale} class="mobile-theme" />
+				</div>
 			</div>
 		</div>
 	</div>
 </header>
 
 <script>
-	// Frosted-on-scroll header + vanilla full-screen mobile nav. No framework.
+	// Click opens one sheet. Hover only nudges the chevron (CSS).
+	// 1200px matches the CSS cutoff where the centered bar gives way to the drawer.
 	const header = document.getElementById("site-header");
-	const toggle = header?.querySelector(".nav-toggle");
+	const toggle = header?.querySelector<HTMLButtonElement>(".nav-toggle");
 	const mobileNav = document.getElementById("mobile-nav");
+	const desktop = window.matchMedia("(min-width: 1200px)");
 
 	const onScroll = () => header?.classList.toggle("is-scrolled", window.scrollY > 8);
 	onScroll();
@@ -174,6 +288,10 @@ const packageLinks = [
 	function setMenu(open: boolean) {
 		if (!toggle || !mobileNav) return;
 		toggle.setAttribute("aria-expanded", String(open));
+		toggle.setAttribute(
+			"aria-label",
+			open ? toggle.dataset.labelClose ?? "" : toggle.dataset.labelOpen ?? "",
+		);
 		toggle.classList.toggle("is-open", open);
 		if (open) {
 			mobileNav.hidden = false;
@@ -188,14 +306,65 @@ const packageLinks = [
 		}
 	}
 
-	toggle?.addEventListener("click", () =>
-		setMenu(toggle.getAttribute("aria-expanded") !== "true"),
-	);
+	function setPanel(li: Element, open: boolean) {
+		const btn = li.querySelector<HTMLButtonElement>("[data-nav-trigger]");
+		const panel = li.querySelector<HTMLElement>(".nav-panel");
+		li.classList.toggle("is-open", open);
+		btn?.setAttribute("aria-expanded", String(open));
+		if (!panel) return;
+		panel.toggleAttribute("inert", !open);
+		panel.setAttribute("aria-hidden", String(!open));
+	}
+
+	function closePanels(returnFocus = false) {
+		const open = header?.querySelector(".has-panel.is-open");
+		const trigger = open?.querySelector<HTMLButtonElement>("[data-nav-trigger]");
+		const active = document.activeElement;
+		if (open && active instanceof Node && open.contains(active)) trigger?.focus();
+		else if (returnFocus) trigger?.focus();
+		header?.querySelectorAll(".has-panel").forEach((li) => setPanel(li, false));
+		header?.classList.remove("is-open");
+	}
+
+	function openPanel(li: Element) {
+		header?.querySelectorAll(".has-panel").forEach((item) => setPanel(item, item === li));
+		header?.classList.add("is-open");
+	}
+
+	header?.querySelectorAll("[data-nav-trigger]").forEach((btn) => {
+		btn.addEventListener("click", () => {
+			const li = btn.closest(".has-panel");
+			if (!li) return;
+			if (li.classList.contains("is-open")) closePanels();
+			else openPanel(li);
+		});
+	});
+
+	header?.querySelectorAll(".nav-panel a").forEach((link) => {
+		link.addEventListener("click", () => closePanels());
+	});
+
+	document.addEventListener("click", (e) => {
+		if (!header?.contains(e.target as Node)) closePanels();
+	});
+
+	toggle?.addEventListener("click", () => {
+		closePanels();
+		setMenu(toggle.getAttribute("aria-expanded") !== "true");
+	});
 	mobileNav?.addEventListener("click", (e) => {
 		if ((e.target as HTMLElement).closest("a")) setMenu(false);
 	});
+
+	desktop.addEventListener("change", () => {
+		if (desktop.matches) setMenu(false);
+		else closePanels();
+	});
+
 	window.addEventListener("keydown", (e) => {
-		if (e.key === "Escape") setMenu(false);
+		if (e.key !== "Escape") return;
+		closePanels(true);
+		setMenu(false);
 	});
 </script>
 
@@ -204,139 +373,272 @@ const packageLinks = [
 		position: sticky;
 		top: 0;
 		z-index: 100;
-		background: transparent;
-		transition:
-			background var(--transition-base),
-			border-color var(--transition-base),
-			backdrop-filter var(--transition-base);
-		border-bottom: 1px solid transparent;
+		background: var(--color-bg);
+		border-bottom: 1px solid var(--color-border);
 	}
 	.site-header.is-scrolled {
-		background: color-mix(in srgb, var(--color-bg) 88%, transparent);
-		-webkit-backdrop-filter: blur(12px);
-		backdrop-filter: blur(12px);
-		border-bottom-color: var(--color-border);
+		box-shadow: var(--shadow-sm);
+	}
+	.site-header.is-open {
+		border-bottom-color: transparent;
+		box-shadow: none;
 	}
 
+	/* Logo left, links centered, actions right. The middle minmax(0, 1fr)
+	   track centers the odd-numbered link group on the viewport. */
 	.nav {
-		max-width: var(--wide-width);
-		margin: 0 auto;
-		padding: var(--spacing-md) var(--spacing-lg);
-		display: flex;
+		position: relative;
+		z-index: 2; /* stays above the full-screen drawer so the close control remains clickable */
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr) auto;
 		align-items: center;
-		gap: var(--spacing-lg);
+		gap: var(--spacing-md);
+		width: 100%;
+		padding: 0.625rem var(--spacing-lg);
 	}
 
+	/* Left lockup: badge on top, wordmark centered beneath it. */
 	.brand {
 		display: inline-flex;
+		flex-direction: column;
 		align-items: center;
-		gap: var(--spacing-sm);
-		flex-shrink: 0;
+		justify-content: center;
+		gap: 0.2rem;
+		justify-self: start;
+		grid-column: 1;
+		grid-row: 1;
+		text-decoration: none;
 	}
 	.brand-badge {
-		width: 40px;
-		height: 40px;
+		width: 34px;
+		height: 34px;
 		border-radius: 50%;
 		object-fit: cover;
 	}
 	.wordmark {
 		font-family: var(--font-heading);
-		font-size: var(--font-size-lg);
+		font-size: var(--font-size-xs);
 		font-weight: var(--font-weight-heading);
-		letter-spacing: var(--tracking-snug);
+		letter-spacing: 0.01em;
+		line-height: 1.1;
 		white-space: nowrap;
+		color: var(--color-text);
 	}
 
 	.nav-links {
 		display: flex;
 		align-items: center;
-		flex-wrap: nowrap;
-		gap: var(--spacing-md);
-		margin-left: auto;
+		justify-self: center;
+		grid-column: 2;
+		grid-row: 1;
+		gap: clamp(0.75rem, 1.4vw, 1.5rem);
+		min-width: 0;
 		list-style: none;
 	}
-	.nav-links > li > a {
+	.nav-links > li {
+		transition: opacity 0.2s ease;
+	}
+	.site-header.is-open .nav-links > li:not(.is-open) {
+		opacity: 0.45;
+	}
+	.nav-trigger,
+	.nav-link {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.25rem;
+		gap: 0.35rem;
+		padding: 0.5rem 0;
+		border: 0;
+		background: none;
+		color: var(--color-muted);
+		font-family: inherit;
 		font-size: var(--font-size-sm);
 		font-weight: 500;
-		color: var(--color-muted);
-		padding: 0.375rem 0.125rem;
+		line-height: 1;
 		white-space: nowrap;
-		border-bottom: 2px solid transparent;
+		text-decoration: none;
+		cursor: pointer;
 	}
-	.nav-links > li > a:hover {
+	.nav-trigger:hover,
+	.nav-link:hover,
+	.nav-trigger[aria-expanded="true"],
+	.nav-trigger.active,
+	.nav-link[aria-current="page"] {
 		color: var(--color-text);
 	}
-	.nav-links > li > a.active {
-		color: var(--color-text);
-		border-bottom-color: var(--color-brand);
-	}
-	.nav-links svg {
-		width: 0.85em;
-		height: 0.85em;
+	.nav-trigger.active,
+	.nav-link[aria-current="page"] {
+		font-weight: 600;
 	}
 
-	.has-dropdown {
-		position: relative;
+	.chevron {
+		display: block;
+		width: 0.7em;
+		height: 0.7em;
+		flex-shrink: 0;
+		transition: transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.125);
 	}
-	.dropdown {
+	.nav-trigger:hover .chevron,
+	.nav-trigger:focus-visible .chevron {
+		transform: translateX(3px);
+	}
+	.nav-trigger[aria-expanded="true"] .chevron {
+		transform: rotate(90deg);
+	}
+	.nav-trigger[aria-expanded="true"]:hover .chevron,
+	.nav-trigger[aria-expanded="true"]:focus-visible .chevron {
+		transform: rotate(90deg) translateX(2px);
+	}
+
+	.nav-panel {
 		position: absolute;
-		top: calc(100% + 8px);
-		left: 50%;
-		transform: translate(-50%, 4px);
-		min-width: 220px;
-		max-height: min(70vh, 480px);
-		overflow: auto;
+		left: 0;
+		right: 0;
+		top: calc(100% - 1px);
+		z-index: 20;
+		max-height: 0;
+		overflow: hidden;
+		overscroll-behavior: contain;
 		background: var(--color-bg);
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius);
-		box-shadow: var(--shadow-lg);
-		padding: var(--spacing-sm);
+		border-top: 1px solid transparent;
+		border-bottom: 1px solid transparent;
+		box-shadow: none;
 		opacity: 0;
 		visibility: hidden;
+		transform: translateY(-6px);
+		pointer-events: none;
 		transition:
-			opacity var(--transition-fast),
-			transform var(--transition-fast),
-			visibility var(--transition-fast);
+			opacity 0.35s cubic-bezier(0.33, 1, 0.68, 1),
+			transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.125),
+			visibility 0s linear 0.35s;
 	}
-	.has-dropdown:hover .dropdown,
-	.has-dropdown:focus-within .dropdown {
+	.has-panel.is-open .nav-panel {
+		max-height: min(70vh, 34rem);
+		overflow: auto;
+		border-color: var(--color-border);
+		box-shadow: var(--shadow-lg);
 		opacity: 1;
 		visibility: visible;
-		transform: translate(-50%, 0);
+		transform: translateY(0);
+		pointer-events: auto;
+		transition:
+			opacity 0.35s cubic-bezier(0.33, 1, 0.68, 1),
+			transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.125),
+			visibility 0s;
 	}
-	.dropdown a {
-		display: block;
-		font-size: var(--font-size-sm);
-		padding: 0.5rem 0.75rem;
-		border-radius: var(--radius-sm);
-		color: var(--color-text);
-		white-space: nowrap;
+	/* Huts-style mega grid: centered tracks of tile + title + description
+	   cards. Groups (2 cards) centers its pair; Explore uses .cols-2 for
+	   a centered 2x2. */
+	.mega-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 22rem));
+		justify-content: center;
+		gap: var(--spacing-sm) var(--spacing-lg);
+		max-width: 72rem;
+		margin-inline: auto;
+		padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-2xl);
 	}
-	.dropdown a:hover {
+	.mega-grid.cols-2 {
+		grid-template-columns: repeat(2, minmax(0, 22rem));
+		max-width: 48rem;
+	}
+	.mega-card {
+		display: flex;
+		align-items: flex-start;
+		gap: var(--spacing-md);
+		min-width: 0;
+		padding: var(--spacing-md);
+		border-radius: var(--radius-lg);
+		text-decoration: none;
+		transition: background-color 0.15s ease;
+	}
+	.mega-card:hover {
 		background: var(--color-surface);
 	}
-	.dropdown-all {
-		font-weight: 700 !important;
-		color: var(--color-brand) !important;
-		border-bottom: 1px solid var(--color-border);
-		border-radius: 0 !important;
-		margin-bottom: var(--spacing-xs);
+	.mega-card:hover .mega-title {
+		color: var(--color-brand);
+	}
+	.mega-card[aria-current="page"] .mega-title {
+		color: var(--color-brand);
+	}
+	/* Tile placeholder: fixed 96px slot in the brand-soft wash.
+	   AI-ILLUSTRATION SWAP POINT, replace .mega-tile-mark with an
+	   <img data-tile="…"> at 96px, object-fit cover, same radius. */
+	.mega-tile {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		width: 96px;
+		height: 96px;
+		border-radius: 20px;
+		color: var(--color-wood);
+		background:
+			radial-gradient(120% 100% at 50% 0%, var(--color-brand-soft) 0%, transparent 60%),
+			var(--color-surface);
+		border: 1px dashed var(--color-border);
+	}
+	.mega-tile-mark {
+		width: 40px;
+		height: 40px;
+		border-radius: 12px;
+		background: var(--color-brand-soft);
+	}
+	.mega-body {
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+		padding-top: 0.15rem;
+	}
+	.mega-title {
+		font-family: var(--font-heading);
+		font-size: var(--font-size-xl);
+		font-weight: var(--font-weight-heading);
+		letter-spacing: -0.02em;
+		line-height: 1.2;
+		color: var(--color-text);
+	}
+	.mega-desc {
+		margin-top: 0.3rem;
+		font-size: var(--font-size-sm);
+		line-height: 1.55;
+		color: var(--color-muted);
 	}
 
 	.nav-actions {
 		display: flex;
 		align-items: center;
+		justify-self: end;
+		grid-column: 3;
+		grid-row: 1;
 		gap: var(--spacing-md);
-		flex-shrink: 0;
+	}
+	/* Language pill + theme toggle, sitting between the links and Reservasi. */
+	.nav-tools {
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-sm);
 	}
 	.nav-cta {
-		padding: var(--spacing-sm) var(--spacing-md);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.6rem 1.15rem;
 		border-radius: var(--radius-full);
+		background: var(--color-brand);
+		color: var(--color-on-brand);
 		font-size: var(--font-size-sm);
+		font-weight: 600;
+		line-height: 1;
 		white-space: nowrap;
+		text-decoration: none;
+	}
+	.nav-cta:hover {
+		background: var(--color-brand-strong);
+		color: var(--color-on-brand);
+	}
+	.nav-cta-lg {
+		padding: 0.85rem 1.4rem;
+		font-size: var(--font-size-base);
 	}
 
 	.nav-toggle {
@@ -368,9 +670,8 @@ const packageLinks = [
 	.mobile-nav {
 		position: fixed;
 		inset: 0;
-		top: 0;
 		background: var(--color-bg);
-		z-index: 99;
+		z-index: 1;
 		overflow: auto;
 		padding: 5.5rem var(--spacing-lg) var(--spacing-2xl);
 		opacity: 0;
@@ -390,6 +691,7 @@ const packageLinks = [
 		font-size: var(--font-size-xl);
 		padding: 0.6rem 0;
 		border-bottom: 1px solid var(--color-border);
+		text-decoration: none;
 	}
 	.mobile-group {
 		font-size: var(--font-size-xs);
@@ -407,36 +709,55 @@ const packageLinks = [
 		margin-top: var(--spacing-xl);
 		text-align: center;
 	}
-	.mobile-cta .lang-toggle {
+	.mobile-cta :global(.lang-toggle) {
 		justify-content: center;
+	}
+	/* Drawer copy of the header tools: same pills, centred, below Reservasi. */
+	.mobile-tools {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: var(--spacing-sm);
 	}
 	:global(body.menu-open) {
 		overflow: hidden;
 	}
 
-	@media (max-width: 1180px) {
-		.nav-links .optional {
-			display: none;
-		}
-	}
-	@media (max-width: 960px) {
-		.nav-links,
-		.nav-lang {
-			display: none;
-		}
-		.nav-toggle {
-			display: inline-flex;
-		}
+	@media (max-width: 1199px) {
 		.nav {
+			display: flex;
 			justify-content: space-between;
+		}
+		.nav-links,
+		.nav-panel {
+			display: none;
+		}
+		/* Both the language dropdown and the theme toggle live in a
+		   Navbar-owned wrapper: they are LanguageToggle's / ThemeToggle's own
+		   root elements, so a scoped `.nav-lang` rule would never match them
+		   (they carry the child component's scope id, not this one). */
+		.nav-tools {
+			display: none;
+		}
+		.brand {
+			grid-column: auto;
 		}
 		.nav-actions {
 			margin-left: auto;
 		}
+		.nav-toggle {
+			display: inline-flex;
+		}
+	}
+	@media (max-width: 520px) {
+		.wordmark {
+			display: none;
+		}
 	}
 	@media (prefers-reduced-motion: reduce) {
-		.site-header,
-		.dropdown,
+		.chevron,
+		.nav-panel,
+		.nav-links > li,
 		.mobile-nav {
 			transition: none;
 		}

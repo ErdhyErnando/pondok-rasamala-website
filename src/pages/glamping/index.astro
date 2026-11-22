@@ -14,7 +14,7 @@ const copy = {
 	title: "Semua Glamping",
 	eyebrow: "Menginap",
 	description:
-		"8 tenda glamping dinamai gunung-gunung Jawa Barat — matras hangat, kamar mandi sendiri, sarapan, dan api unggun termasuk.",
+		"8 tenda glamping dinamai gunung-gunung Jawa Barat, matras hangat, kamar mandi sendiri, sarapan, dan api unggun termasuk.",
 	meta: "Semua glamping Pondok Rasamala: 8 tenda, harga per tier pax, termasuk sarapan & api unggun. Pesan via WhatsApp.",
 };
 ---
@@ -25,6 +25,7 @@ const copy = {
 			eyebrow={copy.eyebrow}
 			title={copy.title}
 			description={copy.description}
+			align="left"
 		/>
 		<div class="card-grid">
 			{glamping.map((g) => {
@@ -38,7 +39,7 @@ const copy = {
 						fromPrice={`Mulai ${formatIDR(min)}`}
 						priceNote="Harga konfirmasi via WhatsApp"
 						blurb={g.tagline.id}
-						imageLabel={`Glamping ${g.name} — foto menyusul`}
+						imageLabel={`Glamping ${g.name}: foto menyusul`}
 					/>
 				);
 			})}
@@ -51,17 +52,21 @@ const copy = {
 		padding-top: var(--section-pad);
 		padding-bottom: var(--section-pad);
 	}
+	/* Compact editorial: three cards per row, full container width so the
+	   grid aligns with the header, deep gaps for breathing room. */
 	.card-grid {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		gap: var(--spacing-2xl) var(--spacing-xl);
+		gap: var(--spacing-3xl);
+		border-top: 1px solid var(--color-border);
+		padding-top: var(--spacing-3xl);
 	}
-	@media (max-width: 960px) {
+	@media (max-width: 1100px) {
 		.card-grid {
 			grid-template-columns: repeat(2, 1fr);
 		}
 	}
-	@media (max-width: 600px) {
+	@media (max-width: 700px) {
 		.card-grid {
 			grid-template-columns: 1fr;
 		}

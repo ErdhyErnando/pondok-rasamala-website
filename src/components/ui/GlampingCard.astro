@@ -18,7 +18,7 @@ const { href, name, eyebrow, fromPrice, priceNote, blurb, imageLabel } = Astro.p
 
 <article class="stay-card">
 	<a href={href} class="card-visual" aria-hidden="true" tabindex="-1">
-		<PhotoPlaceholder label={imageLabel} ratio="16 / 10" />
+		<PhotoPlaceholder label={imageLabel} ratio="16 / 8" />
 	</a>
 	<p class="card-eyebrow">{eyebrow}</p>
 	<h3><a href={href}>{name}</a></h3>
@@ -28,6 +28,7 @@ const { href, name, eyebrow, fromPrice, priceNote, blurb, imageLabel } = Astro.p
 
 <style>
 	.stay-card {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 	}
@@ -35,11 +36,16 @@ const { href, name, eyebrow, fromPrice, priceNote, blurb, imageLabel } = Astro.p
 		display: block;
 	}
 	.card-visual :global(.photo-placeholder) {
-		border-radius: var(--radius);
+		border-radius: var(--radius-lg);
 		transition: transform var(--transition-base);
 	}
 	.stay-card:hover .card-visual :global(.photo-placeholder) {
 		transform: translateY(-2px);
+	}
+	.stay-card h3 a::after {
+		content: "";
+		position: absolute;
+		inset: 0;
 	}
 	.card-eyebrow {
 		margin-top: var(--spacing-md);

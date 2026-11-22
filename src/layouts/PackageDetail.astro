@@ -23,7 +23,7 @@ const t = {
 	tiers: en ? "Options & pricing" : "Pilihan & harga",
 	activities: en ? "Activities" : "Aktivitas",
 	other: en ? "Other packages" : "Paket lainnya",
-	verifyNote: en ? "Web anchor — confirmed via WhatsApp" : "Acuan web — konfirmasi via WhatsApp",
+	verifyNote: en ? "Web anchor, confirmed via WhatsApp" : "Acuan web, konfirmasi via WhatsApp",
 	quoteCta: en ? "Request a quote" : "Minta penawaran",
 	perEvent: (u: string) => u,
 };
@@ -49,7 +49,7 @@ const others = packages.filter((p) => p.slug !== pkg.slug);
 
 		<div class="pkg-hero">
 			<PhotoPlaceholder
-				label={en ? `${pkg.name.en} — hero photo to follow` : `${pkg.name.id} — foto utama menyusul`}
+				label={en ? `${pkg.name.en}: hero photo to follow` : `${pkg.name.id}: foto utama menyusul`}
 				ratio="16 / 8"
 			/>
 		</div>
@@ -109,7 +109,7 @@ const others = packages.filter((p) => p.slug !== pkg.slug);
 						tagline={o.tagline[locale]}
 						duration={o.duration[locale]}
 						priceSummary={priceSummary(o)}
-						imageLabel={en ? `${o.name.en} — photo to follow` : `${o.name.id} — foto menyusul`}
+						imageLabel={en ? `${o.name.en}: photo to follow` : `${o.name.id}: foto menyusul`}
 					/>
 				))}
 			</div>
@@ -136,13 +136,17 @@ const others = packages.filter((p) => p.slug !== pkg.slug);
 	}
 	.pkg-hero :global(.photo-placeholder) {
 		min-height: min(50vh, 440px);
+		border-radius: var(--radius-lg);
 	}
 	.pkg-grid {
 		display: grid;
 		grid-template-columns: 1.6fr 1fr;
 		gap: var(--spacing-3xl);
-		margin-top: var(--spacing-2xl);
+		margin-top: var(--spacing-3xl);
 		align-items: start;
+	}
+	.pkg-main {
+		max-width: 44rem;
 	}
 	.eyebrow {
 		font-size: var(--font-size-xs);
@@ -153,8 +157,10 @@ const others = packages.filter((p) => p.slug !== pkg.slug);
 	}
 	.pkg-main h1 {
 		font-size: clamp(2rem, 4vw, 3rem);
-		letter-spacing: var(--tracking-tight);
+		line-height: 1.1;
+		letter-spacing: -0.02em;
 		margin-top: var(--spacing-sm);
+		text-wrap: balance;
 	}
 	.tagline {
 		margin-top: var(--spacing-xs);
@@ -166,9 +172,10 @@ const others = packages.filter((p) => p.slug !== pkg.slug);
 		line-height: var(--leading-relaxed);
 	}
 	.pkg-main h2 {
-		margin-top: var(--spacing-2xl);
+		margin-top: var(--spacing-3xl);
 		margin-bottom: var(--spacing-md);
-		font-size: var(--font-size-2xl);
+		font-size: var(--font-size-xl);
+		letter-spacing: var(--tracking-snug);
 	}
 	.check-list {
 		list-style: none;

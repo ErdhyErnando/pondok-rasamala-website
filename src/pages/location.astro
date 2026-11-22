@@ -1,16 +1,21 @@
 ---
 import Base from "../layouts/Base.astro";
 import MapFacade from "../components/ui/MapFacade.astro";
-import SectionHeader from "../components/ui/SectionHeader.astro";
+import { SITE } from "../lib/constants";
 
 export const prerender = true;
 
 const locale = "id" as const;
+
+// About-style rhythm: eyebrow + statement + sidenote, then quiet
+// numbered route columns and hairline note rows.
 const copy = {
 	title: "Lokasi & Rute",
 	eyebrow: "Menuju ke sini",
 	meta: "Rute ke Pondok Rasamala dari Jakarta & Bogor: via Tol Sentul Selatan, BORR, Dramaga IPB. ±90 km dari Jakarta, ±30 km dari Kota Bogor.",
-	description: "Di kawasan wisata Gunung Salak Endah, Pamijahan, Bogor — ±90 km dari Jakarta, ±30 km dari Kota Bogor.",
+	statement:
+		"Di kawasan wisata Gunung Salak Endah, Pamijahan, Bogor, dikelilingi hutan Taman Nasional.",
+	side: "±90 km dari Jakarta · ±30 km dari Kota Bogor · parkir bus tersedia.",
 	routes: [
 		{
 			title: "Dari Jakarta (±2 jam)",
@@ -34,53 +39,58 @@ const copy = {
 	transport: [
 		"Bus jurusan Curug Luhur dari Bogor melewati kawasan Gunung Bunder.",
 		"Dari titik turun, lanjut ojek lokal sampai gerbang resort.",
-		"Rombongan besar disarankan bawa bus sendiri — parkir tersedia.",
+		"Rombongan besar disarankan bawa bus sendiri, parkir tersedia.",
 	],
 	tipsTitle: "Tips perjalanan",
 	tips: [
 		"Berangkat pagi untuk menghindari macet Jagorawi & Sentul.",
-		"Sinyal seluler melemah di beberapa titik — unduh peta offline.",
+		"Sinyal seluler melemah di beberapa titik, unduh peta offline.",
 		"Jalan menanjak di segmen akhir; pastikan rem & bahan bakar aman.",
 	],
-	verify: "Rute dari arsip web & blog wisatawan — mohon koreksi via WhatsApp bila ada perubahan.",
+	verify: "Rute dari arsip web & blog wisatawan, mohon koreksi via WhatsApp bila ada perubahan.",
 	mapLabel: "Muat peta",
 };
 ---
 
 <Base title={copy.title} description={copy.meta} locale={locale}>
 	<div class="container page">
-		<SectionHeader
-			eyebrow={copy.eyebrow}
-			title={copy.title}
-			description={copy.description}
-		/>
-		<div class="route-grid">
-			{copy.routes.map((r) => (
-				<article class="route-card reveal">
-					<h2>{r.title}</h2>
-					<ol>
-						{r.steps.map((s) => <li>{s}</li>)}
-					</ol>
+		<h1 class="page-title reveal">{copy.title}</h1>
+		<p class="statement reveal">{copy.statement}</p>
+		<div class="split-grid">
+			<div class="info-stack">
+				{copy.routes.map((r, i) => (
+					<article class="info-card reveal">
+						<span class="row-index" aria-hidden="true">
+							{String(i + 1).padStart(2, "0")}
+						</span>
+						<h2>{r.title}</h2>
+						<ol>
+							{r.steps.map((s) => <li>{s}</li>)}
+						</ol>
+					</article>
+				))}
+				<article class="info-card reveal">
+					<h2>{copy.transportTitle}</h2>
+					<ul>
+						{copy.transport.map((item) => <li>{item}</li>)}
+					</ul>
 				</article>
-			))}
-		</div>
-		<div class="two-col">
-			<article class="info-card reveal">
-				<h2>{copy.transportTitle}</h2>
-				<ul>
-					{copy.transport.map((item) => <li>{item}</li>)}
-				</ul>
-			</article>
-			<article class="info-card reveal">
-				<h2>{copy.tipsTitle}</h2>
-				<ul>
-					{copy.tips.map((item) => <li>{item}</li>)}
-				</ul>
-			</article>
-		</div>
-		<p class="verify-note reveal">{copy.verify}</p>
-		<div class="map-wrap reveal">
-			<MapFacade loadLabel={copy.mapLabel} />
+				<article class="info-card reveal">
+					<h2>{copy.tipsTitle}</h2>
+					<ul>
+						{copy.tips.map((item) => <li>{item}</li>)}
+					</ul>
+				</article>
+				<p class="verify-note reveal">{copy.verify}</p>
+			</div>
+			<div class="map-wrap reveal">
+				<MapFacade loadLabel={copy.mapLabel} auto />
+				<p class="map-link">
+					<a href={SITE.mapsUrl} target="_blank" rel="noopener"
+						>Buka di Google Maps →</a
+					>
+				</p>
+			</div>
 		</div>
 	</div>
 </Base>
@@ -90,59 +100,104 @@ const copy = {
 		padding-top: var(--section-pad);
 		padding-bottom: var(--section-pad);
 	}
-	.route-grid {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: var(--spacing-xl);
+	.page-title {
+		font-family: var(--font-body);
+		font-weight: 700;
+		font-size: clamp(2rem, 4vw, 3rem);
+		line-height: 1.1;
+		letter-spacing: -0.03em;
+		text-transform: uppercase;
+		text-wrap: balance;
 	}
-	.route-card,
+	.statement {
+		margin-top: var(--spacing-md);
+		color: var(--color-muted);
+		font-size: var(--font-size-lg);
+		line-height: var(--leading-relaxed);
+		max-width: 52ch;
+	}
+	.split-grid {
+		display: grid;
+		grid-template-columns: 1fr 1.1fr;
+		gap: var(--spacing-xl);
+		align-items: stretch;
+		margin-top: var(--spacing-3xl);
+	}
+	.info-stack {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-md);
+	}
 	.info-card {
 		padding: var(--spacing-xl);
 		background: var(--color-surface);
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius-lg);
 	}
-	.route-card h2,
 	.info-card h2 {
+		font-family: var(--font-heading);
 		font-size: var(--font-size-xl);
-		margin-bottom: var(--spacing-md);
+		letter-spacing: var(--tracking-snug);
+		margin-top: var(--spacing-sm);
 	}
-	.route-card ol {
+	.row-index {
+		font-family: var(--font-heading);
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		color: var(--color-accent);
+		letter-spacing: 0.08em;
+	}
+	.info-card ol {
+		margin-top: var(--spacing-md);
 		padding-left: 1.25rem;
 		display: flex;
 		flex-direction: column;
 		gap: var(--spacing-sm);
 		line-height: var(--leading-relaxed);
-	}
-	.two-col {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: var(--spacing-xl);
-		margin-top: var(--spacing-xl);
+		color: var(--color-muted);
 	}
 	.info-card ul {
+		margin-top: var(--spacing-md);
 		padding-left: 1.25rem;
 		display: flex;
 		flex-direction: column;
-		gap: var(--spacing-sm);
+		gap: var(--spacing-xs);
+		font-size: var(--font-size-sm);
 		line-height: var(--leading-relaxed);
+		color: var(--color-muted);
 	}
 	.verify-note {
-		margin-top: var(--spacing-xl);
+		margin-top: var(--spacing-md);
 		font-size: var(--font-size-sm);
 		color: var(--color-muted);
 		font-style: italic;
 	}
 	.map-wrap {
-		margin-top: var(--spacing-md);
+		position: sticky;
+		top: 96px;
+		display: flex;
+		flex-direction: column;
 	}
 	.map-wrap :global(.map-facade) {
 		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		flex: 1;
+		min-height: min(70vh, 560px);
+	}
+	.map-link {
+		margin-top: var(--spacing-sm);
+		font-size: var(--font-size-sm);
+	}
+	.map-link a {
+		color: var(--color-brand);
+		font-weight: 600;
 	}
 	@media (max-width: 900px) {
-		.route-grid,
-		.two-col {
+		.split-grid {
 			grid-template-columns: 1fr;
+		}
+		.map-wrap {
+			position: static;
 		}
 	}
 </style>

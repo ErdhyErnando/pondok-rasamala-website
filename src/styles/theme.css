@@ -1,5 +1,5 @@
 /*
-  theme.css — Pondok Rasamala calm-premium overrides.
+  theme.css, Pondok Rasamala calm-premium overrides.
   Monochrome dominant (ink/paper/grays) + hints sampled from the logo badge:
   forest #016747, amber #E8930C (softened from #ff9900), woody #6E8051.
   Gradients flattened to solids. Do not edit tokens.css or Base.astro.
@@ -14,19 +14,24 @@
 	--color-border: light-dark(#e4ded4, #2e332e);
 	--color-surface: light-dark(#fffdf9, #1d211d);
 
-	/* Forest hint — primary actions, eyebrows, active states */
+	/* Forest hint, primary actions, eyebrows, active states */
 	--color-brand: light-dark(#016747, #4caf7d);
 	--color-brand-strong: light-dark(#014d35, #3d9c6c);
 	--color-brand-soft: light-dark(#dce8dd, #24402f);
 	--color-on-brand: white;
 	--color-brand-ring: color-mix(in srgb, var(--color-brand) 12%, transparent);
 
-	/* Amber hint — micro-highlights only (stars, eyebrows, badges) */
+	/* Amber hint, micro-highlights only (stars, eyebrows, badges) */
 	--color-accent: #e8930c;
 	--color-accent-soft: #f6d9a8;
 
-	/* Woody hint — dividers, captions, footer wash */
+	/* Woody hint, dividers, captions, footer wash */
 	--color-wood: light-dark(#6e8051, #9aa583);
+
+	/* Deep-forest footer band, fixed in both modes. --color-brand-strong is
+	   an interactive-state token and flips to a mid green in dark mode, which
+	   dropped white body text on the footer to 3.4:1. */
+	--color-footer: light-dark(#014d35, #12291f);
 
 	/* Flat calm: gradients resolve to solids */
 	--gradient-brand: var(--color-brand);
@@ -40,6 +45,17 @@
 
 	/* Calm section rhythm */
 	--section-pad: clamp(3rem, 8vw, 7.5rem);
+}
+
+/* Header theme toggle. Every colour above is a light-dark() pair, so one
+   color-scheme on <html> re-resolves the whole palette. data-theme is set
+   before first paint by the inline script in Base.astro; without it
+   `color-scheme: light dark` (tokens.css) follows the OS. */
+:root[data-theme="light"] {
+	color-scheme: light;
+}
+:root[data-theme="dark"] {
+	color-scheme: dark;
 }
 
 /* Text selection carries the forest hint */
