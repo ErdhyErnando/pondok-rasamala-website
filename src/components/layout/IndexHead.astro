@@ -1,0 +1,43 @@
+---
+// Heading row shared by the index pages: title left, description right.
+// No breadcrumb, no eyebrow.
+interface Props {
+	title: string;
+	description: string;
+}
+const { title, description } = Astro.props;
+---
+
+<header class="index-top">
+	<h1>{title}</h1>
+	<p>{description}</p>
+</header>
+
+<style>
+	.index-top {
+		display: grid;
+		grid-template-columns: repeat(12, 1fr);
+		gap: var(--spacing-md) var(--spacing-xl);
+		align-items: end;
+		margin-bottom: var(--spacing-2xl);
+	}
+	.index-top h1 {
+		grid-column: 1 / span 7;
+		font-size: clamp(2.1rem, 1.5rem + 2.3vw, 3.5rem);
+		font-weight: var(--font-weight-display);
+		letter-spacing: var(--tracking-tight);
+		line-height: 1.1;
+		text-wrap: balance;
+	}
+	.index-top p {
+		grid-column: 9 / span 4;
+		color: var(--color-muted);
+		line-height: var(--leading-relaxed);
+	}
+	@media (max-width: 960px) {
+		.index-top h1,
+		.index-top p {
+			grid-column: 1 / -1;
+		}
+	}
+</style>

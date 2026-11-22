@@ -3,8 +3,11 @@ import Base from "./Base.astro";
 import PhotoPlaceholder from "../components/ui/PhotoPlaceholder.astro";
 import { localizePath, type Locale } from "../lib/i18n";
 import { posts, postPath, type PostRow } from "../data/posts";
+import { resolvePromos } from "../lib/promo";
 
-// Prose wrapper: ~720px column, hero visual, meta, body, related + Article JSON-LD.
+// Article: header column (780px) → wide hero (1080px) → narrow reading column
+// (66ch, drop cap) with customizable promo cards between paragraphs → related.
+// Promos live in data/posts.ts per post; see PromoSchema.
 interface Props {
 	locale?: Locale;
 	post: PostRow;
@@ -20,6 +23,7 @@ const t = {
 	readMore: en ? "Read" : "Baca",
 	by: en ? "By" : "Oleh",
 };
+const promos = resolvePromos(post, locale);
 const related = posts.filter((p) => p.slug !== post.slug).slice(0, 2);
 const jsonLd = {
 	"@context": "https://schema.org",
@@ -43,6 +47,7 @@ const pubDate = new Date(post.pubDate + "T00:00:00").toLocaleDateString(
 	jsonLd={jsonLd}
 >
 	<div class="container post">
+		<div class="post-col">
 		<nav class="breadcrumb" aria-label="Breadcrumb">
 			<a href={L("/")}>{t.home}</a>
 			<span aria-hidden="true">›</span>
@@ -55,6 +60,7 @@ const pubDate = new Date(post.pubDate + "T00:00:00").toLocaleDateString(
 			<h1>{post.title[locale]}</h1>
 			<p class="meta">{t.by} {post.author} · {pubDate}</p>
 		</header>
+		</div>
 		<div class="post-hero">
 			<PhotoPlaceholder
 				label={en ? `${post.title.en}: hero image to follow` : `${post.title.id}: gambar utama menyusul`}
@@ -62,8 +68,28 @@ const pubDate = new Date(post.pubDate + "T00:00:00").toLocaleDateString(
 			/>
 		</div>
 		<div class="prose">
-			{post.body[locale].map((para) => <p>{para}</p>)}
+			{post.body[locale].map((para, i) => (
+				<>
+					<p>{para}</p>
+					{promos
+						.filter((pr) => pr.after === i + 1)
+						.map((pr) => (
+							<a class="promo" href={pr.href}>
+								<span class="promo-thumb" role="img" aria-label={pr.imageLabel}>
+									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M3 18 9 11l4 4 3-3 5 6H3Z" /><circle cx="16.5" cy="8.5" r="2" /></svg>
+								</span>
+								<span class="promo-body">
+									<b>{pr.title}</b>
+									{pr.body && <span class="promo-text">{pr.body}</span>}
+									{pr.meta && <span class="promo-meta">{pr.meta}</span>}
+								</span>
+								<span class="promo-cta">{pr.cta}</span>
+							</a>
+						))}
+				</>
+			))}
 		</div>
+		<div class="post-col">
 		<section class="related">
 			<h2>{t.related}</h2>
 			<div class="related-grid">
@@ -77,14 +103,20 @@ const pubDate = new Date(post.pubDate + "T00:00:00").toLocaleDateString(
 				))}
 			</div>
 		</section>
+		</div>
 	</div>
 </Base>
 
 <style>
 	.post {
-		max-width: 880px;
+		max-width: 1080px;
 		padding-top: var(--spacing-xl);
 		padding-bottom: var(--section-pad);
+	}
+	/* Header + related stay in a 780px column; hero is wider; prose narrower. */
+	.post-col {
+		max-width: 780px;
+		margin-inline: auto;
 	}
 	.breadcrumb {
 		display: flex;
@@ -128,13 +160,98 @@ const pubDate = new Date(post.pubDate + "T00:00:00").toLocaleDateString(
 		border-radius: var(--radius-lg);
 	}
 	.prose {
-		max-width: var(--max-width);
-		margin-top: var(--spacing-xl);
+		max-width: 66ch;
+		margin: var(--spacing-2xl) auto 0;
+		font-size: 1.125rem;
+		line-height: 1.8;
+	}
+	.prose > * + * {
+		margin-top: 1.15em;
+	}
+	/* Drop cap on the opening paragraph. */
+	.prose > p:first-child::first-letter {
+		float: left;
+		padding: 6px 10px 0 0;
+		font-family: var(--font-heading);
+		font-size: 3.6em;
+		line-height: 0.85;
+		color: var(--color-brand);
+	}
+	/* In-article promo card: thumb · text · button, hairlines above and below. */
+	.promo {
+		display: grid;
+		grid-template-columns: 112px 1fr auto;
+		gap: var(--spacing-md);
+		align-items: center;
+		margin-block: 2em !important;
+		padding-block: var(--spacing-md);
+		border-block: 1px solid var(--color-border);
+		line-height: 1.4;
+		text-decoration: none;
+		color: inherit;
+	}
+	.promo-thumb {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		aspect-ratio: 1;
+		border: 1px dashed var(--color-border);
+		border-radius: var(--radius-sm);
+		color: var(--color-wood);
+		background:
+			radial-gradient(120% 100% at 50% 0%, var(--color-brand-soft) 0%, transparent 60%),
+			var(--color-surface);
+	}
+	.promo-thumb svg {
+		width: 28px;
+		height: 28px;
+		opacity: 0.7;
+	}
+	.promo-body {
 		display: flex;
 		flex-direction: column;
-		gap: var(--spacing-md);
-		line-height: var(--leading-relaxed);
-		font-size: var(--font-size-lg);
+		gap: 4px;
+		min-width: 0;
+	}
+	.promo-body b {
+		font-family: var(--font-heading);
+		font-weight: 500;
+		font-size: 1.2rem;
+		line-height: 1.2;
+	}
+	.promo:hover .promo-body b {
+		color: var(--color-brand);
+	}
+	.promo-text {
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+	}
+	.promo-meta {
+		font-size: 0.8125rem;
+		color: var(--color-wood);
+		font-variant-numeric: tabular-nums;
+	}
+	.promo-cta {
+		padding: 8px 16px;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-full);
+		background: var(--color-surface);
+		font-size: var(--font-size-sm);
+		font-weight: 500;
+		white-space: nowrap;
+		transition: border-color 0.2s ease;
+	}
+	.promo:hover .promo-cta {
+		border-color: var(--color-text);
+	}
+	@media (max-width: 560px) {
+		.promo {
+			grid-template-columns: 80px 1fr;
+		}
+		.promo-cta {
+			grid-column: 1 / -1;
+			text-align: center;
+		}
 	}
 	.related {
 		margin-top: var(--spacing-3xl);

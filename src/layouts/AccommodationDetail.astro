@@ -1,189 +1,414 @@
 ---
 import Base from "./Base.astro";
-import GlampingCard from "../components/ui/GlampingCard.astro";
-import Lightbox from "../components/ui/Lightbox.astro";
+import CTASection from "../components/sections/CTASection.astro";
+import DatePicker from "../components/ui/DatePicker.astro";
 import PhotoPlaceholder from "../components/ui/PhotoPlaceholder.astro";
-import VillaCard from "../components/ui/VillaCard.astro";
-import WhatsAppButton from "../components/ui/WhatsAppButton.astro";
-import { localizePath, type Locale } from "../lib/i18n";
-import type { StayPage, StayCard } from "../lib/stay";
+import Select from "../components/ui/Select.astro";
+import StayCard from "../components/ui/StayCard.astro";
+import { stayDetailCta } from "../data/stay-cta";
+import { SITE } from "../lib/constants";
+import { formatIDR } from "../lib/format";
+import type { Locale } from "../lib/i18n";
+import type { StayCard as StayCardData, StayPage } from "../lib/stay";
 
-// Shared villa / glamping / campsite / aula layout, fed by src/lib/stay.ts.
-// No bespoke per-unit templates: hero → content + price sidebar → gallery → related.
+// Shared villa / glamping / aula layout (artifact "lookbook" detail):
+// title + tagline → 3-photo gallery → specs & amenities | sticky price card
+// → other stays → closing CTA. No breadcrumb, no eyebrow.
+// The price card is interactive (tier, date, nights → estimate + WhatsApp
+// message) via a small vanilla script; the server-rendered default works
+// without JS (WhatsApp link already carries the default message).
 interface Props {
 	locale?: Locale;
 	stay: StayPage;
-	related: StayCard[];
+	related: StayCardData[];
 }
 
 const { locale = "id", stay, related } = Astro.props;
-const L = (p: string) => localizePath(p, locale);
-const note = locale === "en" ? "Price confirmed via WhatsApp" : "Harga konfirmasi via WhatsApp";
+const en = locale === "en";
+const isAula = stay.segment === "aula";
+const cta = stayDetailCta(isAula ? "aula" : stay.kind, stay.name, locale);
+
+const DEFAULT_NIGHTS = 2;
+const multi = stay.tiers.length > 1;
+const first = stay.tiers[0];
+
+// Message pieces shared by the server default and the client script.
+const strings = {
+	intro: isAula
+		? en
+			? "Hello Pondok Rasamala, I'd like to ask about renting the Aula."
+			: "Halo Pondok Rasamala, saya ingin menanyakan sewa Aula."
+		: en
+			? `Hello Pondok Rasamala, I'd like to book ${stay.name}`
+			: `Halo Pondok Rasamala, saya ingin pesan ${stay.name}`,
+	date: isAula ? (en ? "Date" : "Tanggal") : "Check-in",
+	duration: en ? "Duration" : "Durasi",
+	night: en ? "night" : "malam",
+	nights: en ? "nights" : "malam",
+	pending: "...",
+	ask: en ? "Is it available? Thank you." : "Apakah tersedia? Terima kasih.",
+	locale: en ? "en-GB" : "id-ID",
+};
+const buildMessage = (tierLabel: string | null, date: string, nights: number) =>
+	[
+		`${strings.intro}${tierLabel && !isAula ? ` (${tierLabel})` : ""}${isAula ? "" : "."}`,
+		`${strings.date}: ${date}`,
+		stay.showNights ? `${strings.duration}: ${nights} ${nights === 1 ? strings.night : strings.nights}` : null,
+		strings.ask,
+	]
+		.filter(Boolean)
+		.join("\n");
+const defaultMessage = buildMessage(multi ? first.label : null, strings.pending, DEFAULT_NIGHTS);
+const waBase = `https://wa.me/${SITE.whatsapp}`;
+const waHref = `${waBase}?text=${encodeURIComponent(defaultMessage)}`;
+const minPrice = Math.min(...stay.tiers.map((t) => t.price));
+
+const L10n = {
+	priceTitle: en ? "Rates" : "Harga",
+	checkIn: isAula ? (en ? "Date" : "Tanggal") : "Check-in",
+	nightsLabel: en ? "Nights" : "Malam",
+	messageLabel: en ? "Message we'll send" : "Pesan yang akan dikirim",
+	send: en ? "Book via WhatsApp" : "Pesan via WhatsApp",
+	askAula: en ? "Ask via WhatsApp" : "Tanya via WhatsApp",
+	from: en ? "From" : "Mulai",
+	pickTier: en ? "Choose a rate" : "Pilihan harga",
+};
+const estimateLabel = (n: number) =>
+	`${first.priceText} × ${n} ${n === 1 ? strings.night : strings.nights}`;
 ---
 
 <Base title={stay.name} description={stay.metaDescription} locale={locale}>
-	<div class="container">
-		<nav class="breadcrumb reveal" aria-label="Breadcrumb">
-			<a href={L("/")}>{stay.labels.home}</a>
-			{stay.category && stay.categoryHref && (
-				<>
-					<span aria-hidden="true">›</span>
-					<a href={stay.categoryHref}>{stay.category}</a>
-				</>
-			)}
-			<span aria-hidden="true">›</span>
-			<span aria-current="page">{stay.name}</span>
-		</nav>
+	<div class="container detail">
+		<header class="d-top">
+			<h1>{stay.name}</h1>
+			<p class="tagline">{stay.tagline}</p>
+		</header>
 
-		<div class="detail-hero reveal">
-			<PhotoPlaceholder
-				label={locale === "en" ? `${stay.name}: hero photo to follow` : `${stay.name}: foto utama menyusul`}
-				ratio="16 / 8"
-			/>
+		<div class="d-gal reveal">
+			{stay.gallery.slice(0, 3).map((g) => (
+				<PhotoPlaceholder label={g.label} ratio="4 / 3" class="gal-item" />
+			))}
 		</div>
 
-		<div class="detail-grid">
-			<div class="detail-main">
-				<p class="eyebrow">{stay.category ?? stay.name}</p>
-				<h1>{stay.name}</h1>
-				<p class="tagline">{stay.tagline}</p>
-				<p class="description">{stay.description}</p>
+		<div class="d-body">
+			<div class="d-main">
+				<p class="d-desc">{stay.description}</p>
 
-				<h2>{stay.labels.specs}</h2>
-				<dl class="specs">
-					{stay.specs.map((s) => (
-						<div class="spec-row">
-							<dt>{s.label}</dt>
-							<dd>{s.value}</dd>
-						</div>
-					))}
-				</dl>
+				<section class="d-block">
+					<h2>{stay.labels.specs}</h2>
+					<dl class="specs">
+						{stay.specs.map((s) => (
+							<div class="spec-row">
+								<dt>{s.label}</dt>
+								<dd>{s.value}</dd>
+							</div>
+						))}
+					</dl>
+				</section>
 
-				<h2>{stay.labels.gallery}</h2>
-				<Lightbox items={stay.gallery} closeLabel={stay.labels.close} />
+				{stay.amenities.length > 0 && (
+					<section class="d-block">
+						<h2>{en ? "Facilities" : "Fasilitas"}</h2>
+						<ul class="checks">
+							{stay.amenities.map((a) => (
+								<li>
+									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" /></svg>
+									<span>{a}</span>
+								</li>
+							))}
+						</ul>
+					</section>
+				)}
 			</div>
 
-			<aside class="detail-sidebar">
-				<div class="price-card">
-					<h2>{stay.labels.prices}</h2>
-					<ul>
-						{stay.prices.map((p) => (
-							<li>
-								<span>{p.label}</span>
-								<strong>{p.price}</strong>
-							</li>
-						))}
-					</ul>
-					<p class="price-note">{stay.priceNote}</p>
-					<WhatsAppButton
-						message={stay.waMessage}
-						label={stay.labels.book}
-						locale={locale}
-						size="lg"
-						class="sidebar-cta"
-					/>
+			<aside class="d-aside">
+				<div
+					class="pcard"
+					data-pcard
+					data-wa-base={waBase}
+					data-show-nights={stay.showNights ? "true" : "false"}
+					data-multi={multi ? "true" : "false"}
+					data-strings={JSON.stringify(strings)}
+					data-tiers={JSON.stringify(stay.tiers)}
+				>
+					<h2>{L10n.priceTitle}</h2>
+					<div class="tiers" role={multi ? "radiogroup" : undefined} aria-label={multi ? L10n.pickTier : undefined}>
+						{stay.tiers.map((t, i) =>
+							multi ? (
+								<label class="tier">
+									<input type="radio" name="tier" value={i} checked={i === 0} />
+									<span>{t.label}</span>
+									<strong>{t.priceText}</strong>
+								</label>
+							) : (
+								<div class="tier single">
+									<span>{t.label}</span>
+									<strong>{t.priceText}</strong>
+								</div>
+							),
+						)}
+					</div>
+
+					<div class="fields">
+						<div class="field">
+							<span class="field-label" aria-hidden="true">{L10n.checkIn}</span>
+							<DatePicker id="stay-date" locale={locale} label={L10n.checkIn} inputAttrs={{ "data-date": true }} />
+						</div>
+						{stay.showNights && (
+							<div class="field">
+								<span class="field-label" aria-hidden="true">{L10n.nightsLabel}</span>
+								<Select
+									id="stay-nights"
+									label={L10n.nightsLabel}
+									value={String(DEFAULT_NIGHTS)}
+									options={[1, 2, 3, 4, 5, 6, 7].map((n) => ({ value: String(n), label: String(n) }))}
+									inputAttrs={{ "data-nights": true }}
+								/>
+							</div>
+						)}
+					</div>
+
+					{stay.showNights && (
+						<div class="est" aria-live="polite">
+							<span data-est-label>{estimateLabel(DEFAULT_NIGHTS)}</span>
+							<strong data-est-total>{formatIDR(first.price * DEFAULT_NIGHTS)}</strong>
+						</div>
+					)}
+
+					<p class="msg-label">{L10n.messageLabel}</p>
+					<p class="msg" data-msg>{defaultMessage}</p>
+					<a class="send" href={waHref} target="_blank" rel="noopener" data-send>
+						{stay.showNights ? L10n.send : L10n.askAula}
+					</a>
+					<p class="p-note">{stay.priceNote}</p>
 				</div>
 			</aside>
 		</div>
 
-		<section class="related">
+		<section class="related" data-related>
 			<h2>{stay.labels.related}</h2>
-			<div class="related-grid">
-				{related.map((c) =>
-					c.kind === "glamping" ? (
-						<GlampingCard
-							href={c.href}
-							name={c.name}
-							eyebrow={c.eyebrow}
-							fromPrice={c.price}
-							priceNote={note}
-							imageLabel={c.imageLabel}
-						/>
-					) : (
-						<VillaCard
-							href={c.href}
-							name={c.name}
-							eyebrow={c.eyebrow}
-							price={c.price}
-							priceNote={note}
-							imageLabel={c.imageLabel}
-						/>
-					),
-				)}
+			<div class="stay-grid">
+				{related.map((c) => (
+					<StayCard href={c.href} name={c.name} blurb={c.blurb} imageLabel={c.imageLabel} facts={c.facts} />
+				))}
 			</div>
 		</section>
 	</div>
+
+	<CTASection locale={locale} title={cta.title} body={cta.body} message={cta.message} />
+
+	<div class="mbar" data-mbar aria-hidden="true">
+		<div>
+			<strong>{multi ? `${L10n.from} ${formatIDR(minPrice)}` : first.priceText}</strong>
+			<span>{stay.name}</span>
+		</div>
+		<a class="send" href={waHref} target="_blank" rel="noopener" data-send tabindex="-1">
+			{stay.showNights ? L10n.send : L10n.askAula}
+		</a>
+	</div>
 </Base>
 
+<script>
+	interface Tier {
+		label: string;
+		price: number;
+		priceText: string;
+	}
+	interface Strings {
+		intro: string;
+		date: string;
+		duration: string;
+		night: string;
+		nights: string;
+		pending: string;
+		ask: string;
+		locale: string;
+	}
+
+	const card = document.querySelector<HTMLElement>("[data-pcard]");
+	if (card) {
+		const tiers = JSON.parse(card.dataset.tiers ?? "[]") as Tier[];
+		const s = JSON.parse(card.dataset.strings ?? "{}") as Strings;
+		const base = card.dataset.waBase ?? "";
+		const showNights = card.dataset.showNights === "true";
+		const multi = card.dataset.multi === "true";
+		const isAula = !showNights;
+
+		const date = card.querySelector<HTMLInputElement>("[data-date]");
+		const nightsEl = card.querySelector<HTMLInputElement>("[data-nights]");
+		const estLabel = card.querySelector<HTMLElement>("[data-est-label]");
+		const estTotal = card.querySelector<HTMLElement>("[data-est-total]");
+		const msgEl = card.querySelector<HTMLElement>("[data-msg]");
+		const sends = document.querySelectorAll<HTMLAnchorElement>("[data-send]");
+		const idr = (n: number) => `Rp${n.toLocaleString("id-ID")}`;
+
+		const fmtDate = (v: string) => {
+			if (!v) return s.pending;
+			const [y, m, d] = v.split("-").map(Number);
+			return new Date(y, m - 1, d).toLocaleDateString(s.locale, {
+				day: "numeric",
+				month: "long",
+				year: "numeric",
+			});
+		};
+
+		const update = () => {
+			const checked = card.querySelector<HTMLInputElement>('input[name="tier"]:checked');
+			const tier = tiers[checked ? Number(checked.value) : 0];
+			const n = nightsEl ? Number(nightsEl.value) : 1;
+			const word = n === 1 ? s.night : s.nights;
+			const lines = [
+				`${s.intro}${multi && !isAula ? ` (${tier.label})` : ""}${isAula ? "" : "."}`,
+				`${s.date}: ${fmtDate(date?.value ?? "")}`,
+				showNights ? `${s.duration}: ${n} ${word}` : null,
+				s.ask,
+			].filter(Boolean) as string[];
+			const message = lines.join("\n");
+
+			if (estLabel) estLabel.textContent = `${tier.priceText} × ${n} ${word}`;
+			if (estTotal) estTotal.textContent = idr(tier.price * n);
+			if (msgEl) msgEl.textContent = message;
+			sends.forEach((a) => (a.href = `${base}?text=${encodeURIComponent(message)}`));
+		};
+
+		card.addEventListener("input", update);
+		card.addEventListener("change", update);
+		update();
+	}
+
+	// Mobile bar: shown while the price card is off-screen and the page
+	// hasn't reached "other stays" / the closing CTA yet.
+	const bar = document.querySelector<HTMLElement>("[data-mbar]");
+	const priceCard = document.querySelector<HTMLElement>("[data-pcard]");
+	const related = document.querySelector<HTMLElement>("[data-related]");
+	if (bar && priceCard && related && "IntersectionObserver" in window) {
+		let cardVisible = false;
+		let pastRelated = false;
+		const sync = () => {
+			const show = !cardVisible && !pastRelated;
+			bar.classList.toggle("show", show);
+			bar.toggleAttribute("inert", !show);
+			bar.setAttribute("aria-hidden", String(!show));
+		};
+		new IntersectionObserver((e) => {
+			cardVisible = e[0].isIntersecting;
+			sync();
+		}).observe(priceCard);
+		new IntersectionObserver(
+			(e) => {
+				pastRelated = e[0].isIntersecting || e[0].boundingClientRect.top < 0;
+				sync();
+			},
+			{ rootMargin: "0px 0px -20% 0px" },
+		).observe(related);
+		sync();
+	}
+</script>
+
 <style>
-	.breadcrumb {
+	.detail {
+		padding-top: clamp(2.25rem, 5vw, 4rem);
+		padding-bottom: var(--section-pad);
+	}
+	.d-top {
 		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 0.5rem;
-		padding: var(--spacing-xl) 0 var(--spacing-md);
-		font-size: var(--font-size-sm);
-		color: var(--color-muted);
+		flex-direction: column;
+		gap: var(--spacing-sm);
+		margin-bottom: var(--spacing-xl);
+		max-width: 56rem;
 	}
-	.breadcrumb a:hover {
-		color: var(--color-brand);
-	}
-	.breadcrumb [aria-current="page"] {
-		color: var(--color-text);
-		font-weight: 600;
-	}
-	.detail-hero :global(.photo-placeholder) {
-		min-height: min(60vh, 520px);
-		border-radius: var(--radius-lg);
-	}
-	.detail-grid {
-		display: grid;
-		grid-template-columns: 1.6fr 1fr;
-		gap: var(--spacing-3xl);
-		margin-top: var(--spacing-3xl);
-		align-items: start;
-	}
-	.detail-main {
-		max-width: 44rem;
-	}
-	.eyebrow {
-		font-size: var(--font-size-xs);
-		font-weight: 700;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		color: var(--color-brand);
-	}
-	.detail-main h1 {
-		font-size: clamp(2rem, 4vw, 3rem);
+	.d-top h1 {
+		font-size: clamp(2.1rem, 1.5rem + 2.3vw, 3.5rem);
+		font-weight: var(--font-weight-display);
+		letter-spacing: var(--tracking-tight);
 		line-height: 1.1;
-		letter-spacing: -0.02em;
-		margin-top: var(--spacing-sm);
 		text-wrap: balance;
 	}
 	.tagline {
-		margin-top: var(--spacing-xs);
-		font-size: var(--font-size-lg);
+		font-family: var(--font-heading);
+		font-style: italic;
+		font-size: clamp(1.2rem, 1.08rem + 0.5vw, 1.5rem);
 		color: var(--color-muted);
 	}
-	.description {
-		margin-top: var(--spacing-lg);
-		line-height: var(--leading-relaxed);
+
+	/* Gallery: one large photo + two stacked (artifact lookbook) */
+	.d-gal {
+		display: grid;
+		grid-template-columns: 2fr 1fr;
+		grid-template-rows: repeat(2, clamp(150px, 18vw, 250px));
+		gap: 12px;
 	}
-	.detail-main h2 {
+	.d-gal :global(.gal-item) {
+		aspect-ratio: auto !important;
+		height: 100%;
+		border-radius: var(--radius);
+	}
+	.d-gal :global(.gal-item:first-child) {
+		grid-row: 1 / span 2;
+		border-radius: var(--radius-lg);
+	}
+	@media (max-width: 700px) {
+		.d-gal {
+			grid-template-columns: 1fr 1fr;
+			grid-template-rows: clamp(220px, 60vw, 340px) 110px;
+		}
+		.d-gal :global(.gal-item:first-child) {
+			grid-column: 1 / -1;
+			grid-row: auto;
+		}
+	}
+
+	.d-body {
+		display: grid;
+		grid-template-columns: repeat(12, 1fr);
+		gap: var(--spacing-2xl) var(--spacing-xl);
 		margin-top: var(--spacing-3xl);
-		margin-bottom: var(--spacing-md);
+	}
+	.d-main {
+		grid-column: 1 / span 7;
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-2xl);
+		min-width: 0;
+	}
+	.d-aside {
+		grid-column: 9 / span 4;
+		position: sticky;
+		top: 7rem;
+		align-self: start;
+	}
+	@media (max-width: 960px) {
+		.d-main,
+		.d-aside {
+			grid-column: 1 / -1;
+		}
+		.d-aside {
+			position: static;
+		}
+	}
+	.d-desc {
+		font-size: var(--font-size-lg);
+		line-height: 1.7;
+		color: var(--color-muted);
+		max-width: 66ch;
+	}
+	.d-block {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-md);
+	}
+	.d-block h2 {
 		font-size: var(--font-size-xl);
 		letter-spacing: var(--tracking-snug);
 	}
-	/* Quiet grotesque spec rows: hairlines, no box. */
 	.specs {
-		border-top: 1px solid var(--color-border);
+		border-top: 1px solid var(--color-text);
 	}
 	.spec-row {
-		display: flex;
-		justify-content: space-between;
+		display: grid;
+		grid-template-columns: 200px 1fr;
 		gap: var(--spacing-md);
-		padding: var(--spacing-md) 0;
+		padding: 13px 0;
 		border-bottom: 1px solid var(--color-border);
 		font-size: var(--font-size-sm);
 	}
@@ -191,70 +416,245 @@ const note = locale === "en" ? "Price confirmed via WhatsApp" : "Harga konfirmas
 		color: var(--color-muted);
 	}
 	.spec-row dd {
-		font-weight: 600;
-		text-align: right;
+		margin: 0;
 	}
-	.price-card {
-		position: sticky;
-		top: 96px;
-		padding: var(--spacing-xl);
+	@media (max-width: 520px) {
+		.spec-row {
+			grid-template-columns: 1fr;
+			gap: 2px;
+		}
+	}
+	.checks {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0 var(--spacing-xl);
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+	.checks li {
+		display: flex;
+		gap: 10px;
+		padding: 9px 0;
+		border-bottom: 1px solid var(--color-border);
+		font-size: var(--font-size-sm);
+	}
+	.checks svg {
+		width: 18px;
+		height: 18px;
+		flex: none;
+		margin-top: 2px;
+		color: var(--color-brand);
+	}
+	@media (max-width: 520px) {
+		.checks {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	/* Price card */
+	.pcard {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-md);
+		padding: var(--spacing-lg);
 		background: var(--color-surface);
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow-lg);
 	}
-	.price-card h2 {
-		font-size: var(--font-size-xl);
-		margin-bottom: var(--spacing-md);
+	.pcard h2 {
+		font-size: var(--font-size-lg);
 	}
-	.price-card ul {
-		list-style: none;
+	.tiers {
 		display: flex;
 		flex-direction: column;
-		gap: var(--spacing-sm);
+		gap: 8px;
 	}
-	.price-card li {
+	.tier {
+		position: relative;
 		display: flex;
+		align-items: center;
 		justify-content: space-between;
-		align-items: baseline;
-		gap: var(--spacing-md);
+		gap: var(--spacing-sm);
+		padding: 12px 14px;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
 		font-size: var(--font-size-sm);
+		cursor: pointer;
+		transition:
+			border-color 0.2s ease,
+			background-color 0.2s ease;
 	}
-	.price-card li strong {
-		font-size: var(--font-size-lg);
-		letter-spacing: var(--tracking-snug);
+	.tier.single {
+		cursor: default;
+		border-color: var(--color-brand);
+		background: var(--color-brand-soft);
+	}
+	.tier input {
+		position: absolute;
+		opacity: 0;
+		pointer-events: none;
+	}
+	.tier:has(input:checked) {
+		border-color: var(--color-brand);
+		background: var(--color-brand-soft);
+	}
+	.tier:has(input:focus-visible) {
+		outline: 2px solid var(--color-brand);
+		outline-offset: 2px;
+	}
+	.tier strong {
+		font-family: var(--font-heading);
+		font-weight: 500;
+		font-size: 1.15rem;
 		white-space: nowrap;
 	}
-	.price-note {
-		margin-top: var(--spacing-md);
-		font-size: var(--font-size-xs);
+	.fields {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 10px;
+	}
+	.fields:has(.field:only-child) {
+		grid-template-columns: 1fr;
+	}
+	.field {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		min-width: 0;
+	}
+	.field-label {
+		font-size: 0.72rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
 		color: var(--color-muted);
 	}
-	.price-card :global(.sidebar-cta) {
-		width: 100%;
-		margin-top: var(--spacing-md);
+	.est {
+		display: flex;
+		justify-content: space-between;
+		gap: var(--spacing-sm);
+		padding-top: var(--spacing-sm);
+		border-top: 1px dashed var(--color-border);
+		font-size: var(--font-size-sm);
+		font-variant-numeric: tabular-nums;
 	}
+	.est strong {
+		font-weight: 700;
+	}
+	.msg-label {
+		font-size: 0.75rem;
+		color: var(--color-muted);
+	}
+	.msg {
+		padding: 10px 12px;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-sm);
+		background: var(--color-bg);
+		font-size: 0.8125rem;
+		line-height: 1.5;
+		color: var(--color-muted);
+		white-space: pre-line;
+		margin-top: calc(var(--spacing-md) * -0.5);
+	}
+	.send {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		height: 54px;
+		padding: 0 26px;
+		border-radius: var(--radius-full);
+		background: var(--color-brand);
+		color: var(--color-on-brand);
+		font-weight: 600;
+		text-decoration: none;
+		white-space: nowrap;
+		transition:
+			transform 0.16s ease,
+			background-color 0.2s ease;
+	}
+	.send:hover {
+		background: var(--color-brand-strong);
+		color: var(--color-on-brand);
+	}
+	.send:active {
+		transform: scale(0.97);
+	}
+	.p-note {
+		font-size: 0.78rem;
+		color: var(--color-muted);
+		text-align: center;
+	}
+
+	/* Other stays */
 	.related {
-		padding: var(--section-pad) 0;
+		margin-top: var(--section-pad);
+		padding-top: var(--spacing-xl);
+		border-top: 1px solid var(--color-border);
 	}
 	.related h2 {
 		font-size: var(--font-size-2xl);
 		margin-bottom: var(--spacing-xl);
 	}
-	.related-grid {
+	.stay-grid {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		gap: var(--spacing-xl);
+		gap: var(--spacing-2xl) var(--spacing-xl);
 	}
-	@media (max-width: 900px) {
-		.detail-grid {
+	@media (max-width: 960px) {
+		.stay-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+	@media (max-width: 600px) {
+		.stay-grid {
 			grid-template-columns: 1fr;
 		}
-		.price-card {
-			position: static;
+	}
+
+	/* Mobile sticky booking bar */
+	.mbar {
+		position: fixed;
+		inset: auto 0 0;
+		z-index: 40;
+		display: none;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--spacing-md);
+		padding: 12px max(16px, env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom))
+			max(16px, env(safe-area-inset-left));
+		background: color-mix(in srgb, var(--color-bg) 96%, transparent);
+		border-top: 1px solid var(--color-border);
+		transform: translateY(100%);
+		transition: transform 0.24s cubic-bezier(0.23, 1, 0.32, 1);
+	}
+	.mbar.show {
+		transform: none;
+	}
+	.mbar strong {
+		display: block;
+		font-family: var(--font-heading);
+		font-weight: 500;
+		font-size: 1.1rem;
+	}
+	.mbar span {
+		font-size: 0.78rem;
+		color: var(--color-muted);
+	}
+	.mbar .send {
+		height: 44px;
+		padding: 0 18px;
+	}
+	@media (max-width: 960px) {
+		.mbar {
+			display: flex;
 		}
-		.related-grid {
-			grid-template-columns: 1fr;
-			max-width: 560px;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.mbar,
+		.send {
+			transition: none;
 		}
 	}
 </style>

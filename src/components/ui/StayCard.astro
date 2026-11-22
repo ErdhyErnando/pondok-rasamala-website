@@ -1,0 +1,119 @@
+---
+import PhotoPlaceholder from "./PhotoPlaceholder.astro";
+import type { StayFact } from "../../lib/stay";
+
+// One card anatomy for every stay (villa, glamping, campsite lot):
+// photo, serif name, blurb, then either a facts strip (rooms · capacity ·
+// price) or a plain link line when there are no per-unit facts (campsite lots).
+// Whole card is clickable via the stretched name link.
+interface Props {
+	href: string;
+	name: string;
+	blurb: string;
+	imageLabel: string;
+	facts?: StayFact[];
+	cta?: string;
+	external?: boolean;
+	/** Index filter/sort hooks (optional). */
+	paxMin?: number;
+	paxMax?: number;
+	minPrice?: number;
+}
+
+const { href, name, blurb, imageLabel, facts, cta, external = false, paxMin, paxMax, minPrice } = Astro.props;
+---
+
+<article
+	class="stay-card reveal"
+	data-card
+	data-pax-min={paxMin}
+	data-pax-max={paxMax}
+	data-price={minPrice}
+>
+	<span class="card-visual" aria-hidden="true">
+		<PhotoPlaceholder label={imageLabel} ratio="4 / 3" />
+	</span>
+	<h3 class="card-name">
+		<a href={href} target={external ? "_blank" : undefined} rel={external ? "noopener" : undefined}>{name}</a>
+	</h3>
+	<p class="card-blurb">{blurb}</p>
+	{facts && facts.length > 0 ? (
+		<div class="facts">
+			{facts.map((f) => (
+				<span><b>{f.value}</b>{f.label}</span>
+			))}
+		</div>
+	) : cta ? (
+		<p class="card-cta">{cta} →</p>
+	) : null}
+</article>
+
+<style>
+	.stay-card {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+	}
+	.stay-card[hidden] {
+		display: none;
+	}
+	.card-visual :global(.photo-placeholder) {
+		border-radius: var(--radius);
+		margin-bottom: var(--spacing-sm);
+		transition: transform var(--transition-base);
+	}
+	.stay-card:hover .card-visual :global(.photo-placeholder) {
+		transform: translateY(-2px);
+	}
+	.card-name {
+		font-size: var(--font-size-xl);
+		line-height: 1.15;
+	}
+	.card-name a::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+	}
+	.stay-card:hover .card-name {
+		color: var(--color-brand);
+	}
+	.card-blurb {
+		margin-top: var(--spacing-xs);
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+		line-height: var(--leading-relaxed);
+		flex-grow: 1;
+	}
+	.facts {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--spacing-xs) var(--spacing-lg);
+		margin-top: var(--spacing-md);
+		padding-top: var(--spacing-sm);
+		border-top: 1px solid var(--color-border);
+		font-size: 0.8125rem;
+		color: var(--color-muted);
+		font-variant-numeric: tabular-nums;
+	}
+	.facts b {
+		display: block;
+		font-family: var(--font-heading);
+		font-weight: 500;
+		font-size: 1.0625rem;
+		color: var(--color-text);
+	}
+	.card-cta {
+		margin-top: var(--spacing-md);
+		padding-top: var(--spacing-sm);
+		border-top: 1px solid var(--color-border);
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		color: var(--color-brand);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.card-visual :global(.photo-placeholder) {
+			transition: none;
+		}
+	}
+</style>

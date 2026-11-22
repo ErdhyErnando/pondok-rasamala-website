@@ -1,72 +1,23 @@
 ---
-import Base from "../../layouts/Base.astro";
-import SectionHeader from "../../components/ui/SectionHeader.astro";
-import VillaCard from "../../components/ui/VillaCard.astro";
-import { isVillaCategory, villas, villaPath } from "../../data/villas";
-import { formatIDR } from "../../lib/format";
-import { localizePath } from "../../lib/i18n";
-import { displayName } from "../../lib/stay";
+import StayIndex from "../../components/layout/StayIndex.astro";
+import StayCard from "../../components/ui/StayCard.astro";
+import { getVillaCards, getSizeBuckets } from "../../lib/stay";
 
 export const prerender = true;
 
 const locale = "id" as const;
-const L = (p: string) => localizePath(p, locale);
-const rows = villas.filter(isVillaCategory);
 const copy = {
 	title: "Semua Villa",
-	eyebrow: "Menginap",
 	description:
 		"Villa bambu dan kayu di dalam Taman Nasional Gunung Halimun Salak, dari yang mungil untuk keluarga kecil sampai Villa Cendana untuk 28 orang.",
 	meta: "Semua villa Pondok Rasamala: unit bambu, kayu, dan cottage, harga per malam, kapasitas. Pesan via WhatsApp.",
 };
+const cards = getVillaCards(locale);
+const sizes = getSizeBuckets("villa", locale);
 ---
 
-<Base title={copy.title} description={copy.meta} locale={locale}>
-	<div class="container index-head">
-		<SectionHeader
-			eyebrow={copy.eyebrow}
-			title={copy.title}
-			description={copy.description}
-			align="left"
-		/>
-		<div class="card-grid">
-			{rows.map((v) => (
-				<VillaCard
-					href={L(villaPath(v.slug))}
-					name={displayName("villa", v.name)}
-					eyebrow={`Villa · maks ${v.paxMax} orang`}
-					price={formatIDR(v.price)}
-					priceNote="Harga konfirmasi via WhatsApp"
-					blurb={v.tagline.id}
-					imageLabel={`${displayName("villa", v.name)}: foto menyusul`}
-				/>
-			))}
-		</div>
-	</div>
-</Base>
-
-<style>
-	.index-head {
-		padding-top: var(--section-pad);
-		padding-bottom: var(--section-pad);
-	}
-	/* Compact editorial: three cards per row, full container width so the
-	   grid aligns with the header, deep gaps for breathing room. */
-	.card-grid {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: var(--spacing-3xl);
-		border-top: 1px solid var(--color-border);
-		padding-top: var(--spacing-3xl);
-	}
-	@media (max-width: 1100px) {
-		.card-grid {
-			grid-template-columns: repeat(2, 1fr);
-		}
-	}
-	@media (max-width: 700px) {
-		.card-grid {
-			grid-template-columns: 1fr;
-		}
-	}
-</style>
+<StayIndex locale={locale} title={copy.title} description={copy.description} meta={copy.meta} ctaKind="villa" sizes={sizes}>
+	{cards.map((c) => (
+		<StayCard href={c.href} name={c.name} blurb={c.blurb} imageLabel={c.imageLabel} facts={c.facts} paxMin={c.paxMin} paxMax={c.paxMax} minPrice={c.minPrice} />
+	))}
+</StayIndex>

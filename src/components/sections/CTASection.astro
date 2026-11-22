@@ -7,19 +7,24 @@ import type { Locale } from "../../lib/i18n";
 // one forest pill, one honesty note. Footer follows directly.
 interface Props {
 	locale?: Locale;
+	/** Override the landing-page copy (stay pages pass their own). */
+	title?: string;
+	body?: string;
+	message?: string;
 }
 
-const { locale = "id" } = Astro.props;
+const { locale = "id", title, body, message: customMessage } = Astro.props;
 const message =
-	locale === "en"
+	customMessage ??
+	(locale === "en"
 		? "Hello Pondok Rasamala, I'd like to check availability for an upcoming weekend. Thank you."
-		: "Halo Pondok Rasamala, saya mau cek ketersediaan untuk akhir pekan. Terima kasih.";
+		: "Halo Pondok Rasamala, saya mau cek ketersediaan untuk akhir pekan. Terima kasih.");
 ---
 
 <section class="cta">
 	<div class="container cta-inner reveal">
-		<h2>{tx(ctaSection.title, locale)}</h2>
-		<p>{tx(ctaSection.body, locale)}</p>
+		<h2>{title ?? tx(ctaSection.title, locale)}</h2>
+		<p>{body ?? tx(ctaSection.body, locale)}</p>
 		<WhatsAppButton message={message} locale={locale} size="lg" />
 		<p class="cta-note">{tx(ctaSection.note, locale)}</p>
 	</div>

@@ -1,18 +1,15 @@
 ---
 import Base from "../../layouts/Base.astro";
-import SectionHeader from "../../components/ui/SectionHeader.astro";
+import IndexHead from "../../components/layout/IndexHead.astro";
 import PackageCard from "../../components/ui/PackageCard.astro";
-import { packages, packagePath } from "../../data/packages";
-import { formatIDR } from "../../lib/format";
-import { localizePath } from "../../lib/i18n";
+import { packages } from "../../data/packages";
+import { packageCardProps } from "../../lib/packages";
 
 export const prerender = true;
 
 const locale = "id" as const;
-const L = (p: string) => localizePath(p, locale);
 const copy = {
 	title: "Semua Paket",
-	eyebrow: "Gathering & aktivitas",
 	meta: "Paket Pondok Rasamala: outbound, sekolah, company outing, keluarga. Harga per orang & penawaran khusus via WhatsApp.",
 	description: "Dari outbound sehari sampai gathering menginap, semua diatur dari satu pintu.",
 };
@@ -20,26 +17,10 @@ const copy = {
 
 <Base title={copy.title} description={copy.meta} locale={locale}>
 	<div class="container page">
-		<SectionHeader
-			eyebrow={copy.eyebrow}
-			title={copy.title}
-			description={copy.description}
-			align="left"
-		/>
-		<div class="card-grid">
+		<IndexHead title={copy.title} description={copy.description} />
+		<div class="pk-grid">
 			{packages.map((p) => (
-				<PackageCard
-					href={L(packagePath(p.slug))}
-					name={p.name.id}
-					tagline={p.tagline.id}
-					duration={p.duration.id}
-					priceSummary={
-						p.tiers[0]?.price != null
-							? `Mulai ${formatIDR(Math.min(...p.tiers.map((tier) => tier.price as number)))}`
-							: "Penawaran khusus"
-					}
-					imageLabel={`${p.name.id}: foto menyusul`}
-				/>
+				<PackageCard {...packageCardProps(p, locale)} />
 			))}
 		</div>
 	</div>
@@ -47,19 +28,16 @@ const copy = {
 
 <style>
 	.page {
-		padding-top: var(--section-pad);
+		padding-top: clamp(3rem, 6vw, 6rem);
 		padding-bottom: var(--section-pad);
 	}
-	/* Airy editorial: hairline rule, deep gaps. */
-	.card-grid {
+	.pk-grid {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
-		gap: var(--spacing-3xl) var(--spacing-2xl);
-		border-top: 1px solid var(--color-border);
-		padding-top: var(--spacing-3xl);
+		gap: var(--spacing-3xl) var(--spacing-xl);
 	}
-	@media (max-width: 700px) {
-		.card-grid {
+	@media (max-width: 900px) {
+		.pk-grid {
 			grid-template-columns: 1fr;
 		}
 	}

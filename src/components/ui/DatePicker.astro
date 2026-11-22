@@ -1,0 +1,431 @@
+---
+import type { Locale } from "../../lib/i18n";
+
+// Custom calendar (replaces native <input type="date">) in the site's tokens.
+// A hidden <input> holds YYYY-MM-DD and fires `input` + `change`, so page
+// scripts read `input.value` exactly as they would on a date input.
+// Past days are disabled. Keyboard: arrows move by day/week, PageUp/PageDown
+// by month, Enter/Space choose, Esc closes.
+interface Props {
+	id: string;
+	locale?: Locale;
+	/** Accessible name of the control (the visible label lives outside). */
+	label: string;
+	inputAttrs?: Record<string, string | boolean>;
+}
+
+const { id, locale = "id", label, inputAttrs = {} } = Astro.props;
+const en = locale === "en";
+const T = {
+	placeholder: en ? "Select date" : "Pilih tanggal",
+	prev: en ? "Previous month" : "Bulan sebelumnya",
+	next: en ? "Next month" : "Bulan berikutnya",
+	clear: en ? "Clear" : "Hapus",
+	today: en ? "Today" : "Hari ini",
+};
+---
+
+<div class="dpick" data-dpick data-locale={en ? "en-GB" : "id-ID"} data-clear-label={T.placeholder}>
+	<input type="hidden" id={id} value="" {...inputAttrs} />
+	<span class="dp-sr" id={`${id}-label`}>{label}</span>
+	<button
+		type="button"
+		class="dp-btn"
+		aria-haspopup="dialog"
+		aria-expanded="false"
+		aria-labelledby={`${id}-label ${id}-value`}
+	>
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5" /><path d="M3.5 9.5h17M8 3v4M16 3v4" /></svg>
+		<span class="dp-value is-empty" id={`${id}-value`}>{T.placeholder}</span>
+	</button>
+	<div class="dp-panel" role="dialog" aria-label={label}>
+		<div class="dp-head">
+			<button type="button" class="dp-nav" data-prev aria-label={T.prev}>
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg>
+			</button>
+			<span class="dp-title" data-title aria-live="polite"></span>
+			<button type="button" class="dp-nav" data-next aria-label={T.next}>
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
+			</button>
+		</div>
+		<div class="dp-dow" data-dow aria-hidden="true"></div>
+		<div class="dp-grid" data-grid></div>
+		<div class="dp-foot">
+			<button type="button" class="dp-link" data-clear>{T.clear}</button>
+			<button type="button" class="dp-link" data-today>{T.today}</button>
+		</div>
+	</div>
+</div>
+
+<script>
+	const roots = document.querySelectorAll<HTMLElement>("[data-dpick]");
+	const closeAll = (except?: HTMLElement) =>
+		roots.forEach((r) => {
+			if (r !== except) r.dispatchEvent(new CustomEvent("dp-close"));
+		});
+	const pad = (n: number) => String(n).padStart(2, "0");
+	const iso = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+	const startOfDay = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+
+	roots.forEach((root) => {
+		const locale = root.dataset.locale ?? "id-ID";
+		const input = root.querySelector<HTMLInputElement>('input[type="hidden"]')!;
+		const btn = root.querySelector<HTMLButtonElement>(".dp-btn")!;
+		const valueEl = root.querySelector<HTMLElement>(".dp-value")!;
+		const panel = root.querySelector<HTMLElement>(".dp-panel")!;
+		const title = root.querySelector<HTMLElement>("[data-title]")!;
+		const dow = root.querySelector<HTMLElement>("[data-dow]")!;
+		const grid = root.querySelector<HTMLElement>("[data-grid]")!;
+		const placeholder = root.dataset.clearLabel ?? "";
+		const today = startOfDay(new Date());
+
+		let selected: Date | null = null;
+		let view = new Date(today.getFullYear(), today.getMonth(), 1);
+		let focused = today;
+
+		// Monday-first weekday header from Intl (2024-01-01 is a Monday).
+		dow.innerHTML = Array.from({ length: 7 }, (_, i) => {
+			const d = new Date(2024, 0, 1 + i);
+			return `<span>${d.toLocaleDateString(locale, { weekday: "short" }).replace(".", "")}</span>`;
+		}).join("");
+
+		const longDate = (d: Date) =>
+			d.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" });
+
+		const render = () => {
+			title.textContent = view.toLocaleDateString(locale, { month: "long", year: "numeric" });
+			const first = new Date(view.getFullYear(), view.getMonth(), 1);
+			const lead = (first.getDay() + 6) % 7;
+			const days = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
+			const cells: string[] = Array.from({ length: lead }, () => "<span></span>");
+			for (let n = 1; n <= days; n++) {
+				const d = new Date(view.getFullYear(), view.getMonth(), n);
+				const past = d < today;
+				const cls = [
+					"dp-day",
+					selected && iso(d) === iso(selected) ? "is-selected" : "",
+					iso(d) === iso(today) ? "is-today" : "",
+				]
+					.filter(Boolean)
+					.join(" ");
+				cells.push(
+					`<button type="button" class="${cls}" data-d="${iso(d)}" ${past ? "disabled" : ""} tabindex="${iso(d) === iso(focused) ? 0 : -1}" aria-label="${longDate(d)}" aria-pressed="${selected ? iso(d) === iso(selected) : false}">${n}</button>`,
+				);
+			}
+			grid.innerHTML = cells.join("");
+			// Prev month is pointless before the current month.
+			root.querySelector<HTMLButtonElement>("[data-prev]")!.disabled =
+				view.getFullYear() === today.getFullYear() && view.getMonth() === today.getMonth();
+		};
+
+		const isOpen = () => root.classList.contains("open");
+		const focusDay = () =>
+			grid.querySelector<HTMLElement>(`[data-d="${iso(focused)}"]`)?.focus({ preventScroll: true });
+		const open = () => {
+			closeAll(root);
+			const base = selected ?? today;
+			view = new Date(base.getFullYear(), base.getMonth(), 1);
+			focused = base;
+			render();
+			root.classList.add("open");
+			btn.setAttribute("aria-expanded", "true");
+			focusDay();
+		};
+		const close = (refocus = false) => {
+			if (!isOpen()) return;
+			root.classList.remove("open");
+			btn.setAttribute("aria-expanded", "false");
+			if (refocus) btn.focus();
+		};
+		const commit = (d: Date | null) => {
+			selected = d;
+			input.value = d ? iso(d) : "";
+			valueEl.textContent = d ? longDate(d) : placeholder;
+			valueEl.classList.toggle("is-empty", !d);
+			input.dispatchEvent(new Event("input", { bubbles: true }));
+			input.dispatchEvent(new Event("change", { bubbles: true }));
+		};
+		const moveFocus = (d: Date) => {
+			if (d < today) return;
+			focused = d;
+			if (d.getMonth() !== view.getMonth() || d.getFullYear() !== view.getFullYear()) {
+				view = new Date(d.getFullYear(), d.getMonth(), 1);
+				render();
+			} else {
+				grid.querySelectorAll<HTMLElement>(".dp-day").forEach((b) => (b.tabIndex = b.dataset.d === iso(d) ? 0 : -1));
+			}
+			focusDay();
+		};
+		const shiftMonth = (by: number) => {
+			const next = new Date(view.getFullYear(), view.getMonth() + by, 1);
+			if (next < new Date(today.getFullYear(), today.getMonth(), 1)) return;
+			view = next;
+			const keep = Math.min(focused.getDate(), new Date(next.getFullYear(), next.getMonth() + 1, 0).getDate());
+			focused = new Date(next.getFullYear(), next.getMonth(), keep);
+			if (focused < today) focused = today;
+			render();
+		};
+
+		root.addEventListener("dp-close", () => close());
+		btn.addEventListener("click", () => (isOpen() ? close(true) : open()));
+		root.querySelector("[data-prev]")!.addEventListener("click", () => shiftMonth(-1));
+		root.querySelector("[data-next]")!.addEventListener("click", () => shiftMonth(1));
+		root.querySelector("[data-clear]")!.addEventListener("click", () => {
+			commit(null);
+			render();
+		});
+		root.querySelector("[data-today]")!.addEventListener("click", () => {
+			commit(today);
+			close(true);
+		});
+		grid.addEventListener("click", (e) => {
+			const b = (e.target as HTMLElement).closest<HTMLButtonElement>(".dp-day");
+			if (!b || b.disabled) return;
+			const [y, m, d] = (b.dataset.d ?? "").split("-").map(Number);
+			commit(new Date(y, m - 1, d));
+			close(true);
+		});
+		panel.addEventListener("keydown", (e) => {
+			if (e.key === "Escape") {
+				e.preventDefault();
+				e.stopPropagation();
+				close(true);
+				return;
+			}
+			if (!(e.target as HTMLElement).classList.contains("dp-day")) return;
+			const step = (days: number) => {
+				e.preventDefault();
+				moveFocus(new Date(focused.getFullYear(), focused.getMonth(), focused.getDate() + days));
+			};
+			if (e.key === "ArrowLeft") step(-1);
+			else if (e.key === "ArrowRight") step(1);
+			else if (e.key === "ArrowUp") step(-7);
+			else if (e.key === "ArrowDown") step(7);
+			else if (e.key === "PageUp" || e.key === "PageDown") {
+				e.preventDefault();
+				shiftMonth(e.key === "PageUp" ? -1 : 1);
+				focusDay();
+			}
+		});
+		btn.addEventListener("keydown", (e) => {
+			if (e.key === "ArrowDown") {
+				e.preventDefault();
+				open();
+			}
+		});
+	});
+
+	document.addEventListener("pointerdown", (e) => {
+		roots.forEach((r) => {
+			if (!r.contains(e.target as Node)) r.dispatchEvent(new CustomEvent("dp-close"));
+		});
+	});
+</script>
+
+<style>
+	.dpick {
+		position: relative;
+		min-width: 0;
+	}
+	.dp-sr {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+		white-space: nowrap;
+	}
+	.dp-btn {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		width: 100%;
+		height: 44px;
+		padding: 0 12px;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-sm);
+		background: var(--color-bg);
+		color: var(--color-text);
+		font: inherit;
+		font-size: var(--font-size-sm);
+		text-align: left;
+		cursor: pointer;
+		transition:
+			border-color 0.2s ease,
+			box-shadow 0.2s ease;
+	}
+	.dp-btn svg {
+		width: 18px;
+		height: 18px;
+		flex: none;
+		color: var(--color-muted);
+	}
+	.dp-value {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.dp-value.is-empty {
+		color: var(--color-muted);
+	}
+	.dp-btn:hover {
+		border-color: var(--color-text);
+	}
+	.dp-btn:focus-visible,
+	.dpick.open .dp-btn {
+		outline: none;
+		border-color: var(--color-brand);
+		box-shadow: 0 0 0 3px var(--color-brand-soft);
+	}
+
+	.dp-panel {
+		position: absolute;
+		top: calc(100% + 6px);
+		left: 0;
+		z-index: 30;
+		width: 18.5rem;
+		max-width: calc(100vw - 2rem);
+		padding: var(--spacing-md);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+		box-shadow: var(--shadow-lg);
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(-4px) scale(0.98);
+		transform-origin: top left;
+		transition:
+			opacity 0.15s ease,
+			transform 0.15s cubic-bezier(0.23, 1, 0.32, 1),
+			visibility 0s linear 0.15s;
+	}
+	.dpick.open .dp-panel {
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+		transition:
+			opacity 0.15s ease,
+			transform 0.18s cubic-bezier(0.23, 1, 0.32, 1),
+			visibility 0s;
+	}
+	.dp-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--spacing-sm);
+		margin-bottom: var(--spacing-sm);
+	}
+	.dp-title {
+		font-family: var(--font-heading);
+		font-size: var(--font-size-base);
+		font-weight: 500;
+		text-transform: capitalize;
+	}
+	.dp-nav {
+		width: 36px;
+		height: 36px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		border: 1px solid var(--color-border);
+		border-radius: 50%;
+		background: var(--color-bg);
+		color: var(--color-text);
+		cursor: pointer;
+		transition: border-color 0.2s ease;
+	}
+	.dp-nav svg {
+		width: 16px;
+		height: 16px;
+	}
+	.dp-nav:hover:not(:disabled) {
+		border-color: var(--color-text);
+	}
+	.dp-nav:disabled {
+		opacity: 0.35;
+		cursor: default;
+	}
+	.dp-dow,
+	.dp-grid {
+		display: grid;
+		grid-template-columns: repeat(7, 1fr);
+		gap: 2px;
+	}
+	.dp-dow :global(span) {
+		padding: 6px 0;
+		text-align: center;
+		font-size: 0.7rem;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--color-muted);
+	}
+	.dp-grid :global(.dp-day) {
+		aspect-ratio: 1;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		border: 1px solid transparent;
+		border-radius: 50%;
+		background: none;
+		color: var(--color-text);
+		font: inherit;
+		font-size: var(--font-size-sm);
+		font-variant-numeric: tabular-nums;
+		cursor: pointer;
+		transition:
+			background-color 0.15s ease,
+			transform 0.12s ease;
+	}
+	.dp-grid :global(.dp-day:hover:not(:disabled):not(.is-selected)) {
+		background: var(--color-brand-soft);
+	}
+	.dp-grid :global(.dp-day:active:not(:disabled)) {
+		transform: scale(0.94);
+	}
+	.dp-grid :global(.dp-day:disabled) {
+		color: var(--color-muted);
+		opacity: 0.4;
+		cursor: default;
+	}
+	.dp-grid :global(.dp-day.is-today:not(.is-selected)) {
+		border-color: var(--color-accent);
+	}
+	.dp-grid :global(.dp-day.is-selected) {
+		background: var(--color-brand);
+		color: var(--color-on-brand);
+		font-weight: 600;
+	}
+	.dp-grid :global(.dp-day:focus-visible) {
+		outline: 2px solid var(--color-brand);
+		outline-offset: 2px;
+	}
+	.dp-foot {
+		display: flex;
+		justify-content: space-between;
+		margin-top: var(--spacing-sm);
+		padding-top: var(--spacing-sm);
+		border-top: 1px dashed var(--color-border);
+	}
+	.dp-link {
+		padding: 6px 4px;
+		border: 0;
+		background: none;
+		color: var(--color-brand);
+		font: inherit;
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		cursor: pointer;
+	}
+	.dp-link:hover {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.dp-panel,
+		.dpick.open .dp-panel,
+		.dp-grid :global(.dp-day) {
+			transition: none;
+		}
+	}
+</style>
