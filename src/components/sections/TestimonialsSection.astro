@@ -1,73 +1,176 @@
 ---
-import { testimonials, testimonialsHead, tx } from "../../data/home";
+import { testimonials, tx } from "../../data/home";
 import type { Locale } from "../../lib/i18n";
 
-// Single large quote (Well Traveled lock): one REAL public review,
-// linked to source. The featured quote rotates by editing data/home.ts.
+// One REAL public review at a time, linked to its source. All reviews are in
+// the HTML (stacked in one grid cell, so height never jumps); a small vanilla
+// script swaps the active one with a short blur-crossfade. No auto-advance.
+// Without JS the first review shows and the controls stay hidden.
 interface Props {
 	locale?: Locale;
 }
 
 const { locale = "id" } = Astro.props;
-const featured = testimonials[0];
+const label = (id: string, en: string) => (locale === "en" ? en : id);
 ---
 
-<section class="testimonials">
-	<div class="container testimonials-inner">
-		<p class="eyebrow reveal">{tx(testimonialsHead.eyebrow, locale)}</p>
-		<figure class="quote reveal">
-			<div class="stars" aria-hidden="true">{"★".repeat(5)}</div>
-			<blockquote>“{tx(featured.quote, locale)}”</blockquote>
-			<figcaption>
-				<span class="author">{featured.name}</span>
-				<span class="context">{tx(featured.context, locale)} · </span>
-				<a
-					href={featured.source}
-					target="_blank"
-					rel="noopener"
-					class="source">{featured.sourceLabel} ↗</a
+<section class="testimonials" data-testimonials>
+	<div class="container">
+		<div class="quote-wrap reveal">
+			<button
+				type="button"
+				class="q-btn"
+				data-q-prev
+				aria-label={label("Ulasan sebelumnya", "Previous review")}
+				hidden
+			>
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg>
+			</button>
+			<div class="quotes" aria-live="polite">
+				{testimonials.map((t, i) => (
+					<figure class="quote" data-quote data-active={i === 0 ? "true" : undefined} aria-hidden={i === 0 ? undefined : "true"}>
+						<blockquote>“{tx(t.quote, locale)}”</blockquote>
+						<figcaption>
+							<span class="author">{t.name}</span>
+							<span class="context"> · {tx(t.context, locale)} · </span>
+							<a href={t.source} target="_blank" rel="noopener" class="source" tabindex={i === 0 ? undefined : -1}>{t.sourceLabel} ↗</a>
+						</figcaption>
+					</figure>
+				))}
+			</div>
+			<button
+				type="button"
+				class="q-btn"
+				data-q-next
+				aria-label={label("Ulasan berikutnya", "Next review")}
+				hidden
+			>
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
+			</button>
+		</div>
+		<div class="dots" data-q-dots hidden>
+			{testimonials.map((_, i) => (
+				<button
+					type="button"
+					aria-label={label(`Ulasan ${i + 1}`, `Review ${i + 1}`)}
+					aria-current={i === 0 ? "true" : "false"}
 				>
-			</figcaption>
-		</figure>
+					<i></i>
+				</button>
+			))}
+		</div>
 	</div>
 </section>
+
+<script>
+	document.querySelectorAll<HTMLElement>("[data-testimonials]").forEach((root) => {
+		const quotes = [...root.querySelectorAll<HTMLElement>("[data-quote]")];
+		const dotsWrap = root.querySelector<HTMLElement>("[data-q-dots]");
+		const dots = dotsWrap ? [...dotsWrap.querySelectorAll<HTMLButtonElement>("button")] : [];
+		const prev = root.querySelector<HTMLButtonElement>("[data-q-prev]");
+		const next = root.querySelector<HTMLButtonElement>("[data-q-next]");
+		if (quotes.length < 2 || !prev || !next || !dotsWrap) return;
+
+		const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+		let index = 0;
+		let timer: number | undefined;
+		prev.hidden = next.hidden = dotsWrap.hidden = false;
+
+		const show = (i: number) => {
+			quotes.forEach((q, j) => {
+				const on = j === i;
+				q.toggleAttribute("data-active", on);
+				if (on) q.removeAttribute("aria-hidden");
+				else q.setAttribute("aria-hidden", "true");
+				q.querySelector("a")?.setAttribute("tabindex", on ? "0" : "-1");
+			});
+			dots.forEach((d, j) => d.setAttribute("aria-current", String(j === i)));
+		};
+
+		const go = (to: number) => {
+			const target = (to + quotes.length) % quotes.length;
+			if (target === index) return;
+			window.clearTimeout(timer);
+			if (reduce.matches) {
+				index = target;
+				show(index);
+				return;
+			}
+			// Fade the current one out (120ms), then bring the next in (200ms).
+			quotes[index].classList.add("is-leaving");
+			timer = window.setTimeout(() => {
+				quotes[index].classList.remove("is-leaving");
+				index = target;
+				show(index);
+			}, 120);
+		};
+
+		prev.addEventListener("click", () => go(index - 1));
+		next.addEventListener("click", () => go(index + 1));
+		dots.forEach((d, i) => d.addEventListener("click", () => go(i)));
+	});
+</script>
 
 <style>
 	.testimonials {
 		padding: var(--section-pad) 0;
 		border-top: 1px solid var(--color-border);
+		background: var(--color-surface);
+		border-bottom: 1px solid var(--color-border);
 	}
-	.testimonials-inner {
-		text-align: center;
-		max-width: 880px;
-		margin: 0 auto;
+	.quote-wrap {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		gap: var(--spacing-xl);
+		align-items: center;
+		max-width: 1000px;
+		margin-inline: auto;
+	}
+	.quotes {
+		display: grid;
+	}
+	.quote {
+		grid-area: 1 / 1;
+		margin: 0;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		gap: var(--spacing-lg);
+		text-align: center;
+		opacity: 0;
+		filter: blur(2px);
+		visibility: hidden;
+		pointer-events: none;
+		transition:
+			opacity 120ms ease,
+			filter 120ms ease,
+			visibility 0s 120ms;
 	}
-	.eyebrow {
-		font-size: var(--font-size-xs);
-		font-weight: 700;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		color: var(--color-muted);
-		margin-bottom: var(--spacing-lg);
+	.quote[data-active] {
+		opacity: 1;
+		filter: none;
+		visibility: visible;
+		pointer-events: auto;
+		transition:
+			opacity 200ms ease,
+			filter 200ms ease,
+			visibility 0s;
 	}
-	.stars {
-		color: var(--color-accent);
-		letter-spacing: 0.2em;
-		margin-bottom: var(--spacing-lg);
+	.quote.is-leaving {
+		opacity: 0;
+		filter: blur(2px);
 	}
 	.quote blockquote {
+		margin: 0;
+		max-width: 28ch;
 		font-family: var(--font-heading);
-		font-size: clamp(1.5rem, 3vw, 2.25rem);
-		line-height: 1.3;
-		letter-spacing: -0.02em;
-		font-weight: var(--font-weight-display);
+		font-size: clamp(1.5rem, 1.15rem + 1.6vw, 2.5rem);
+		line-height: 1.28;
+		letter-spacing: -0.01em;
+		font-weight: 500;
 		text-wrap: balance;
 	}
 	.quote figcaption {
-		margin-top: var(--spacing-lg);
 		font-size: var(--font-size-sm);
 		color: var(--color-muted);
 	}
@@ -78,5 +181,84 @@ const featured = testimonials[0];
 	.source {
 		color: var(--color-brand);
 		font-weight: 600;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+		text-decoration-color: var(--color-border);
+	}
+	.source:hover {
+		text-decoration-color: currentColor;
+	}
+
+	.q-btn {
+		width: 44px;
+		height: 44px;
+		border-radius: 50%;
+		border: 1px solid var(--color-border);
+		background: var(--color-bg);
+		color: var(--color-text);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		transition:
+			transform 160ms ease,
+			border-color 200ms ease;
+	}
+	.q-btn:hover {
+		border-color: var(--color-text);
+	}
+	.q-btn:active {
+		transform: scale(0.95);
+	}
+	.q-btn svg {
+		width: 18px;
+		height: 18px;
+	}
+	.q-btn[hidden],
+	.dots[hidden] {
+		display: none;
+	}
+
+	.dots {
+		display: flex;
+		justify-content: center;
+		gap: 8px;
+		margin-top: var(--spacing-xl);
+	}
+	.dots button {
+		width: 28px;
+		height: 28px;
+		border: 0;
+		background: none;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.dots i {
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: var(--color-border);
+		transition: background-color 200ms ease;
+	}
+	.dots button[aria-current="true"] i {
+		background: var(--color-text);
+	}
+
+	@media (max-width: 700px) {
+		.quote-wrap {
+			grid-template-columns: 1fr;
+		}
+		.q-btn {
+			display: none;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.quote,
+		.quote[data-active] {
+			transition: none;
+			filter: none;
+		}
 	}
 </style>

@@ -112,25 +112,17 @@ export const showcase = {
 		"Camp without hauling tents",
 	),
 	detail: T("Lihat detail", "View details"),
-	from: T("Mulai", "From"),
-	priceNote: T("Konfirmasi via WhatsApp", "Confirm via WhatsApp"),
 } as const;
 
 export const activities = {
 	eyebrow: T("Aktivitas & Paket", "Activities & Packages"),
 	title: T("Seharian penuh tanpa gadget", "Full days, no gadgets needed"),
-	description: T(
-		"Outbound di lapangan hijau, trekking ke curug, dan malam api unggun, semua bisa diatur dari satu pintu.",
-		"Outbound on green fields, waterfall treks, and bonfire nights, all arranged from one place.",
-	),
-	cta: T("Lihat paket gathering", "View gathering packages"),
-	dividerTag: T(
-		"Outbound, gathering, dan api unggun, diatur dari satu pintu",
-		"Outbound, gatherings, and bonfires, arranged from one place",
-	),
-	dividerLink: T("Lihat semua paket", "View all packages"),
 	cards: [
 		{
+			word: T("Main", "Play"),
+			href: "/package/outbound/",
+			linkLabel: T("Paket outbound", "Outbound package"),
+			imageLabel: T("Foto menyusul · outbound di lapangan", "Photo coming · outbound on the field"),
 			title: T("Outbound & team building", "Outbound & team building"),
 			body: T(
 				"Lapangan bola, area games, dan pemandu untuk rombongan kantor dan sekolah.",
@@ -138,6 +130,10 @@ export const activities = {
 			),
 		},
 		{
+			word: T("Jelajah", "Explore"),
+			href: "/attractions/",
+			linkLabel: T("Lihat atraksi", "See attractions"),
+			imageLabel: T("Foto menyusul · Curug Seribu", "Photo coming · Curug Seribu"),
 			title: T("Trekking curug", "Waterfall treks"),
 			body: T(
 				"Kawah Ratu, Curug Seribu, dan Curug Ngumpet, semua dalam jangkauan singkat.",
@@ -145,6 +141,10 @@ export const activities = {
 			),
 		},
 		{
+			word: T("Kumpul", "Gather"),
+			href: "/package/company-outing/",
+			linkLabel: T("Company outing", "Company outing"),
+			imageLabel: T("Foto menyusul · api unggun malam", "Photo coming · evening bonfire"),
 			title: T("Gathering & api unggun", "Gatherings & bonfires"),
 			body: T(
 				"Aula dengan soundsystem, saung-saung, dan api unggun untuk malam kebersamaan.",
@@ -162,10 +162,6 @@ export const TestimonialSchema = z.object({
 	sourceLabel: z.string(),
 });
 export type Testimonial = z.infer<typeof TestimonialSchema>;
-export const testimonialsHead = {
-	eyebrow: T("Kata tamu", "Guest words"),
-	title: T("Yang bikin kangen pulang", "What guests remember"),
-} as const;
 /** REAL guest quotes only, curated from public reviews, linked to source.
  *  EN lines are our translation of the guest's words (🟡), ID is verbatim (🟢). */
 export const testimonials = z.array(TestimonialSchema).parse([
@@ -199,19 +195,31 @@ export const testimonials = z.array(TestimonialSchema).parse([
 		source: "https://ecyrinos.blogspot.com/2019/04/glamping-di-pondok-rasamala.html",
 		sourceLabel: "ecyrinos.blogspot.com",
 	},
+	{
+		// Original is English (Tripadvisor, verbatim). The ID line is our translation.
+		quote: T(
+			"Kami menginap di salah satu tenda glamping dan itu salah satu liburan terbaik kami.",
+			"We stayed at one of the glamping tent and we had one of the best outings.",
+		),
+		name: "Melissacamelia",
+		context: T("Glamping bersama keluarga, Juni 2019", "Glamping with family, June 2019"),
+		source:
+			"https://www.tripadvisor.com/ShowUserReviews-g297706-d12048726-r685573303-Pondok_Rasamala_Resort_Bernuansa_Alam_Pedesaan-Bogor_West_Java_Java.html",
+		sourceLabel: "Tripadvisor",
+	},
 ]);
 
 export const location = {
 	eyebrow: T("Lokasi", "Location"),
 	title: T("Dekat dari kota, jauh dari bising", "Close to the city, far from noise"),
 	body: T(
-		"Di kawasan wisata Gunung Salak Endah, Pamijahan, Bogor, di dalam Taman Nasional Gunung Halimun Salak. Sekitar 2 jam dari Jakarta, 1,5 jam dari Bogor.",
-		"In the Gunung Salak Endah tourism area, Pamijahan, Bogor, inside Gunung Halimun Salak National Park. About 2 hours from Jakarta, 1.5 hours from Bogor.",
+		"Di kawasan wisata Gunung Salak Endah, Pamijahan, Bogor, di dalam Taman Nasional Gunung Halimun Salak.",
+		"In the Gunung Salak Endah tourism area, Pamijahan, Bogor, inside Gunung Halimun Salak National Park.",
 	),
-	address: T(
-		"Jl. Raya Gunung Salak Endah, Pamijahan, Kab. Bogor",
-		"Gunung Salak Endah Rd, Pamijahan, Bogor Regency",
-	),
+	routes: [
+		{ from: T("Dari Jakarta", "From Jakarta"), time: T("±2 jam", "±2 hrs") },
+		{ from: T("Dari Bogor", "From Bogor"), time: T("±1,5 jam", "±1.5 hrs") },
+	],
 	mapLabel: T("Muat peta", "Load map"),
 	mapsLink: T("Buka di Google Maps", "Open in Google Maps"),
 	detail: T("Lihat rute & petunjuk", "See routes & directions"),

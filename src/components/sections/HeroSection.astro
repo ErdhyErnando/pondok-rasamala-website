@@ -35,13 +35,15 @@ const message =
 
 <style>
 	.hero-overlay {
-		padding: var(--spacing-sm) var(--spacing-sm) 0;
+		padding: var(--spacing-sm);
 	}
 	.hero-panel {
 		position: relative;
 		overflow: hidden;
 		display: flex;
-		min-height: 100svh;
+		/* Navbar (~75px) + hero top/bottom gutters are subtracted so the panel's
+		   bottom edge and rounded corners stay inside the first viewport. */
+		min-height: calc(100svh - 6.5rem);
 		border-radius: var(--radius-lg);
 		background: #0c211a;
 		isolation: isolate;
@@ -124,7 +126,9 @@ const message =
 		}
 		.hero-panel {
 			border-radius: var(--radius);
-			min-height: 0;
+			/* Tall on phones: fill the viewport below the navbar; .hero-inner's
+			   margin:auto centres the copy vertically in the panel. */
+			min-height: calc(100svh - 5.5rem);
 		}
 		.hero-inner {
 			padding: 4rem var(--spacing-md) 3rem;
