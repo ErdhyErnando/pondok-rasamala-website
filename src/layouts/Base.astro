@@ -60,6 +60,22 @@ const pageCtx = createPublicPageContext({
 	siteName: siteTitle,
 });
 
+// Speculation rules (Chromium; ignored elsewhere). Document rules, one shared
+// matcher. Excludes the admin/API (/_emdash/*), every .xml route (rss.xml,
+// en/rss.xml, sitemap-*.xml) and links that leave the page's flow.
+const speculationWhere = {
+	and: [
+		{ href_matches: "/*" },
+		{ not: { href_matches: "/_emdash/*" } },
+		{ not: { href_matches: "/*.xml" } },
+		{ not: { selector_matches: "[rel~=nofollow], [target=_blank], [download]" } },
+	],
+};
+const speculationRules = {
+	prefetch: [{ where: speculationWhere, eagerness: "moderate" }],
+	prerender: [{ where: speculationWhere, eagerness: "conservative" }],
+};
+
 const beaconToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
 ---
 
@@ -113,6 +129,7 @@ const beaconToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
 			)
 		}
 		<slot name="jsonld" />
+		<script is:inline type="speculationrules" set:html={JSON.stringify(speculationRules)} />
 		{
 			beaconToken && (
 				<script
