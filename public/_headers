@@ -1,0 +1,13 @@
+# Baseline security headers for prerendered (static) pages and assets.
+# Worker-rendered responses get the same set from src/outer-middleware.ts.
+# KEEP IN SYNC with src/lib/security-headers.ts. No HSTS yet: it waits for the
+# DNS cutover (#7). The CSP is Report-Only: it observes, it does not block.
+# The generated Cache-Control rule for /_astro/* is merged in at build time.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Reporting-Endpoints: default="/_csp-report"
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' 'inline-speculation-rules' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://cloudflareinsights.com; frame-src https://www.google.com https://maps.google.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://wa.me; object-src 'none'; report-to default; report-uri /_csp-report
