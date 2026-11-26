@@ -27,6 +27,19 @@ export default defineConfig({
 		},
 	},
 	integrations: [
+		{
+			// Astro never routes src/pages files that start with "_", so the
+			// CSP report sink is injected explicitly (prerender = false inside).
+			name: "csp-report-route",
+			hooks: {
+				"astro:config:setup": ({ injectRoute }) => {
+					injectRoute({
+						pattern: "/_csp-report",
+						entrypoint: new URL("./src/csp-report.ts", import.meta.url),
+					});
+				},
+			},
+		},
 		sitemap({
 			i18n: { defaultLocale: "id", locales: { id: "id-ID", en: "en-US" } },
 		}),
@@ -59,6 +72,8 @@ export default defineConfig({
 		emdash({
 			database: d1({ binding: "DB", session: "auto" }),
 			storage: r2({ binding: "MEDIA" }),
+			// Security headers wrap EmDash's whole middleware stack (see file).
+			middleware: { outer: "./src/outer-middleware.ts" },
 			plugins: [
 				{
 					id: "marketing-blocks",
