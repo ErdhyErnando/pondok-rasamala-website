@@ -24,9 +24,9 @@ const message =
 		<div class="hero-bg" aria-hidden="true"></div>
 		<div class="hero-scrim" aria-hidden="true"></div>
 		<div class="hero-inner">
-			<h1 class="reveal">{tx(hero.title, locale)}</h1>
-			<p class="hero-sub reveal">{tx(hero.sub, locale)}</p>
-			<div class="hero-actions reveal">
+			<h1 class="reveal-load">{tx(hero.title, locale)}</h1>
+			<p class="hero-sub reveal-load" style="--reveal-delay: 0.08s">{tx(hero.sub, locale)}</p>
+			<div class="hero-actions reveal-load" style="--reveal-delay: 0.16s">
 				<WhatsAppButton message={message} locale={locale} size="lg" />
 			</div>
 		</div>
