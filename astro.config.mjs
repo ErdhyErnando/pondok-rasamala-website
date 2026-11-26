@@ -10,7 +10,9 @@ import emdash from "emdash/astro";
 export default defineConfig({
 	site: "https://pondokrasamala.com",
 	output: "server",
-	adapter: cloudflare(),
+	// "compile": local images are resized to WebP srcsets by sharp at build time
+	// and served as static files; runtime /_image requests are passthrough.
+	adapter: cloudflare({ imageService: "compile" }),
 	image: {
 		layout: "constrained",
 		responsiveStyles: true,
