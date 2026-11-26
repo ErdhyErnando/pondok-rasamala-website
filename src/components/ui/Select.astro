@@ -1,0 +1,316 @@
+---
+// Custom dropdown (replaces native <select>) in the site's design tokens.
+// A hidden <input> holds the value and fires `change`, so page scripts read
+// `input.value` / listen for "change" exactly as they would on a <select>.
+// Keyboard: ↑/↓/Home/End move, Enter/Space choose, Esc closes, Tab leaves.
+interface Option {
+	value: string;
+	label: string;
+}
+interface Props {
+	id: string;
+	label: string;
+	options: Option[];
+	value?: string;
+	name?: string;
+	/** "pill" = toolbar control, "field" = form field. */
+	variant?: "pill" | "field";
+	/** Which edge the open list lines up with. */
+	align?: "left" | "right";
+	/** Extra attributes for the hidden input (e.g. data-sort). */
+	inputAttrs?: Record<string, string | boolean>;
+	class?: string;
+}
+
+const {
+	id,
+	label,
+	options,
+	value = options[0]?.value,
+	name,
+	variant = "field",
+	align = "left",
+	inputAttrs = {},
+	class: className = "",
+} = Astro.props;
+const selected = options.find((o) => o.value === value) ?? options[0];
+---
+
+<div class:list={["cselect", `v-${variant}`, `a-${align}`, className]} data-cselect>
+	<input type="hidden" id={id} name={name} value={selected?.value} {...inputAttrs} />
+	<span class="cs-sr" id={`${id}-label`}>{label}</span>
+	<button
+		type="button"
+		class="cs-btn"
+		aria-haspopup="listbox"
+		aria-expanded="false"
+		aria-labelledby={`${id}-label ${id}-value`}
+		aria-controls={`${id}-list`}
+	>
+		<span class="cs-value" id={`${id}-value`}>{selected?.label}</span>
+		<svg class="cs-chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2.5 4.5 3.5 3.5 3.5-3.5" /></svg>
+	</button>
+	<ul class="cs-list" id={`${id}-list`} role="listbox" tabindex="-1" aria-labelledby={`${id}-label`}>
+		{options.map((o, i) => (
+			<li
+				class="cs-opt"
+				role="option"
+				id={`${id}-o${i}`}
+				data-value={o.value}
+				aria-selected={o.value === selected?.value ? "true" : "false"}
+			>
+				<span>{o.label}</span>
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" /></svg>
+			</li>
+		))}
+	</ul>
+</div>
+
+<script>
+	const roots = document.querySelectorAll<HTMLElement>("[data-cselect]");
+	const closeAll = (except?: HTMLElement) =>
+		roots.forEach((r) => {
+			if (r !== except) r.dispatchEvent(new CustomEvent("cs-close"));
+		});
+
+	roots.forEach((root) => {
+		const input = root.querySelector<HTMLInputElement>('input[type="hidden"]')!;
+		const btn = root.querySelector<HTMLButtonElement>(".cs-btn")!;
+		const valueEl = root.querySelector<HTMLElement>(".cs-value")!;
+		const list = root.querySelector<HTMLElement>(".cs-list")!;
+		const opts = [...list.querySelectorAll<HTMLElement>(".cs-opt")];
+		let active = 0;
+
+		const setActive = (i: number) => {
+			active = Math.max(0, Math.min(opts.length - 1, i));
+			opts.forEach((o, j) => o.classList.toggle("is-active", j === active));
+			list.setAttribute("aria-activedescendant", opts[active].id);
+			opts[active].scrollIntoView({ block: "nearest" });
+		};
+		const isOpen = () => root.classList.contains("open");
+		const open = () => {
+			closeAll(root);
+			root.classList.add("open");
+			btn.setAttribute("aria-expanded", "true");
+			setActive(Math.max(0, opts.findIndex((o) => o.getAttribute("aria-selected") === "true")));
+			list.focus({ preventScroll: true });
+		};
+		const close = (refocus = false) => {
+			if (!isOpen()) return;
+			root.classList.remove("open");
+			btn.setAttribute("aria-expanded", "false");
+			if (refocus) btn.focus();
+		};
+		const choose = (i: number) => {
+			const o = opts[i];
+			const changed = input.value !== o.dataset.value;
+			opts.forEach((x) => x.setAttribute("aria-selected", String(x === o)));
+			input.value = o.dataset.value ?? "";
+			valueEl.textContent = o.querySelector("span")?.textContent ?? "";
+			close(true);
+			if (changed) input.dispatchEvent(new Event("change", { bubbles: true }));
+		};
+
+		root.addEventListener("cs-close", () => close());
+		btn.addEventListener("click", () => (isOpen() ? close(true) : open()));
+		btn.addEventListener("keydown", (e) => {
+			if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+				e.preventDefault();
+				open();
+			}
+		});
+		opts.forEach((o, i) => {
+			o.addEventListener("click", () => choose(i));
+			o.addEventListener("pointermove", () => setActive(i));
+		});
+		list.addEventListener("keydown", (e) => {
+			switch (e.key) {
+				case "ArrowDown":
+					e.preventDefault();
+					setActive(active + 1);
+					break;
+				case "ArrowUp":
+					e.preventDefault();
+					setActive(active - 1);
+					break;
+				case "Home":
+					e.preventDefault();
+					setActive(0);
+					break;
+				case "End":
+					e.preventDefault();
+					setActive(opts.length - 1);
+					break;
+				case "Enter":
+				case " ":
+					e.preventDefault();
+					choose(active);
+					break;
+				case "Escape":
+					e.preventDefault();
+					e.stopPropagation();
+					close(true);
+					break;
+				case "Tab":
+					close();
+					break;
+			}
+		});
+	});
+
+	document.addEventListener("pointerdown", (e) => {
+		roots.forEach((r) => {
+			if (!r.contains(e.target as Node)) r.dispatchEvent(new CustomEvent("cs-close"));
+		});
+	});
+</script>
+
+<style>
+	.cselect {
+		position: relative;
+		min-width: 0;
+	}
+	.cs-sr {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+		white-space: nowrap;
+	}
+	.cs-btn {
+		position: relative;
+		display: flex;
+		align-items: center;
+		width: 100%;
+		height: 44px;
+		/* Right padding reserves the chevron's lane so text never touches it. */
+		padding: 0 2.75rem 0 14px;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-sm);
+		background: var(--color-bg);
+		color: var(--color-text);
+		font: inherit;
+		font-size: var(--font-size-sm);
+		text-align: left;
+		cursor: pointer;
+		transition:
+			border-color 0.2s ease,
+			box-shadow 0.2s ease;
+	}
+	.v-pill .cs-btn {
+		height: 40px;
+		padding: 0 2.75rem 0 18px;
+		border-radius: var(--radius-full);
+		background: var(--color-surface);
+		width: auto;
+		min-width: 12.5rem;
+	}
+	.cs-value {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.cs-chevron {
+		position: absolute;
+		right: 16px;
+		top: 50%;
+		width: 12px;
+		height: 12px;
+		margin-top: -6px;
+		color: var(--color-muted);
+		pointer-events: none;
+		transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+	}
+	.cselect.open .cs-chevron {
+		transform: rotate(180deg);
+	}
+	.cs-btn:hover {
+		border-color: var(--color-text);
+	}
+	.cs-btn:focus-visible,
+	.cselect.open .cs-btn {
+		outline: none;
+		border-color: var(--color-brand);
+		box-shadow: 0 0 0 3px var(--color-brand-soft);
+	}
+
+	.cs-list {
+		position: absolute;
+		top: calc(100% + 6px);
+		z-index: 30;
+		min-width: 100%;
+		width: max-content;
+		max-width: min(22rem, 90vw);
+		max-height: 18rem;
+		overflow-y: auto;
+		margin: 0;
+		padding: 6px;
+		list-style: none;
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+		box-shadow: var(--shadow-lg);
+		outline: none;
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(-4px) scale(0.98);
+		transform-origin: top;
+		transition:
+			opacity 0.15s ease,
+			transform 0.15s cubic-bezier(0.23, 1, 0.32, 1),
+			visibility 0s linear 0.15s;
+	}
+	.a-left .cs-list {
+		left: 0;
+	}
+	.a-right .cs-list {
+		right: 0;
+		transform-origin: top right;
+	}
+	.cselect.open .cs-list {
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+		transition:
+			opacity 0.15s ease,
+			transform 0.18s cubic-bezier(0.23, 1, 0.32, 1),
+			visibility 0s;
+	}
+	.cs-opt {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--spacing-md);
+		padding: 9px 10px;
+		border-radius: var(--radius-sm);
+		font-size: var(--font-size-sm);
+		color: var(--color-text);
+		cursor: pointer;
+		white-space: nowrap;
+	}
+	.cs-opt svg {
+		width: 16px;
+		height: 16px;
+		flex: none;
+		opacity: 0;
+		color: var(--color-brand);
+	}
+	.cs-opt.is-active {
+		background: var(--color-brand-soft);
+	}
+	.cs-opt[aria-selected="true"] {
+		font-weight: 600;
+		color: var(--color-brand);
+	}
+	.cs-opt[aria-selected="true"] svg {
+		opacity: 1;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.cs-list,
+		.cselect.open .cs-list,
+		.cs-chevron {
+			transition: none;
+		}
+	}
+</style>

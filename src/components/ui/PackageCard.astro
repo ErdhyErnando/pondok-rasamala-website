@@ -1,79 +1,118 @@
 ---
 import PhotoPlaceholder from "./PhotoPlaceholder.astro";
 
-// Package card: name / duration / price summary. Overview + related.
+// Package card (artifact layout): photo beside the text, solid rule on top.
+// Name, tagline, up to three activity chips, then "From Rp… per person".
+// Whole card is clickable via the stretched name link.
 interface Props {
 	href: string;
 	name: string;
 	tagline: string;
-	duration: string;
+	activities?: string[];
 	priceSummary: string;
+	priceUnit?: string;
 	imageLabel: string;
 }
 
-const { href, name, tagline, duration, priceSummary, imageLabel } = Astro.props;
+const { href, name, tagline, activities = [], priceSummary, priceUnit, imageLabel } = Astro.props;
 ---
 
-<article class="package-card">
-	<a href={href} class="card-visual" aria-hidden="true" tabindex="-1">
-		<PhotoPlaceholder label={imageLabel} ratio="16 / 10" />
+<article class="pk reveal">
+	<a href={href} class="pk-visual" aria-hidden="true" tabindex="-1">
+		<PhotoPlaceholder label={imageLabel} ratio="4 / 5" />
 	</a>
-	<p class="card-eyebrow">{duration}</p>
-	<h3><a href={href}>{name}</a></h3>
-	<p class="card-blurb">{tagline}</p>
-	<p class="card-price">{priceSummary}</p>
+	<div class="pk-body">
+		<h3><a href={href}>{name}</a></h3>
+		<p class="pk-tag">{tagline}</p>
+		{activities.length > 0 && (
+			<ul class="pk-chips">
+				{activities.map((a) => <li>{a}</li>)}
+			</ul>
+		)}
+		<p class="pk-price">
+			{priceSummary}
+			{priceUnit && <small>{priceUnit}</small>}
+		</p>
+	</div>
 </article>
 
 <style>
-	.package-card {
+	.pk {
 		position: relative;
-		display: flex;
-		flex-direction: column;
+		display: grid;
+		grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+		gap: var(--spacing-lg);
+		align-items: start;
+		padding-top: var(--spacing-lg);
+		border-top: 1px solid var(--color-text);
 	}
-	.card-visual {
+	.pk-visual {
 		display: block;
 	}
-	.card-visual :global(.photo-placeholder) {
-		border-radius: var(--radius-lg);
+	.pk-visual :global(.photo-placeholder) {
+		border-radius: var(--radius);
 		transition: transform var(--transition-base);
 	}
-	.package-card:hover .card-visual :global(.photo-placeholder) {
+	.pk:hover .pk-visual :global(.photo-placeholder) {
 		transform: translateY(-2px);
 	}
-	.package-card h3 a::after {
+	.pk-body {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-sm);
+		min-width: 0;
+	}
+	.pk-body h3 {
+		font-size: var(--font-size-2xl);
+		line-height: 1.15;
+	}
+	.pk-body h3 a::after {
 		content: "";
 		position: absolute;
 		inset: 0;
 	}
-	.card-eyebrow {
-		margin-top: var(--spacing-md);
-		font-size: var(--font-size-xs);
-		font-weight: 700;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
+	.pk:hover h3 {
 		color: var(--color-brand);
 	}
-	.package-card h3 {
-		margin-top: var(--spacing-xs);
-		font-size: var(--font-size-xl);
-	}
-	.package-card h3 a:hover {
-		color: var(--color-brand);
-	}
-	.card-blurb {
-		margin-top: var(--spacing-xs);
+	.pk-tag {
 		font-size: var(--font-size-sm);
 		color: var(--color-muted);
 		line-height: var(--leading-relaxed);
-		flex-grow: 1;
 	}
-	.card-price {
+	.pk-chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+		list-style: none;
+		padding: 0;
+		margin: var(--spacing-xs) 0 0;
+	}
+	.pk-chips li {
+		padding: 4px 10px;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-full);
+		background: var(--color-surface);
+		font-size: 0.8125rem;
+		color: var(--color-muted);
+	}
+	.pk-price {
 		margin-top: var(--spacing-sm);
-		font-weight: 700;
-		letter-spacing: var(--tracking-snug);
+		font-weight: 600;
+		font-variant-numeric: tabular-nums;
+	}
+	.pk-price small {
+		margin-left: 4px;
+		font-weight: 400;
+		font-size: 0.8125rem;
+		color: var(--color-muted);
+	}
+	@media (max-width: 480px) {
+		.pk {
+			grid-template-columns: 1fr;
+		}
 	}
 	@media (prefers-reduced-motion: reduce) {
-		.card-visual :global(.photo-placeholder) {
+		.pk-visual :global(.photo-placeholder) {
 			transition: none;
 		}
 	}

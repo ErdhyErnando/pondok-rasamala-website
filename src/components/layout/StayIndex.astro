@@ -1,0 +1,240 @@
+---
+import Base from "../../layouts/Base.astro";
+import CTASection from "../sections/CTASection.astro";
+import IndexHead from "./IndexHead.astro";
+import Select from "../ui/Select.astro";
+import { stayIndexCta, type StayCtaKind } from "../../data/stay-cta";
+import type { Locale } from "../../lib/i18n";
+import type { SizeBucket } from "../../lib/stay";
+
+// Shared shell for /villa, /glamping, /campsite (ID + EN): heading row,
+// card grid (default slot), optional extra block (slot "after"), then the
+// index-specific closing CTA. No breadcrumb, eyebrow or filters.
+interface Props {
+	locale: Locale;
+	title: string;
+	description: string;
+	meta: string;
+	ctaKind: Exclude<StayCtaKind, "aula">;
+	/** Group-size buckets. When given, the toolbar (size filter + price sort) shows. */
+	sizes?: SizeBucket[];
+}
+
+const { locale, title, description, meta, ctaKind, sizes } = Astro.props;
+const cta = stayIndexCta[ctaKind][locale];
+const en = locale === "en";
+const T = {
+	group: en ? "Group size" : "Jumlah orang",
+	all: en ? "All" : "Semua",
+	sort: en ? "Sort" : "Urutkan",
+	recommended: en ? "Recommended" : "Rekomendasi",
+	low: en ? "Price: low to high" : "Harga: rendah ke tinggi",
+	high: en ? "Price: high to low" : "Harga: tinggi ke rendah",
+	emptyTitle: en ? "Nothing fits that group size" : "Belum ada yang cocok untuk ukuran ini",
+	emptyBody: en
+		? "Try another size, or message us and we'll find a way."
+		: "Coba ukuran lain, atau kirim pesan dan kami carikan jalannya.",
+	reset: en ? "Show all" : "Tampilkan semua",
+};
+---
+
+<Base title={title} description={meta} locale={locale}>
+	<div class="container index-head">
+		<IndexHead title={title} description={description} />
+		{sizes && sizes.length > 0 && (
+			<div class="toolbar" data-toolbar>
+				<div class="seg" role="group" aria-label={T.group}>
+					<button type="button" aria-pressed="true" data-min="1" data-max="999">{T.all} <span data-n></span></button>
+					{sizes.map((b) => (
+						<button type="button" aria-pressed="false" data-min={b.min} data-max={b.max}>
+							{b.label} <span data-n></span>
+						</button>
+					))}
+				</div>
+				<Select
+					id="stay-sort"
+					variant="pill"
+					align="right"
+					label={T.sort}
+					options={[
+						{ value: "default", label: T.recommended },
+						{ value: "low", label: T.low },
+						{ value: "high", label: T.high },
+					]}
+					inputAttrs={{ "data-sort": true }}
+				/>
+			</div>
+		)}
+		<div class="stay-grid" data-grid>
+			<slot />
+			{sizes && (
+				<div class="empty" data-empty hidden>
+					<h3>{T.emptyTitle}</h3>
+					<p>{T.emptyBody}</p>
+					<button type="button" class="reset" data-reset>{T.reset}</button>
+				</div>
+			)}
+		</div>
+		<slot name="after" />
+	</div>
+	<CTASection locale={locale} title={cta.title} body={cta.body} message={cta.message} />
+</Base>
+
+<script>
+	// Group-size filter + price sort for the index grids. Vanilla, no framework.
+	const bar = document.querySelector<HTMLElement>("[data-toolbar]");
+	const grid = document.querySelector<HTMLElement>("[data-grid]");
+	if (bar && grid) {
+		const cards = [...grid.querySelectorAll<HTMLElement>("[data-card]")];
+		const empty = grid.querySelector<HTMLElement>("[data-empty]");
+		const buttons = [...bar.querySelectorAll<HTMLButtonElement>(".seg button")];
+		const sortEl = bar.querySelector<HTMLInputElement>("[data-sort]");
+		const original = new Map(cards.map((c, i) => [c, i] as const));
+		let bucket = buttons[0];
+
+		const fits = (c: HTMLElement, b: HTMLButtonElement) => {
+			const lo = Number(c.dataset.paxMin);
+			const hi = Number(c.dataset.paxMax);
+			return lo <= Number(b.dataset.max) && hi >= Number(b.dataset.min);
+		};
+
+		const render = () => {
+			const mode = sortEl?.value ?? "default";
+			const shown = cards.filter((c) => fits(c, bucket));
+			shown.sort((a, b) => {
+				if (mode === "low") return Number(a.dataset.price) - Number(b.dataset.price);
+				if (mode === "high") return Number(b.dataset.price) - Number(a.dataset.price);
+				return (original.get(a) ?? 0) - (original.get(b) ?? 0);
+			});
+			cards.forEach((c) => (c.hidden = !shown.includes(c)));
+			shown.forEach((c) => grid.insertBefore(c, empty));
+			if (empty) empty.hidden = shown.length > 0;
+			buttons.forEach((b) => {
+				b.setAttribute("aria-pressed", String(b === bucket));
+				const n = b.querySelector("[data-n]");
+				if (n) n.textContent = String(cards.filter((c) => fits(c, b)).length);
+			});
+		};
+
+		buttons.forEach((b) =>
+			b.addEventListener("click", () => {
+				bucket = b;
+				render();
+			}),
+		);
+		sortEl?.addEventListener("change", render);
+		grid.querySelector("[data-reset]")?.addEventListener("click", () => {
+			bucket = buttons[0];
+			render();
+		});
+		render();
+	}
+</script>
+
+<style>
+	.index-head {
+		padding-top: clamp(3rem, 6vw, 6rem);
+		padding-bottom: var(--section-pad);
+	}
+	.toolbar {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--spacing-md);
+		padding-block: var(--spacing-md);
+		margin-bottom: var(--spacing-xl);
+		border-block: 1px solid var(--color-border);
+	}
+	.seg {
+		display: inline-flex;
+		flex-wrap: wrap;
+		gap: 2px;
+		padding: 3px;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-full);
+		background: var(--color-surface);
+	}
+	.seg button {
+		border: 0;
+		background: none;
+		padding: 7px 14px;
+		border-radius: var(--radius-full);
+		font: inherit;
+		font-size: var(--font-size-sm);
+		font-weight: 500;
+		color: var(--color-muted);
+		cursor: pointer;
+		transition:
+			background-color 0.2s ease,
+			color 0.2s ease,
+			transform 0.16s ease;
+	}
+	.seg button:active {
+		transform: scale(0.97);
+	}
+	.seg button[aria-pressed="true"] {
+		background: var(--color-text);
+		color: var(--color-bg);
+	}
+	.seg button span {
+		opacity: 0.55;
+		margin-left: 3px;
+	}
+	.empty {
+		grid-column: 1 / -1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: var(--spacing-sm);
+		padding: var(--spacing-3xl) var(--spacing-lg);
+		border: 1px dashed var(--color-border);
+		border-radius: var(--radius-lg);
+		text-align: center;
+	}
+	.empty[hidden] {
+		display: none;
+	}
+	.empty h3 {
+		font-size: var(--font-size-xl);
+	}
+	.empty p {
+		color: var(--color-muted);
+		font-size: var(--font-size-sm);
+	}
+	.reset {
+		margin-top: var(--spacing-sm);
+		height: 40px;
+		padding: 0 18px;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-full);
+		background: var(--color-surface);
+		color: var(--color-text);
+		font: inherit;
+		font-size: var(--font-size-sm);
+		font-weight: 500;
+		cursor: pointer;
+	}
+	.stay-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--spacing-2xl) var(--spacing-xl);
+		border-top: 1px solid var(--color-border);
+		padding-top: var(--spacing-2xl);
+	}
+	/* The toolbar already draws the rule above the grid. */
+	.toolbar + .stay-grid {
+		border-top: 0;
+		padding-top: 0;
+	}
+	@media (max-width: 960px) {
+		.stay-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+	@media (max-width: 600px) {
+		.stay-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

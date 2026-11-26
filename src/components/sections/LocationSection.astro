@@ -3,8 +3,8 @@ import MapFacade from "../ui/MapFacade.astro";
 import { location, tx } from "../../data/home";
 import { localizePath, type Locale } from "../../lib/i18n";
 
-// Single restrained dark card: copy + click-to-load map facade.
-// Facade keeps the Maps iframe off the critical path (perf + privacy).
+// Two columns: real click-to-load map on the left (facade keeps the Maps
+// iframe off the critical path), copy + travel times on the right.
 interface Props {
 	locale?: Locale;
 }
@@ -16,23 +16,28 @@ const mapsHref = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
 ---
 
 <section class="location-section">
-	<div class="container">
-		<div class="location-card reveal">
-			<div class="location-copy">
-				<p class="eyebrow">{tx(location.eyebrow, locale)}</p>
-				<h2>{tx(location.title, locale)}</h2>
-				<p class="lead">{tx(location.body, locale)}</p>
-				<address>{tx(location.address, locale)}</address>
-				<div class="location-actions">
-					<a href={mapsHref} target="_blank" rel="noopener" class="btn btn-map">
-						{tx(location.mapsLink, locale)}
-					</a>
-					<a href={L("/location/")} class="location-detail">
-						{tx(location.detail, locale)} →
-					</a>
-				</div>
+	<div class="container loc">
+		<div class="loc-map reveal">
+			<MapFacade loadLabel={tx(location.mapLabel, locale)} auto />
+		</div>
+		<div class="loc-copy reveal">
+			<p class="eyebrow">{tx(location.eyebrow, locale)}</p>
+			<h2>{tx(location.title, locale)}</h2>
+			<p class="body">{tx(location.body, locale)}</p>
+			<dl class="routes">
+				{location.routes.map((r) => (
+					<div>
+						<dt>{tx(r.from, locale)}</dt>
+						<dd>{tx(r.time, locale)}</dd>
+					</div>
+				))}
+			</dl>
+			<div class="loc-links">
+				<a href={L("/location/")} class="link-forest">{tx(location.detail, locale)}</a>
+				<a href={mapsHref} target="_blank" rel="noopener" class="link-plain">
+					{tx(location.mapsLink, locale)}
+				</a>
 			</div>
-			<MapFacade loadLabel={tx(location.mapLabel, locale)} class="dark" auto />
 		</div>
 	</div>
 </section>
@@ -41,70 +46,96 @@ const mapsHref = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
 	.location-section {
 		padding: var(--section-pad) 0;
 	}
-	.location-card {
+	.loc {
 		display: grid;
-		grid-template-columns: 1fr 1.1fr;
-		gap: var(--spacing-2xl);
-		padding: var(--spacing-3xl);
-		background: var(--color-brand-strong);
-		color: var(--color-on-brand);
+		grid-template-columns: repeat(12, 1fr);
+		gap: var(--spacing-2xl) var(--spacing-xl);
+		align-items: center;
+	}
+	.loc-map {
+		grid-column: 1 / span 6;
+		aspect-ratio: 5 / 4;
 		border-radius: var(--radius-lg);
-		align-items: stretch;
+		overflow: hidden;
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+	}
+	.loc-map :global(.map-facade) {
+		height: 100%;
+		min-height: 0;
+		border-radius: 0;
+	}
+	.loc-copy {
+		grid-column: 8 / span 5;
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-lg);
 	}
 	.eyebrow {
 		font-size: var(--font-size-xs);
 		font-weight: 700;
 		letter-spacing: 0.14em;
 		text-transform: uppercase;
-		opacity: 0.8;
-		margin-bottom: var(--spacing-sm);
+		color: var(--color-brand);
+		margin-bottom: calc(var(--spacing-sm) * -1);
 	}
-	.location-copy h2 {
+	.loc-copy h2 {
 		font-size: var(--font-size-3xl);
 		font-weight: var(--font-weight-display);
 		letter-spacing: var(--tracking-tight);
 		text-wrap: balance;
 	}
-	.lead {
-		margin-top: var(--spacing-md);
+	.body {
+		color: var(--color-muted);
 		line-height: var(--leading-relaxed);
-		opacity: 0.9;
 	}
-	.location-copy address {
-		margin-top: var(--spacing-md);
-		font-style: normal;
-		font-size: var(--font-size-sm);
-		opacity: 0.8;
+	.routes {
+		margin: 0;
+		border-top: 1px solid var(--color-border);
 	}
-	.location-actions {
+	.routes div {
+		display: flex;
+		justify-content: space-between;
+		padding-block: var(--spacing-md);
+		border-bottom: 1px solid var(--color-border);
+	}
+	.routes dt {
+		color: var(--color-muted);
+	}
+	.routes dd {
+		margin: 0;
+		font-family: var(--font-heading);
+		font-size: var(--font-size-lg);
+		font-variant-numeric: tabular-nums;
+	}
+	.loc-links {
 		display: flex;
 		flex-wrap: wrap;
-		align-items: center;
 		gap: var(--spacing-lg);
-		margin-top: var(--spacing-xl);
-	}
-	.btn-map {
-		color: var(--color-brand-strong);
-		background: var(--color-bg);
-		border-radius: var(--radius-full);
-	}
-	.btn-map:hover {
-		box-shadow: var(--shadow-lg);
-	}
-	.location-detail {
 		font-size: var(--font-size-sm);
 		font-weight: 600;
-		text-decoration: underline;
-		text-underline-offset: 3px;
 	}
-	.location-card :global(.map-facade.dark) {
-		background: color-mix(in srgb, currentColor 8%, transparent);
-		border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+	.link-forest {
+		color: var(--color-brand);
+	}
+	.link-plain {
+		color: var(--color-text);
+	}
+	.link-forest,
+	.link-plain {
+		text-decoration: underline;
+		text-decoration-color: var(--color-border);
+		text-underline-offset: 5px;
+		transition: text-decoration-color 0.2s ease;
+	}
+	.link-forest:hover,
+	.link-plain:hover {
+		text-decoration-color: currentColor;
 	}
 	@media (max-width: 900px) {
-		.location-card {
-			grid-template-columns: 1fr;
-			padding: var(--spacing-2xl);
+		.loc-map,
+		.loc-copy {
+			grid-column: 1 / -1;
 		}
 	}
 </style>

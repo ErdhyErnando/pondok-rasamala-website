@@ -12,16 +12,26 @@ export interface StaySpec {
 	label: string;
 	value: string;
 }
-export interface StayPriceLine {
+export interface StayTier {
 	label: string;
-	price: string;
+	/** IDR per night (number, for the live estimate). */
+	price: number;
+	priceText: string;
+}
+export interface StayFact {
+	value: string;
+	label: string;
 }
 export interface StayCard {
 	href: string;
 	name: string;
-	eyebrow: string;
-	price: string;
-	blurb?: string;
+	blurb: string;
+	/** Three-fact strip: rooms · capacity · price. */
+	facts: StayFact[];
+	/** Capacity range + lowest nightly price, used by the index filter/sort. */
+	paxMin: number;
+	paxMax: number;
+	minPrice: number;
 	imageLabel: string;
 	kind: StayKind;
 }
@@ -35,7 +45,10 @@ export interface StayPage {
 	tagline: string;
 	description: string;
 	specs: StaySpec[];
-	prices: StayPriceLine[];
+	tiers: StayTier[];
+	amenities: string[];
+	/** Aula is booked per event, so no nights / estimate on its price card. */
+	showNights: boolean;
 	priceNote: string;
 	waHref: string;
 	waMessage: string;
@@ -112,7 +125,15 @@ export function resolveStay(segment: string, locale: Locale): StayPage | null {
 			tagline: villa.tagline[locale],
 			description: villa.description[locale],
 			specs,
-			prices: [{ label: en ? "Per night" : "Per malam", price: formatIDR(villa.price) }],
+			tiers: [
+				{
+					label: en ? "Per night" : "Per malam",
+					price: villa.price,
+					priceText: formatIDR(villa.price),
+				},
+			],
+			amenities: villa.amenities[locale],
+			showNights: !isAula,
 			priceNote: isAula
 				? en
 					? "Price & capacity confirmed via WhatsApp"
@@ -170,10 +191,15 @@ export function resolveStay(segment: string, locale: Locale): StayPage | null {
 				{ label: en ? "Bonfire" : "Api unggun", value: en ? "Included" : "Termasuk" },
 				{ label: en ? "Breakfast" : "Sarapan", value: en ? "Per guest count" : "Sesuai pax" },
 			],
-			prices: tiers.map((tier) => ({
-				label: en ? `${tier.pax} guests / night` : `${tier.pax} orang / malam`,
-				price: formatIDR(tier.price),
+			tiers: tiers.map((tier) => ({
+				label: en ? `${tier.pax} guests` : `${tier.pax} orang`,
+				price: tier.price,
+				priceText: formatIDR(tier.price),
 			})),
+			amenities: en
+				? ["Warm mattress", "Private bathroom", "Breakfast per guest count", "Bonfire"]
+				: ["Matras hangat", "Kamar mandi sendiri", "Sarapan sesuai jumlah tamu", "Api unggun"],
+			showNights: true,
 			priceNote: en ? "Price confirmed via WhatsApp" : "Harga konfirmasi via WhatsApp",
 			waHref: en ? waInquiryEn(name) : waInquiry(name),
 			waMessage: en
@@ -204,50 +230,101 @@ export function resolveStay(segment: string, locale: Locale): StayPage | null {
 	return null;
 }
 
-/** 3 related cards: same-kind siblings (campsite → glamping, aula → villas). */
-export function getRelated(segment: string, locale: Locale): StayCard[] {
+const compactIDR = (n: number, locale: Locale) => {
+	const m = n / 1_000_000;
+	return locale === "en"
+		? `IDR ${m.toLocaleString("en-US", { maximumFractionDigits: 2 })}M`
+		: `Rp${m.toLocaleString("id-ID", { maximumFractionDigits: 2 })} jt`;
+};
+const paxRange = (min: number, max: number) => (min === max ? String(max) : `${min}–${max}`);
+
+export function villaStayCard(slug: string, locale: Locale): StayCard {
 	const L = (p: string) => localizePath(p, locale);
 	const en = locale === "en";
-
-	const villaCard = (slug: string): StayCard => {
-		const v = villas.find((x) => x.slug === slug)!;
-		return {
-			href: L(v.type === "aula" ? "/aula/" : villaPath(v.slug)),
-			name: displayName("villa", v.name),
-			eyebrow: en ? `Villa · sleeps ${v.paxMax}` : `Villa · maks ${v.paxMax} orang`,
-			price: formatIDR(v.price),
-			imageLabel: en
-				? `${displayName("villa", v.name)}: photo to follow`
-				: `${displayName("villa", v.name)}: foto menyusul`,
-			kind: "villa",
-		};
+	const v = villas.find((x) => x.slug === slug)!;
+	const name = displayName("villa", v.name);
+	const bedrooms = parseSpec(v.spec).bedrooms;
+	return {
+		href: L(v.type === "aula" ? "/aula/" : villaPath(v.slug)),
+		name,
+		blurb: v.tagline[locale],
+		facts: [
+			{ value: bedrooms === null ? "–" : String(bedrooms), label: en ? "bedrooms" : "kamar" },
+			{ value: paxRange(v.paxNormal, v.paxMax), label: en ? "guests" : "orang" },
+			{ value: compactIDR(v.price, locale), label: en ? "/ night" : "/ malam" },
+		],
+		paxMin: v.paxNormal,
+		paxMax: v.paxMax,
+		minPrice: v.price,
+		imageLabel: en ? `${name}: photo to follow` : `${name}: foto menyusul`,
+		kind: "villa",
 	};
-	const tentCard = (slug: string): StayCard => {
-		const g = glamping.find((x) => x.slug === slug)!;
-		const min = Math.min(...g.tiers.map((tier) => tier.price));
-		const pax = g.tiers.map((tier) => tier.pax);
-		return {
-			href: L(glampingPath(g.slug)),
-			name: displayName("glamping", g.name),
-			eyebrow: en
-				? `Glamping · ${Math.min(...pax)}–${Math.max(...pax)} guests`
-				: `Glamping · ${Math.min(...pax)}–${Math.max(...pax)} orang`,
-			price: `${en ? "From" : "Mulai"} ${formatIDR(min)}`,
-			imageLabel: en
-				? `${displayName("glamping", g.name)}: photo to follow`
-				: `${displayName("glamping", g.name)}: foto menyusul`,
-			kind: "glamping",
-		};
-	};
+}
 
-	if (segment === "campsite") return ["salak", "cikuray", "gede"].map(tentCard);
+export function tentStayCard(slug: string, locale: Locale): StayCard {
+	const L = (p: string) => localizePath(p, locale);
+	const en = locale === "en";
+	const g = glamping.find((x) => x.slug === slug)!;
+	const name = displayName("glamping", g.name);
+	const pax = g.tiers.map((tier) => tier.pax);
+	const min = Math.min(...g.tiers.map((tier) => tier.price));
+	return {
+		href: L(glampingPath(g.slug)),
+		name,
+		blurb: g.tagline[locale],
+		facts: [
+			{ value: "1", label: en ? "tent" : "tenda" },
+			{ value: paxRange(Math.min(...pax), Math.max(...pax)), label: en ? "guests" : "orang" },
+			{
+				value: compactIDR(min, locale),
+				label: g.tiers.length > 1 ? (en ? "from" : "mulai") : en ? "/ night" : "/ malam",
+			},
+		],
+		paxMin: Math.min(...pax),
+		paxMax: Math.max(...pax),
+		minPrice: min,
+		imageLabel: en ? `${name}: photo to follow` : `${name}: foto menyusul`,
+		kind: "glamping",
+	};
+}
+
+export interface SizeBucket {
+	label: string;
+	min: number;
+	max: number;
+}
+/** Group-size filter buckets for the index pages. A unit matches when its
+ *  capacity range overlaps the bucket. Campsite has no per-lot capacity. */
+export function getSizeBuckets(kind: "villa" | "glamping", locale: Locale): SizeBucket[] {
+	const g = locale === "en" ? "guests" : "orang";
+	return kind === "villa"
+		? [
+				{ label: `≤ 6 ${g}`, min: 1, max: 6 },
+				{ label: `7–12 ${g}`, min: 7, max: 12 },
+				{ label: `13+ ${g}`, min: 13, max: 999 },
+			]
+		: [
+				{ label: `≤ 6 ${g}`, min: 1, max: 6 },
+				{ label: `7+ ${g}`, min: 7, max: 999 },
+			];
+}
+
+/** Index pages: every villa-category unit / every glamping tent. */
+export const getVillaCards = (locale: Locale): StayCard[] =>
+	villas.filter(isVillaCategory).map((v) => villaStayCard(v.slug, locale));
+export const getTentCards = (locale: Locale): StayCard[] =>
+	glamping.map((g) => tentStayCard(g.slug, locale));
+
+/** 3 related cards: same-kind siblings (campsite → glamping, aula → villas). */
+export function getRelated(segment: string, locale: Locale): StayCard[] {
+	if (segment === "campsite") return ["salak", "cikuray", "gede"].map((s) => tentStayCard(s, locale));
 	const villa = villas.find((v) =>
 		v.type === "aula" ? segment === "aula" : segment === villaSegment(v.slug),
 	);
 	if (villa) {
 		const pool = villas.filter((v) => isVillaCategory(v) && v.slug !== villa.slug);
-		return pool.slice(0, 3).map((v) => villaCard(v.slug));
+		return pool.slice(0, 3).map((v) => villaStayCard(v.slug, locale));
 	}
 	const tents = glamping.filter((x) => glampingSegment(x.slug) !== segment);
-	return [...tents, ...glamping].slice(0, 3).map((x) => tentCard(x.slug));
+	return [...tents, ...glamping].slice(0, 3).map((x) => tentStayCard(x.slug, locale));
 }

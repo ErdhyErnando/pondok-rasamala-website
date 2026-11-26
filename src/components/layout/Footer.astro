@@ -200,11 +200,13 @@ const socials = [
 		display: inline-block;
 		font-size: var(--font-size-sm);
 		padding: 0.3rem 0;
-		color: #ffffff;
+		color: rgba(255, 255, 255, 0.68);
+		text-decoration: none;
+		transition: color var(--transition-fast);
 	}
 	.link-rows a:hover {
-		text-decoration: underline;
-		text-underline-offset: 4px;
+		color: #ffffff;
+		text-decoration: none;
 	}
 	.footer-socials {
 		display: flex;
@@ -296,11 +298,13 @@ const socials = [
 	.to-top {
 		white-space: nowrap;
 		font-weight: 600;
-		color: inherit;
+		color: rgba(255, 255, 255, 0.68);
+		text-decoration: none;
+		transition: color var(--transition-fast);
 	}
 	.to-top:hover {
-		text-decoration: underline;
-		text-underline-offset: 3px;
+		color: #ffffff;
+		text-decoration: none;
 	}
 	/* Giant mark: container-query sized, paper on forest, clipped edge. */
 	.footer-mark {

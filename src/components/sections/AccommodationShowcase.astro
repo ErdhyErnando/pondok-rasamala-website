@@ -5,12 +5,11 @@ import { featured, showcase, tx, type Featured } from "../../data/home";
 import { campsite } from "../../data/campsite";
 import { glamping, glampingPath } from "../../data/glamping";
 import { villas, villaPath } from "../../data/villas";
-import { formatIDR } from "../../lib/format";
 import { localizePath, type Locale } from "../../lib/i18n";
 
 // Homepage rails (Paper DS v1, Well Traveled ref): one rail per
 // category with a big serif divider cell (dot + VILLA / GLAMPING +
-// tagline + view-all) and photo cards in eyebrow / serif name /
+// tagline + view-all) and photo cards in serif name /
 // meta anatomy, separated by dotted rules. Divider alternates sides
 // per rail like the reference. Paket gets its divider in the
 // activities section below.
@@ -23,10 +22,8 @@ const L = (p: string) => localizePath(p, locale);
 
 interface Card {
 	href: string;
-	eyebrow: string;
 	name: string;
 	blurb: string;
-	price: string;
 	imageLabel: string;
 }
 
@@ -35,28 +32,16 @@ const toCard = (f: Featured): Card => {
 		const v = villas.find((x) => x.slug === f.slug)!;
 		return {
 			href: L(villaPath(v.slug)),
-			eyebrow:
-				locale === "en"
-					? `Villa · sleeps ${v.paxMax}`
-					: `Villa · maks ${v.paxMax} orang`,
 			name: `Villa ${v.name}`,
 			blurb: tx(f.blurb, locale),
-			price: formatIDR(v.price),
 			imageLabel: `Villa ${v.name}: foto menyusul`,
 		};
 	}
 	const g = glamping.find((x) => x.slug === f.slug)!;
-	const min = Math.min(...g.tiers.map((tier) => tier.price));
-	const pax = g.tiers.map((tier) => tier.pax);
 	return {
 		href: L(glampingPath(g.slug)),
-		eyebrow:
-			locale === "en"
-				? `Glamping · ${Math.min(...pax)}–${Math.max(...pax)} guests`
-				: `Glamping · ${Math.min(...pax)}–${Math.max(...pax)} orang`,
 		name: `Glamping ${g.name}`,
 		blurb: tx(f.blurb, locale),
-		price: `${tx(showcase.from, locale)} ${formatIDR(min)}`,
 		imageLabel: `Glamping ${g.name}: foto menyusul`,
 	};
 };
@@ -68,25 +53,18 @@ const glampingCards = featured.filter((f) => f.kind === "glamping").map(toCard);
 // built from the tiers verbatim: the 4-pax lot, then the 6–10 pax lots.
 const [lot4, ...lotRest] = campsite.tiers;
 const restPax = lotRest.map((t) => t.pax);
-const restMin = Math.min(...lotRest.map((t) => t.price));
 const campsiteCards: Card[] = [
 	{
 		href: L("/campsite/"),
-		eyebrow: locale === "en" ? "Campsite · 4 guests" : "Campsite · 4 orang",
 		name: locale === "en" ? "Campsite for 4" : "Campsite 4 Orang",
 		blurb:
 			locale === "en"
 				? "Tent and breakfast for 4 guests, bonfire included."
 				: `${lot4.includes}.`,
-		price: formatIDR(lot4.price),
 		imageLabel: "Campsite 4 orang: foto menyusul",
 	},
 	{
 		href: L("/campsite/"),
-		eyebrow:
-			locale === "en"
-				? `Campsite · ${Math.min(...restPax)}–${Math.max(...restPax)} guests`
-				: `Campsite · ${Math.min(...restPax)}–${Math.max(...restPax)} orang`,
 		name:
 			locale === "en"
 				? `Campsite for ${Math.min(...restPax)}–${Math.max(...restPax)}`
@@ -95,7 +73,6 @@ const campsiteCards: Card[] = [
 			locale === "en"
 				? `Tents for ${restPax.slice(0, -1).join(", ")} or ${restPax.at(-1)} guests with breakfast and a bonfire.`
 				: `Tenda ${restPax.slice(0, -1).join(", ")} atau ${restPax.at(-1)} pax dengan makan pagi dan api unggun.`,
-		price: `${tx(showcase.from, locale)} ${formatIDR(restMin)}`,
 		imageLabel: "Campsite 6–10 orang: foto menyusul",
 	},
 ];
@@ -120,13 +97,8 @@ const campsiteCards: Card[] = [
 						<span class="card-visual" aria-hidden="true">
 							<PhotoPlaceholder label={c.imageLabel} ratio="16 / 8" />
 						</span>
-						<p class="card-eyebrow">{c.eyebrow}</p>
 						<h3 class="card-name"><a href={c.href}>{c.name}</a></h3>
 						<p class="card-blurb">{c.blurb}</p>
-						<p class="card-price">
-							{c.price}
-							<span class="price-note"> / {tx(showcase.priceNote, locale)}</span>
-						</p>
 					</article>
 				))}
 			</div>
@@ -136,13 +108,8 @@ const campsiteCards: Card[] = [
 						<span class="card-visual" aria-hidden="true">
 							<PhotoPlaceholder label={c.imageLabel} ratio="16 / 8" />
 						</span>
-						<p class="card-eyebrow">{c.eyebrow}</p>
 						<h3 class="card-name"><a href={c.href}>{c.name}</a></h3>
 						<p class="card-blurb">{c.blurb}</p>
-						<p class="card-price">
-							{c.price}
-							<span class="price-note"> / {tx(showcase.priceNote, locale)}</span>
-						</p>
 					</article>
 				))}
 				<div class="rail-divider reveal">
@@ -164,13 +131,8 @@ const campsiteCards: Card[] = [
 						<span class="card-visual" aria-hidden="true">
 							<PhotoPlaceholder label={c.imageLabel} ratio="16 / 8" />
 						</span>
-						<p class="card-eyebrow">{c.eyebrow}</p>
 						<h3 class="card-name"><a href={c.href}>{c.name}</a></h3>
 						<p class="card-blurb">{c.blurb}</p>
-						<p class="card-price">
-							{c.price}
-							<span class="price-note"> / {tx(showcase.priceNote, locale)}</span>
-						</p>
 					</article>
 				))}
 			</div>
@@ -259,14 +221,6 @@ const campsiteCards: Card[] = [
 	.stay-card:hover .card-visual :global(.photo-placeholder) {
 		transform: translateY(-2px);
 	}
-	.card-eyebrow {
-		margin-top: var(--spacing-md);
-		font-size: var(--font-size-xs);
-		font-weight: 700;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		color: var(--color-brand);
-	}
 	.card-name {
 		margin-top: var(--spacing-xs);
 		font-size: var(--font-size-xl);
@@ -285,16 +239,6 @@ const campsiteCards: Card[] = [
 		color: var(--color-muted);
 		line-height: var(--leading-relaxed);
 		flex-grow: 1;
-	}
-	.card-price {
-		margin-top: var(--spacing-sm);
-		font-weight: 700;
-		letter-spacing: var(--tracking-snug);
-	}
-	.price-note {
-		font-weight: 500;
-		font-size: var(--font-size-xs);
-		color: var(--color-muted);
 	}
 	@media (max-width: 900px) {
 		.rails {

@@ -1,8 +1,6 @@
 ---
-import Base from "../../layouts/Base.astro";
-import SectionHeader from "../../components/ui/SectionHeader.astro";
-import CampsiteCard from "../../components/ui/CampsiteCard.astro";
-import WhatsAppButton from "../../components/ui/WhatsAppButton.astro";
+import StayIndex from "../../components/layout/StayIndex.astro";
+import StayCard from "../../components/ui/StayCard.astro";
 import { campsite, campLots } from "../../data/campsite";
 import { SITE } from "../../lib/constants";
 import { formatIDR } from "../../lib/format";
@@ -12,71 +10,45 @@ export const prerender = true;
 const locale = "id" as const;
 const copy = {
 	title: "Semua Campsite",
-	eyebrow: "Menginap",
 	description:
 		"Enam lot campsite dan enam Riverside Camp tepi sungai di kaki Gunung Salak, tenda dan makan pagi sudah disiapkan. Klik lot untuk cek ketersediaan live.",
 	meta: "Semua campsite Pondok Rasamala: 6 lot campsite + 6 Riverside Camp tepi sungai, harga per tier pax. Cek ketersediaan live.",
 	ratesTitle: "Harga per lot",
 	priceNote: "Harga konfirmasi via WhatsApp",
-	waMessage:
-		"Halo Pondok Rasamala, saya mau bertanya tentang campsite. Terima kasih.",
+	cta: "Cek ketersediaan",
+	photo: "foto menyusul",
 };
 const riversideBlurb = "Berkemah tepi sungai, klik untuk cek ketersediaan lot.";
 ---
 
-<Base title={copy.title} description={copy.meta} locale={locale}>
-	<div class="container index-head">
-		<SectionHeader
-			eyebrow={copy.eyebrow}
-			title={copy.title}
-			description={copy.description}
-			align="left"
+<StayIndex locale={locale} title={copy.title} description={copy.description} meta={copy.meta} ctaKind="campsite">
+	{campLots.map((lot) => (
+		<StayCard
+			href={SITE.availability}
+			external
+			name={lot.name}
+			blurb={lot.area === "riverside" ? riversideBlurb : campsite.tagline[locale]}
+			imageLabel={`${lot.name}: ${copy.photo}`}
+			cta={copy.cta}
 		/>
-		<div class="card-grid">
-			{campLots.map((lot) => (
-				<CampsiteCard
-					href={SITE.availability}
-					name={lot.name}
-					eyebrow={lot.area === "riverside" ? "Riverside Camp" : "Campsite"}
-					blurb={lot.area === "riverside" ? riversideBlurb : campsite.tagline.id}
-					imageLabel={`${lot.name}: foto menyusul`}
-					ctaLabel="Cek ketersediaan"
-				/>
+	))}
+	<section class="rates" slot="after">
+		<h2>{copy.ratesTitle}</h2>
+		<dl class="rate-list">
+			{campsite.tiers.map((tier) => (
+				<div class="rate-row">
+					<dt>{tier.pax} orang / malam</dt>
+					<dd>{formatIDR(tier.price)}</dd>
+				</div>
 			))}
-		</div>
-		<section class="rates">
-			<h2>{copy.ratesTitle}</h2>
-			<dl class="rate-list">
-				{campsite.tiers.map((tier) => (
-					<div class="rate-row">
-						<dt>{tier.pax} orang / malam</dt>
-						<dd>{formatIDR(tier.price)}</dd>
-					</div>
-				))}
-			</dl>
-			<p class="price-note">{copy.priceNote}</p>
-			<WhatsAppButton message={copy.waMessage} locale={locale} />
-		</section>
-	</div>
-</Base>
+		</dl>
+		<p class="price-note">{copy.priceNote}</p>
+	</section>
+</StayIndex>
 
 <style>
-	.index-head {
-		padding-top: var(--section-pad);
-		padding-bottom: var(--section-pad);
-	}
-	/* Same compact grid as villa/glamping: three cards per row. */
-	.card-grid {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: var(--spacing-3xl);
-		border-top: 1px solid var(--color-border);
-		padding-top: var(--spacing-3xl);
-	}
 	.rates {
 		margin-top: var(--spacing-3xl);
-		border-top: 1px solid var(--color-border);
-		padding-top: var(--spacing-2xl);
 		max-width: 40rem;
 	}
 	.rates h2 {
@@ -85,35 +57,28 @@ const riversideBlurb = "Berkemah tepi sungai, klik untuk cek ketersediaan lot.";
 		letter-spacing: -0.02em;
 	}
 	.rate-list {
-		margin-top: var(--spacing-lg);
+		margin-top: var(--spacing-md);
+		border-top: 1px solid var(--color-text);
 	}
 	.rate-row {
 		display: flex;
 		align-items: baseline;
 		justify-content: space-between;
 		gap: var(--spacing-md);
-		padding: var(--spacing-sm) 0;
-		border-bottom: 1px dashed var(--color-border);
+		padding: var(--spacing-md) 0;
+		border-bottom: 1px solid var(--color-border);
+		font-size: var(--font-size-sm);
+	}
+	.rate-row dt {
+		color: var(--color-muted);
 	}
 	.rate-row dd {
-		font-weight: 700;
+		margin: 0;
+		font-weight: 600;
 	}
 	.price-note {
 		margin-top: var(--spacing-md);
 		font-size: var(--font-size-sm);
 		color: var(--color-muted);
-	}
-	.rates :global(.btn) {
-		margin-top: var(--spacing-md);
-	}
-	@media (max-width: 1100px) {
-		.card-grid {
-			grid-template-columns: repeat(2, 1fr);
-		}
-	}
-	@media (max-width: 700px) {
-		.card-grid {
-			grid-template-columns: 1fr;
-		}
 	}
 </style>

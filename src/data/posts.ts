@@ -2,6 +2,21 @@ import { z } from "astro/zod";
 
 const text = z.object({ id: z.string().min(1), en: z.string().min(1) });
 
+/** In-article promo card ("intermittent ad"). Shown after paragraph `after`
+ *  (1-based). kind villa/glamping/package pulls name, blurb and facts from the
+ *  data files by `slug`; "custom" needs `title` + `href`. `title`, `body`
+ *  and `cta` override whatever the kind would fill in. Edit per post below. */
+export const PromoSchema = z.object({
+	after: z.number().int().min(1),
+	kind: z.enum(["villa", "glamping", "package", "custom"]),
+	slug: z.string().optional(),
+	href: z.string().optional(),
+	title: text.optional(),
+	body: text.optional(),
+	cta: text.optional(),
+});
+export type Promo = z.infer<typeof PromoSchema>;
+
 /** EXACT future-Emdash `posts` shape (title/excerpt/pubDate/author/
  *  category/tags/heroImage/body, all copy {id,en}) so Week-2 migration is
  *  mechanical. Body here is paragraph arrays; Emdash body will be Portable
@@ -16,13 +31,14 @@ export const PostSchema = z.object({
 	pubDate: z.string(), // ISO date
 	heroImage: z.string(),
 	body: z.object({ id: z.array(z.string()).min(1), en: z.array(z.string()).min(1) }),
+	promos: z.array(PromoSchema).default([]),
 });
 
 export type Post = z.infer<typeof PostSchema>;
 
 const T = (id: string, en: string) => ({ id, en });
 
-export const posts = [
+export const posts: Post[] = [
 	{
 		slug: "panduan-camping-gunung-salak-endah",
 		title: T(
@@ -38,6 +54,17 @@ export const posts = [
 		author: "Pondok Rasamala",
 		pubDate: "2026-09-15",
 		heroImage: "",
+		promos: [
+			{ after: 2, kind: "glamping", slug: "salak" },
+			{
+				after: 4,
+				kind: "custom",
+				href: "/campsite/",
+				title: T("Campsite: tenda dan sarapan sudah siap", "Campsite: tent and breakfast ready"),
+				body: T("Pilih lot untuk 4–10 orang, tinggal datang.", "Pick a lot for 4–10 guests and just arrive."),
+				cta: T("Lihat campsite", "See campsite"),
+			},
+		],
 		body: {
 			id: [
 				"Camping di Gunung Salak Endah cocok untuk yang mau suasana hutan tanpa logistik ribet. Di Pondok Rasamala, tendanya sudah didirikan, matras sudah digelar, dan sarapan sudah disiapkan, Anda tinggal datang membawa pakaian ganti dan jaket hangat.",
@@ -72,6 +99,7 @@ export const posts = [
 		author: "Pondok Rasamala",
 		pubDate: "2026-09-18",
 		heroImage: "",
+		promos: [{ after: 2, kind: "villa", slug: "bambu-a" }],
 		body: {
 			id: [
 				"Tidak semua liburan butuh rencana besar. Kadang yang dibutuhkan hanya dua kamar yang tenang, teras untuk duduk sore, dan udara yang tidak berbau knalpot, itu tepatnya yang ditawarkan Villa Bambu.",
@@ -106,6 +134,16 @@ export const posts = [
 		author: "Pondok Rasamala",
 		pubDate: "2026-09-20",
 		heroImage: "",
+		promos: [
+			{
+				after: 2,
+				kind: "custom",
+				href: "/attractions/",
+				title: T("Atraksi di sekitar Gunung Salak Endah", "Attractions around Gunung Salak Endah"),
+				body: T("Kawah Ratu, Curug Seribu, Curug Ngumpet, dan lainnya.", "Kawah Ratu, Curug Seribu, Curug Ngumpet, and more."),
+				cta: T("Lihat atraksi", "See attractions"),
+			},
+		],
 		body: {
 			id: [
 				"Kawasan Gunung Salak Endah dijuluki surganya curug, dan julukan itu pantas. Dalam radius perjalanan singkat dari Pondok Rasamala ada enam titik air yang masing-masing punya karakter: kawah vulkanik, air terjun tertinggi se-Bogor, sampai gua berlumut.",
