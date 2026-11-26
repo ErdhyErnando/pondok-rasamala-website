@@ -53,10 +53,28 @@ const pageCtx = createPublicPageContext({
 	pageTitle: title ?? siteTitle,
 	description: metaDescription,
 	canonical: canonicalUrl,
-	image,
-	seo: { ogImage: image },
+	image: ogImage,
+	// EmDashHead owns description/canonical/og:*/twitter:*. Pass the full
+	// "| Pondok Rasamala" title so social titles keep the suffix.
+	seo: { ogImage, ogTitle: fullTitle },
 	siteName: siteTitle,
 });
+
+// Speculation rules (Chromium; ignored elsewhere). Document rules, one shared
+// matcher. Excludes the admin/API (/_emdash/*), every .xml route (rss.xml,
+// en/rss.xml, sitemap-*.xml) and links that leave the page's flow.
+const speculationWhere = {
+	and: [
+		{ href_matches: "/*" },
+		{ not: { href_matches: "/_emdash/*" } },
+		{ not: { href_matches: "/*.xml" } },
+		{ not: { selector_matches: "[rel~=nofollow], [target=_blank], [download]" } },
+	],
+};
+const speculationRules = {
+	prefetch: [{ where: speculationWhere, eagerness: "moderate" }],
+	prerender: [{ where: speculationWhere, eagerness: "conservative" }],
+};
 
 const beaconToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
 ---
@@ -65,36 +83,30 @@ const beaconToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
 <html lang={locale}>
 	<head>
 		<meta charset="UTF-8" />
+		<meta name="color-scheme" content="light dark" />
+		<meta name="theme-color" media="(prefers-color-scheme: light)" content="#016747" />
+		<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#161a17" />
 		<script is:inline>
-			// Must run before first paint: the whole palette is light-dark(),
-			// which resolves against <html>'s color-scheme. With no stored
-			// choice we take the OS preference; with JS off entirely the
-			// attribute is never set and `color-scheme: light dark` applies.
-			(function () {
-				var stored = null;
-				try {
-					stored = localStorage.getItem("pr-theme");
-				} catch (e) {}
-				if (stored !== "light" && stored !== "dark") {
-					stored = window.matchMedia("(prefers-color-scheme: dark)").matches
-						? "dark"
-						: "light";
+			// Pre-paint: apply a stored override to the color-scheme meta (theme.css
+			// maps it onto <html>) and to the browser-bar colour. With no stored
+			// choice, or JS off, "light dark" follows the OS. Keep colours in sync
+			// with ThemeToggle.astro.
+			try {
+				var s = localStorage.getItem("pr-theme");
+				if (s === "light" || s === "dark") {
+					document.querySelector('meta[name="color-scheme"]').content = s;
+					var c = s === "dark" ? "#161a17" : "#016747";
+					document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
+						m.content = c;
+					});
 				}
-				document.documentElement.setAttribute("data-theme", stored);
-			})();
+			} catch (e) {}
 		</script>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>{fullTitle}</title>
-		<meta name="description" content={metaDescription} />
-		<link rel="canonical" href={canonicalUrl} />
 		<link rel="alternate" hreflang="id" href={idUrl} />
 		<link rel="alternate" hreflang="en" href={enUrl} />
 		<link rel="alternate" hreflang="x-default" href={idUrl} />
-		<meta property="og:type" content="website" />
-		<meta property="og:site_name" content={siteTitle} />
-		<meta property="og:title" content={fullTitle} />
-		<meta property="og:description" content={metaDescription} />
-		<meta property="og:url" content={canonicalUrl} />
 		<meta property="og:locale" content={ogLocale} />
 		{
 			ogLocale === "id_ID" ? (
@@ -103,12 +115,6 @@ const beaconToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
 				<meta property="og:locale:alternate" content="id_ID" />
 			)
 		}
-		{ogImage && <meta property="og:image" content={ogImage} />}
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content={fullTitle} />
-		<meta name="twitter:description" content={metaDescription} />
-		{ogImage && <meta name="twitter:image" content={ogImage} />}
-		<meta name="theme-color" content="#016747" />
 		<link rel="icon" href="/favicon.ico" sizes="32x32" />
 		<link rel="icon" href="/favicon/favicon-32x32.png" type="image/png" sizes="32x32" />
 		<link rel="icon" href="/favicon/favicon-16x16.png" type="image/png" sizes="16x16" />
@@ -123,6 +129,7 @@ const beaconToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
 			)
 		}
 		<slot name="jsonld" />
+		<script is:inline type="speculationrules" set:html={JSON.stringify(speculationRules)} />
 		{
 			beaconToken && (
 				<script
@@ -161,21 +168,6 @@ const beaconToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
 					box-sizing: border-box;
 					margin: 0;
 					padding: 0;
-				}
-
-				/*
-				 * Colors use light-dark(); these rules pin the scheme only if
-				 * an explicit theme class is ever set. With no class,
-				 * color-scheme: light dark follows the OS preference.
-				 */
-				@supports (color: light-dark(#000, #fff)) {
-					:root.light {
-						color-scheme: light;
-					}
-
-					:root.dark {
-						color-scheme: dark;
-					}
 				}
 
 				html {

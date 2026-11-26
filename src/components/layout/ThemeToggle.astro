@@ -1,11 +1,13 @@
 ---
 import { getStrings, type Locale } from "../../lib/i18n";
 
-// Light/dark switch. The whole palette is expressed as light-dark() pairs in
-// tokens.css / theme.css, so flipping a single `color-scheme` on <html>
-// re-resolves every token. data-theme is written by the inline head script in
-// Base.astro (before first paint) and mirrored here on click; without JS the
-// tokens fall back to the OS preference via `color-scheme: light dark`.
+// Light/dark switch with a way back to "follow system". The whole palette is
+// light-dark() pairs, so one color-scheme on <html> re-resolves every token.
+// The state lives in <meta name="color-scheme"> ("light dark" = follow the OS,
+// "light"/"dark" = override), which theme.css maps onto <html> via :has().
+// An override is stored in localStorage["pr-theme"]; picking the scheme the OS
+// already uses removes it. Icons are pure CSS off the same meta + media query,
+// so the right glyph shows even without JS.
 // One label describes the ACTION ("switch to dark mode") rather than the state.
 interface Props {
 	locale?: Locale;
@@ -55,24 +57,41 @@ const t = getStrings(locale);
 <script>
 	// Runs once per page even with several toggles (header + drawer).
 	const STORAGE_KEY = "pr-theme";
-	const root = document.documentElement;
+	// Keep in sync with the inline head script in Base.astro.
+	const BAR = { light: "#016747", dark: "#161a17" };
 	const system = window.matchMedia("(prefers-color-scheme: dark)");
+	const schemeMeta = document.querySelector<HTMLMetaElement>('meta[name="color-scheme"]');
+	const barMetas = Array.from(
+		document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]'),
+	);
 	const buttons = Array.from(
 		document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]"),
 	);
 
-	const stored = (() => {
+	type Scheme = "light" | "dark";
+
+	function readStored(): Scheme | null {
 		try {
-			return localStorage.getItem(STORAGE_KEY);
+			const v = localStorage.getItem(STORAGE_KEY);
+			return v === "light" || v === "dark" ? v : null;
 		} catch {
 			return null;
 		}
-	})();
+	}
 
-	const mode = () => (root.dataset.theme === "dark" ? "dark" : "light");
+	const systemScheme = (): Scheme => (system.matches ? "dark" : "light");
+
+	// The meta is the page's source of truth, so a choice still holds when
+	// storage is unavailable (private mode).
+	function override(): Scheme | null {
+		const v = schemeMeta?.content;
+		return v === "light" || v === "dark" ? v : null;
+	}
+
+	const rendered = (): Scheme => override() ?? systemScheme();
 
 	function sync() {
-		const dark = mode() === "dark";
+		const dark = rendered() === "dark";
 		for (const btn of buttons) {
 			btn.setAttribute(
 				"aria-label",
@@ -80,29 +99,50 @@ const t = getStrings(locale);
 			);
 			btn.setAttribute("aria-pressed", String(dark));
 		}
-		// Browser chrome follows the page, not the OS, once a mode is picked.
-		const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-		if (meta) meta.content = dark ? "#161a17" : "#016747";
+	}
+
+	// Apply an override (or null = follow system) to the meta tags.
+	function apply(value: Scheme | null) {
+		if (schemeMeta) schemeMeta.content = value ?? "light dark";
+		for (const m of barMetas) {
+			// Override: one colour for both metas. Follow system: restore per media.
+			m.content = value ? BAR[value] : m.media.includes("dark") ? BAR.dark : BAR.light;
+		}
+		sync();
 	}
 
 	for (const btn of buttons) {
 		btn.addEventListener("click", () => {
-			const next = mode() === "dark" ? "light" : "dark";
-			root.dataset.theme = next;
+			// Re-read each time: another tab may have changed the choice.
+			const stored = readStored();
+			if (stored && stored !== override()) apply(stored);
+			const target: Scheme = rendered() === "dark" ? "light" : "dark";
 			try {
-				localStorage.setItem(STORAGE_KEY, next);
+				if (target === systemScheme()) {
+					// Undoing an override: back to following the OS, store nothing.
+					localStorage.removeItem(STORAGE_KEY);
+				} else {
+					localStorage.setItem(STORAGE_KEY, target);
+				}
 			} catch {
 				/* private mode: the choice lasts for this page only */
 			}
-			sync();
+			apply(target === systemScheme() ? null : target);
 		});
 	}
 
-	// Follow the OS until the visitor commits to a mode.
-	system.addEventListener("change", (e) => {
-		if (stored) return;
-		root.dataset.theme = e.matches ? "dark" : "light";
-		sync();
+	// An OS change only matters while following the OS (CSS already handles
+	// the palette); an override is never touched or cleared by it.
+	system.addEventListener("change", sync);
+
+	// Keep other tabs in step (storage events fire in the other documents only).
+	window.addEventListener("storage", (e) => {
+		if (e.key === STORAGE_KEY || e.key === null) apply(readStored());
+	});
+
+	// Back/forward cache restores can hold a stale choice.
+	window.addEventListener("pageshow", (e) => {
+		if (e.persisted) apply(readStored());
 	});
 
 	sync();
@@ -136,15 +176,24 @@ const t = getStrings(locale);
 		height: 18px;
 		flex-shrink: 0;
 	}
-	/* The visible glyph is the mode you would switch TO. */
+	/* The visible glyph is the mode you would switch TO (sun while dark).
+	   Rendered scheme = override meta, else the OS preference. */
 	.icon-sun {
 		display: none;
 	}
-	:global(:root[data-theme="dark"]) .icon-sun {
+	:global(:root:has(> head > meta[name="color-scheme"][content="dark"])) .icon-sun {
 		display: block;
 	}
-	:global(:root[data-theme="dark"]) .icon-moon {
+	:global(:root:has(> head > meta[name="color-scheme"][content="dark"])) .icon-moon {
 		display: none;
+	}
+	@media (prefers-color-scheme: dark) {
+		:global(:root:not(:has(> head > meta[name="color-scheme"][content="light"]))) .icon-sun {
+			display: block;
+		}
+		:global(:root:not(:has(> head > meta[name="color-scheme"][content="light"]))) .icon-moon {
+			display: none;
+		}
 	}
 	@media (prefers-reduced-motion: reduce) {
 		.theme-toggle {
