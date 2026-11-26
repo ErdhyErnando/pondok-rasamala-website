@@ -11,7 +11,7 @@ import "../styles/tokens.css";
 import "../styles/theme.css";
 
 // Calm-premium shell: locale-aware head (hreflang id/en/x-default, OG,
-// JSON-LD slots), frosted Navbar, deep-forest Footer, CSS-only reveals.
+// JSON-LD slots), frosted Navbar, deep-forest Footer, CSS scroll-driven reveals (see theme.css).
 // EmDash wiring kept for admin-published titles/settings; visual chrome
 // is data-file + i18n driven.
 interface Props {
@@ -147,11 +147,6 @@ const beaconToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
 			<slot />
 		</main>
 		<Footer locale={locale} currentPath={path} />
-
-		<script>
-			import { initReveals } from "../lib/reveal";
-			initReveals();
-		</script>
 
 		<style is:global>
 			/*

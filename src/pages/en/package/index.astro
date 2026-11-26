@@ -41,4 +41,15 @@ const copy = {
 			grid-template-columns: 1fr;
 		}
 	}
+	/* First row sits in the first viewport: no reveal there (2/1 columns). */
+	@media (min-width: 901px) {
+		.pk-grid > :global(.pk:nth-child(-n + 2)) {
+			animation: none;
+		}
+	}
+	@media (max-width: 900px) {
+		.pk-grid > :global(.pk:nth-child(1)) {
+			animation: none;
+		}
+	}
 </style>

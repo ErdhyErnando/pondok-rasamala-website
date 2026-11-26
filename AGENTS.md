@@ -38,7 +38,7 @@ This template ships with `.mcp.json`, `.cursor/mcp.json`, and `.vscode/mcp.json`
 
 - All **EmDash CMS-driven** pages must be server-rendered (`output: "server"`). No `getStaticPaths()` for live CMS collection content.
 - ** Amendment (hybrid prerender, locked 2026-09-21):** public marketing/accommodation pages fed by code data files (`src/data/*.ts`) MUST set `export const prerender = true` and may use `getStaticPaths()`. Only `_emdash` admin/API routes and live-collection pages (blog/packages/gallery once on Emdash loaders) stay server-rendered.
-- React is **admin-only**. Never import React (or `@astrojs/react` components) in public pages/layouts — vanilla Astro + `src/lib/reveal.ts` only. Violations fail review.
+- React is **admin-only**. Never import React (or `@astrojs/react` components) in public pages/layouts — vanilla Astro only (scroll reveals are CSS-only: the `.reveal` class in `src/styles/theme.css`). Violations fail review.
 - Image fields are objects (`{ src, alt }`), not strings. Use `<Image image={...} />` from `"emdash/ui"`.
 - `entry.id` is the slug (for URLs). `entry.data.id` is the database ULID (for API calls like `getEntryTerms`).
 - Always call `Astro.cache.set(cacheHint)` on pages that query content.

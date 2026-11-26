@@ -66,22 +66,21 @@
 	color: var(--color-text);
 }
 
-/* Scroll reveals (JS adds .is-visible; see src/lib/reveal.ts) */
-.reveal {
-	opacity: 0;
-	transform: translateY(12px);
-	transition:
-		opacity 0.7s ease,
-		transform 0.7s ease;
-}
-.reveal.is-visible {
-	opacity: 1;
-	transform: none;
-}
-@media (prefers-reduced-motion: reduce) {
-	.reveal {
-		opacity: 1;
-		transform: none;
-		transition: none;
+/* Scroll reveals: CSS scroll-driven, fade only. Decorative, so content is fully
+   visible by default (no JS, no support, reduced motion) and there is no
+   fallback. Keep `reveal` off first-viewport / LCP elements. */
+@media (prefers-reduced-motion: no-preference) {
+	@supports ((animation-timeline: view()) and (animation-range: entry)) {
+		@keyframes reveal-in {
+			from {
+				opacity: 0;
+			}
+		}
+		.reveal {
+			animation: reveal-in linear both;
+			/* Must follow the shorthand, which would otherwise reset them. */
+			animation-timeline: view();
+			animation-range: entry 0% entry 60%;
+		}
 	}
 }

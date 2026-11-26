@@ -30,16 +30,16 @@ const socials = [
 
 <Base title={copy.title} description={copy.meta} locale={locale}>
 	<div class="container page">
-		<h1 class="page-title reveal">{copy.title}</h1>
-		<p class="lede reveal">{copy.description}</p>
+		<h1 class="page-title">{copy.title}</h1>
+		<p class="lede">{copy.description}</p>
 		<div class="contact-grid">
 			<div class="contact-info">
-				<article class="info-card reveal">
+				<article class="info-card">
 					<h2>{copy.waTitle}</h2>
 					<p class="big">+{SITE.whatsapp}</p>
 					<WhatsAppButton message={waMessage} locale={locale} />
 				</article>
-				<article class="info-card reveal">
+				<article class="info-card">
 					<h2>{copy.phoneTitle}</h2>
 					<ul>
 						{SITE.phones.map((p) => <li><a href={`tel:+62${p.replace(/\D/g, "").slice(1)}`}>{p}</a></li>)}
@@ -67,7 +67,7 @@ const socials = [
 					</ul>
 				</article>
 			</div>
-			<div class="map-wrap reveal">
+			<div class="map-wrap">
 				<MapFacade loadLabel={copy.mapLabel} auto />
 			</div>
 		</div>

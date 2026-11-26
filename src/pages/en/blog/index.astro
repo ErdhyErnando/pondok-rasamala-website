@@ -28,15 +28,15 @@ const fmt = (d: string) =>
 <Base title={copy.title} description={copy.meta} locale={locale}>
 	<div class="container page">
 		<div class="blog-head">
-			<h1 class="reveal">{copy.title}</h1>
+			<h1>{copy.title}</h1>
 		</div>
-		<div class="page-visual reveal">
+		<div class="page-visual">
 			<PhotoPlaceholder label="Blog: photo to follow" ratio="16 / 8" />
 		</div>
-		<p class="lede reveal">{copy.description}</p>
+		<p class="lede">{copy.description}</p>
 		<div class="post-rows">
-			{posts.map((p) => (
-				<article class="post-row reveal">
+			{posts.map((p, i) => (
+				<article class:list={["post-row", { reveal: i > 0 }]}>
 					<div class="row-visual" aria-hidden="true">
 						<PhotoPlaceholder label={`${p.title.en}: photo to follow`} ratio="16 / 10" />
 					</div>
