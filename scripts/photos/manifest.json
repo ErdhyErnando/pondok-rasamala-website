@@ -1,0 +1,3422 @@
+{
+  "version": 1,
+  "generatedFrom": "inventory.json",
+  "entries": [
+    {
+      "section": "villa",
+      "slug": "kiriung",
+      "dataFile": "src/data/villas.ts",
+      "photos": [
+        {
+          "source": "2020/12/Kiriung_20201223-130440_Gallery.jpg",
+          "wpId": "1148",
+          "role": "hero",
+          "name": "tampak-depan",
+          "width": 1766,
+          "height": 1180,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Kiriung_20201223-122837_Gallery.jpg",
+          "wpId": "1143",
+          "role": "gallery",
+          "name": "teras-meja-makan",
+          "width": 1689,
+          "height": 1180,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Kiriung_20201223-123033_Gallery.jpg",
+          "wpId": "1147",
+          "role": "gallery",
+          "name": "ruang-keluarga",
+          "width": 1675,
+          "height": 1181,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Kiriung_20201223-122959_Gallery.jpg",
+          "wpId": "1146",
+          "role": "gallery",
+          "name": "dapur-pantry",
+          "width": 1766,
+          "height": 1180,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Kiriung_20201223-122929_Gallery.jpg",
+          "wpId": "1145",
+          "role": "gallery",
+          "name": "kamar-tidur-1",
+          "width": 1768,
+          "height": 1180,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Kiriung_20201223-122906_Gallery.jpg",
+          "wpId": "1144",
+          "role": "gallery",
+          "name": "kamar-tidur-2",
+          "width": 1768,
+          "height": 1179,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2021/04/Kiriung-Image-2021-04-18-at-4.51.56-PM.jpeg",
+          "wpId": "1285",
+          "role": "gallery",
+          "name": "halaman-samping",
+          "width": 1280,
+          "height": 720,
+          "focal": "center",
+          "note": "1280x720."
+        }
+      ]
+    },
+    {
+      "section": "villa",
+      "slug": "bambu-a",
+      "dataFile": "src/data/villas.ts",
+      "photos": [
+        {
+          "source": "2020/12/Bambu-Image-2020-12-11-at-4.00.17-PM.jpeg",
+          "wpId": "990",
+          "role": "hero",
+          "name": "kamar-tidur",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Only landscape photo that meets 1200 px. No landscape exterior exists; best exterior is portrait 1152."
+        },
+        {
+          "source": "2020/12/Bambu_20200829_091518.jpg",
+          "wpId": "1152",
+          "role": "gallery",
+          "name": "jalan-menuju-bambu",
+          "width": 2184,
+          "height": 4608,
+          "focal": "center",
+          "note": "Portrait 2184x4608 (EXIF-rotated). Best exterior of the bamboo hut; needs a portrait/crop-friendly slot."
+        },
+        {
+          "source": "2021/08/bambu-Image-2021-08-02-at-12.22.50-PM.jpeg",
+          "wpId": "1332",
+          "role": "gallery",
+          "name": "kolam-renang",
+          "width": 960,
+          "height": 1280,
+          "focal": "center",
+          "note": "Portrait; shows the resort pool with the Bambu hut behind it."
+        },
+        {
+          "source": "2016/04/03_bambu.jpg",
+          "wpId": "88",
+          "role": "gallery",
+          "name": "kamar-tidur-gelap",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": "Probably the same room as the hero at lower exposure; kept only because the source is so thin."
+        }
+      ]
+    },
+    {
+      "section": "villa",
+      "slug": "bambu-b",
+      "dataFile": "src/data/villas.ts",
+      "photos": [
+        {
+          "source": "2020/12/Bambu-Image-2020-12-11-at-4.00.17-PM.jpeg",
+          "wpId": "990",
+          "role": "hero",
+          "name": "kamar-tidur",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Only landscape photo that meets 1200 px. No landscape exterior exists; best exterior is portrait 1152."
+        },
+        {
+          "source": "2020/12/Bambu_20200829_091518.jpg",
+          "wpId": "1152",
+          "role": "gallery",
+          "name": "jalan-menuju-bambu",
+          "width": 2184,
+          "height": 4608,
+          "focal": "center",
+          "note": "Portrait 2184x4608 (EXIF-rotated). Best exterior of the bamboo hut; needs a portrait/crop-friendly slot."
+        },
+        {
+          "source": "2021/08/bambu-Image-2021-08-02-at-12.22.50-PM.jpeg",
+          "wpId": "1332",
+          "role": "gallery",
+          "name": "kolam-renang",
+          "width": 960,
+          "height": 1280,
+          "focal": "center",
+          "note": "Portrait; shows the resort pool with the Bambu hut behind it."
+        },
+        {
+          "source": "2016/04/03_bambu.jpg",
+          "wpId": "88",
+          "role": "gallery",
+          "name": "kamar-tidur-gelap",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": "Probably the same room as the hero at lower exposure; kept only because the source is so thin."
+        }
+      ]
+    },
+    {
+      "section": "villa",
+      "slug": "cendana",
+      "dataFile": "src/data/villas.ts",
+      "photos": [
+        {
+          "source": "2021/08/cendana-Image-2021-08-02-at-12.17.05-PM.jpeg",
+          "wpId": "1342",
+          "role": "hero",
+          "name": "tampak-depan",
+          "width": 1280,
+          "height": 720,
+          "focal": "center",
+          "note": "Old featured image, 1280x720 (below 1600)."
+        },
+        {
+          "source": "2020/12/Cendana-Image-2020-12-04-at-11.44.05-PM.jpeg",
+          "wpId": "873",
+          "role": "gallery",
+          "name": "tampak-pohon-pakis",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Cendana-Image-2020-12-04-at-11.44.05-PM-1.jpeg",
+          "wpId": "874",
+          "role": "gallery",
+          "name": "teras-pintu-kayu",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Cendana-Image-2020-12-04-at-11.44.14-PM-1.jpeg",
+          "wpId": "897",
+          "role": "gallery",
+          "name": "saung-makan",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2016/05/r-kel-cendana.jpg",
+          "wpId": "259",
+          "role": "gallery",
+          "name": "ruang-keluarga-besar",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool 'r kel cendana' 5472x3648. Strong window glare on the left."
+        },
+        {
+          "source": "2020/12/Cendana-Image-2020-12-04-at-11.44.13-PM.jpeg",
+          "wpId": "893",
+          "role": "gallery",
+          "name": "ruang-keluarga-sofa",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Cendana-Image-2020-12-04-at-11.44.13-PM-1.jpeg",
+          "wpId": "894",
+          "role": "gallery",
+          "name": "lorong-tangga",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Cendana-Image-2020-12-04-at-11.44.10-PM-1.jpeg",
+          "wpId": "883",
+          "role": "gallery",
+          "name": "kamar-tidur-1",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Cendana-Image-2020-12-11-at-3.52.04-PM.jpeg",
+          "wpId": "963",
+          "role": "gallery",
+          "name": "kamar-tidur-jendela",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Cendana-Image-2020-12-04-at-11.44.07-PM-1.jpeg",
+          "wpId": "877",
+          "role": "gallery",
+          "name": "kamar-mandi",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2021/01/cendana_IMG-20190203-WA0262.jpg",
+          "wpId": "1244",
+          "role": "gallery",
+          "name": "halaman-kompleks",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "section": "villa",
+      "slug": "dayak",
+      "dataFile": "src/data/villas.ts",
+      "photos": [
+        {
+          "source": "2021/01/dayak_IMG_8901.jpg",
+          "wpId": "1250",
+          "role": "hero",
+          "name": "tampak-depan-jalan",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool dayak_IMG_8901, 5472x3648. Replaces old featured 1336 (1280x720)."
+        },
+        {
+          "source": "2021/08/dayak-Image-2021-08-02-at-12.22.10-PM-2.jpeg",
+          "wpId": "1336",
+          "role": "gallery",
+          "name": "tampak-a-frame",
+          "width": 1280,
+          "height": 720,
+          "focal": "center",
+          "note": "Old featured, 1280x720."
+        },
+        {
+          "source": "2021/01/dayak_IMG-20201119-WA0016.jpg",
+          "wpId": "1249",
+          "role": "gallery",
+          "name": "halaman-api-unggun",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Dayak-Image-2020-12-04-at-11.40.19-PM-2.jpeg",
+          "wpId": "868",
+          "role": "gallery",
+          "name": "ruang-tamu",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Dayak-Image-2020-12-04-at-11.40.18-PM.jpeg",
+          "wpId": "863",
+          "role": "gallery",
+          "name": "loft-tangga",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Dayak-Image-2020-12-04-at-11.40.18-PM-1.jpeg",
+          "wpId": "864",
+          "role": "gallery",
+          "name": "kamar-loft",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2021/01/dayak_IMG-20200804-WA0062.jpg",
+          "wpId": "1247",
+          "role": "gallery",
+          "name": "kamar-tidur",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Dayak-Image-2020-12-04-at-11.40.19-PM-1.jpeg",
+          "wpId": "867",
+          "role": "gallery",
+          "name": "kamar-mandi",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2021/08/dayak-Image-2021-08-02-at-12.21.00-PM.jpeg",
+          "wpId": "1333",
+          "role": "gallery",
+          "name": "kolam-renang",
+          "width": 1280,
+          "height": 720,
+          "focal": "center",
+          "note": "Resort pool, not Dayak-specific."
+        },
+        {
+          "source": "2020/12/Dayak-Image-2020-12-04-at-11.40.17-PM-2.jpeg",
+          "wpId": "870",
+          "role": "gallery",
+          "name": "jalan-masuk",
+          "width": 1056,
+          "height": 791,
+          "focal": "center",
+          "note": "1056x791."
+        }
+      ]
+    },
+    {
+      "section": "villa",
+      "slug": "kihyang",
+      "dataFile": "src/data/villas.ts",
+      "photos": [
+        {
+          "source": "2021/08/illegole-Image-2021-08-02-at-12.15.01-PM.jpeg",
+          "wpId": "1343",
+          "role": "hero",
+          "name": "tampak-depan",
+          "width": 1600,
+          "height": 900,
+          "focal": "center",
+          "note": "Old featured image (its file name says 'illegole' but it shows the Kihyang house)."
+        },
+        {
+          "source": "2021/08/kihyang-Image-2021-08-02-at-12.13.09-PM.jpeg",
+          "wpId": "1327",
+          "role": "gallery",
+          "name": "tampak-depan-sungai",
+          "width": 1600,
+          "height": 900,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2021/08/kihyang-Image-2021-08-02-at-12.13.41-PM.jpeg",
+          "wpId": "1326",
+          "role": "gallery",
+          "name": "tampak-samping",
+          "width": 1600,
+          "height": 900,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Kihyang-Image-2020-12-11-at-3.58.09-PM.jpeg",
+          "wpId": "982",
+          "role": "gallery",
+          "name": "tampak-taman",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Unused pool, titled 'Kihyang Image 2020-12-11'."
+        },
+        {
+          "source": "2021/04/Kihyang-Image-2021-04-18-at-5.30.02-PM-1.jpeg",
+          "wpId": "1291",
+          "role": "gallery",
+          "name": "api-unggun-taman",
+          "width": 1280,
+          "height": 720,
+          "focal": "center",
+          "note": "1280x720."
+        },
+        {
+          "source": "2020/12/Kihyang-Image-2020-12-11-at-3.58.08-PM.jpeg",
+          "wpId": "981",
+          "role": "gallery",
+          "name": "ruang-keluarga",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Unused pool, titled Kihyang."
+        },
+        {
+          "source": "2020/12/Kihyang-Image-2020-12-11-at-3.58.10-PM-1.jpeg",
+          "wpId": "986",
+          "role": "gallery",
+          "name": "kamar-tidur-1",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Unused pool, titled Kihyang."
+        },
+        {
+          "source": "2020/12/Kihyang-Image-2020-12-11-at-3.58.10-PM-2.jpeg",
+          "wpId": "987",
+          "role": "gallery",
+          "name": "kamar-tidur-2",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Unused pool, titled Kihyang."
+        },
+        {
+          "source": "2020/12/Kihyang-Image-2020-12-11-at-3.58.10-PM.jpeg",
+          "wpId": "985",
+          "role": "gallery",
+          "name": "teras-kursi",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Unused pool, titled Kihyang."
+        },
+        {
+          "source": "2021/04/Kihyang-Image-2021-04-19-at-8.55.31-AM.jpeg",
+          "wpId": "1292",
+          "role": "gallery",
+          "name": "saung-teras",
+          "width": 720,
+          "height": 1280,
+          "focal": "center",
+          "note": "Portrait 720x1280."
+        },
+        {
+          "source": "2021/04/Kihyang-Image-2021-04-18-at-5.30.00-PM-1.jpeg",
+          "wpId": "1287",
+          "role": "gallery",
+          "name": "lorong-kayu",
+          "width": 720,
+          "height": 1280,
+          "focal": "center",
+          "note": "Portrait 720x1280."
+        }
+      ]
+    },
+    {
+      "section": "villa",
+      "slug": "ilegole",
+      "dataFile": "src/data/villas.ts",
+      "photos": [
+        {
+          "source": "2021/08/Kihyang-Image-2021-08-14-at-9.25.03-PM.jpeg",
+          "wpId": "1344",
+          "role": "hero",
+          "name": "tampak-depan",
+          "width": 1280,
+          "height": 720,
+          "focal": "center",
+          "note": "Old featured image (file name says 'Kihyang' but it shows Ilegole), 1280x720."
+        },
+        {
+          "source": "2021/08/illegole-Image-2021-08-02-at-12.16.26-PM.jpeg",
+          "wpId": "1323",
+          "role": "gallery",
+          "name": "tampak-depan-2",
+          "width": 1280,
+          "height": 720,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2021/08/illegole-Image-2021-08-02-at-12.16.27-PM.jpeg",
+          "wpId": "1324",
+          "role": "gallery",
+          "name": "teras-bunga-rambat",
+          "width": 1280,
+          "height": 720,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2016/05/00_ilegole.jpg",
+          "wpId": "118",
+          "role": "gallery",
+          "name": "teras-dalam",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": "1024 px."
+        },
+        {
+          "source": "2020/12/Illegole-Image-2020-12-11-at-3.54.07-PM.jpeg",
+          "wpId": "972",
+          "role": "gallery",
+          "name": "ruang-keluarga",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Illegole-Image-2020-12-11-at-3.54.08-PM-1.jpeg",
+          "wpId": "974",
+          "role": "gallery",
+          "name": "kamar-tidur",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2016/05/IMG_2016.jpg",
+          "wpId": "294",
+          "role": "gallery",
+          "name": "kamar-mandi-wastafel",
+          "width": 1024,
+          "height": 610,
+          "focal": "center",
+          "note": "1024x610."
+        },
+        {
+          "source": "2016/05/IMG_0026.jpg",
+          "wpId": "197",
+          "role": "gallery",
+          "name": "taman-depan",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": "1024 px."
+        },
+        {
+          "source": "2020/12/Illegole-Image-2020-12-11-at-3.54.08-PM-2.jpeg",
+          "wpId": "975",
+          "role": "gallery",
+          "name": "kolam-renang",
+          "width": 1152,
+          "height": 546,
+          "focal": "center",
+          "note": "1152x546."
+        }
+      ]
+    },
+    {
+      "section": "villa",
+      "slug": "kisampang",
+      "dataFile": "src/data/villas.ts",
+      "photos": [
+        {
+          "source": "2020/12/Kisampang-Image-2020-12-11-at-3.58.54-PM.jpeg",
+          "wpId": "989",
+          "role": "hero",
+          "name": "tampak-depan",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Old featured image, 1280x853."
+        },
+        {
+          "source": "2016/05/06_kisampang.jpg",
+          "wpId": "114",
+          "role": "gallery",
+          "name": "halaman-depan",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": "1024 px."
+        },
+        {
+          "source": "2016/05/05_kisampang.jpg",
+          "wpId": "113",
+          "role": "gallery",
+          "name": "tampak-kabut",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": "Unused pool '05_kisampang', 1024 px."
+        },
+        {
+          "source": "2017/09/IMG_7399a.jpg",
+          "wpId": "591",
+          "role": "gallery",
+          "name": "ruang-keluarga",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2016/05/07_kisampang.jpg",
+          "wpId": "115",
+          "role": "gallery",
+          "name": "ruang-makan",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2016/05/04_kisampang.jpg",
+          "wpId": "112",
+          "role": "gallery",
+          "name": "kamar-tidur-1",
+          "width": 1024,
+          "height": 680,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2017/09/IMG_7403a-1.jpg",
+          "wpId": "659",
+          "role": "gallery",
+          "name": "kamar-tidur-2",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2017/09/IMG_7393a.jpg",
+          "wpId": "589",
+          "role": "gallery",
+          "name": "kamar-tidur-3",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2016/05/IMG_2067.jpg",
+          "wpId": "315",
+          "role": "gallery",
+          "name": "ruang-jendela",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "section": "villa",
+      "slug": "pinus",
+      "dataFile": "src/data/villas.ts",
+      "photos": [
+        {
+          "source": "2020/12/Pinus-Image-2020-12-04-at-11.53.23-PM.jpeg",
+          "wpId": "943",
+          "role": "hero",
+          "name": "tampak-depan",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Old featured image, 1280x853."
+        },
+        {
+          "source": "2020/12/Pinus-Image-2020-12-11-at-3.56.45-PM.jpeg",
+          "wpId": "977",
+          "role": "gallery",
+          "name": "tampak-dua-lantai",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Pinus-Image-2020-12-11-at-3.56.44-PM.jpeg",
+          "wpId": "976",
+          "role": "gallery",
+          "name": "tampak-samping",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Pinus-Image-2020-12-04-at-11.53.24-PM.jpeg",
+          "wpId": "944",
+          "role": "gallery",
+          "name": "teras",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Pinus-Image-2020-12-04-at-11.53.27-PM-1.jpeg",
+          "wpId": "954",
+          "role": "gallery",
+          "name": "ruang-keluarga-bambu",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Unused pool, titled Pinus."
+        },
+        {
+          "source": "2020/12/Pinus-Image-2020-12-04-at-11.53.26-PM-2.jpeg",
+          "wpId": "952",
+          "role": "gallery",
+          "name": "kamar-tidur-1",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Pinus-Image-2020-12-11-at-3.56.46-PM.jpeg",
+          "wpId": "979",
+          "role": "gallery",
+          "name": "kamar-tidur-2",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Pinus-Image-2020-12-04-at-11.53.27-PM-2.jpeg",
+          "wpId": "955",
+          "role": "gallery",
+          "name": "kamar-loft",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Pinus-Image-2020-12-04-at-11.53.24-PM-1.jpeg",
+          "wpId": "945",
+          "role": "gallery",
+          "name": "kamar-tidur-3",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Pinus-Image-2020-12-04-at-11.53.26-PM-1.jpeg",
+          "wpId": "951",
+          "role": "gallery",
+          "name": "kamar-mandi-batu",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "section": "villa",
+      "slug": "puspa-a",
+      "dataFile": "src/data/villas.ts",
+      "photos": [
+        {
+          "source": "2020/12/Puspa-Image-2020-12-11-at-3.53.23-PM.jpeg",
+          "wpId": "969",
+          "role": "hero",
+          "name": "lorong-pintu-kamar",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Stone corridor with two cottage doors; best landscape that shows the unit itself (>=1200)."
+        },
+        {
+          "source": "2016/05/01_puspa-1.jpg",
+          "wpId": "97",
+          "role": "gallery",
+          "name": "teras-pagar-bambu",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": "1024 px."
+        },
+        {
+          "source": "2020/12/Puspa-Image-2020-12-11-at-3.53.22-PM.jpeg",
+          "wpId": "968",
+          "role": "gallery",
+          "name": "teras-bunga",
+          "width": 1280,
+          "height": 622,
+          "focal": "center",
+          "note": "1280x622, very wide crop."
+        },
+        {
+          "source": "2018/06/puspa.jpg",
+          "wpId": "732",
+          "role": "gallery",
+          "name": "teras-kursi-batu",
+          "width": 4032,
+          "height": 1960,
+          "focal": "center",
+          "note": "Unused pool 'puspa.jpg' 2018, 4032x1960 wide interior terrace."
+        },
+        {
+          "source": "2020/12/Puspa-Image-2020-12-11-at-3.53.23-PM-2.jpeg",
+          "wpId": "971",
+          "role": "gallery",
+          "name": "kamar-tidur-1",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Puspa-Image-2020-12-11-at-3.53.23-PM-1.jpeg",
+          "wpId": "970",
+          "role": "gallery",
+          "name": "kamar-tidur-2",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2016/05/IMG_6165-1.jpg",
+          "wpId": "324",
+          "role": "gallery",
+          "name": "kamar-tidur-hijau",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool; full-res original (5472x3648) of old IMG_6165 (page photo 309, 1024 px)."
+        },
+        {
+          "source": "2016/05/IMG_6196.jpg",
+          "wpId": "286",
+          "role": "gallery",
+          "name": "taman-pinus",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": "1024 px."
+        },
+        {
+          "source": "2016/05/00_puspa.jpg",
+          "wpId": "95",
+          "role": "gallery",
+          "name": "tampak-depan",
+          "width": 600,
+          "height": 400,
+          "focal": "center",
+          "note": "Only exterior of the thatched cottage, 600x400 (below 1000 px). Swap if a better exterior turns up."
+        }
+      ]
+    },
+    {
+      "section": "villa",
+      "slug": "puspa-b",
+      "dataFile": "src/data/villas.ts",
+      "photos": [
+        {
+          "source": "2020/12/Puspa-Image-2020-12-11-at-3.53.23-PM.jpeg",
+          "wpId": "969",
+          "role": "hero",
+          "name": "lorong-pintu-kamar",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Stone corridor with two cottage doors; best landscape that shows the unit itself (>=1200)."
+        },
+        {
+          "source": "2016/05/01_puspa-1.jpg",
+          "wpId": "97",
+          "role": "gallery",
+          "name": "teras-pagar-bambu",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": "1024 px."
+        },
+        {
+          "source": "2020/12/Puspa-Image-2020-12-11-at-3.53.22-PM.jpeg",
+          "wpId": "968",
+          "role": "gallery",
+          "name": "teras-bunga",
+          "width": 1280,
+          "height": 622,
+          "focal": "center",
+          "note": "1280x622, very wide crop."
+        },
+        {
+          "source": "2018/06/puspa.jpg",
+          "wpId": "732",
+          "role": "gallery",
+          "name": "teras-kursi-batu",
+          "width": 4032,
+          "height": 1960,
+          "focal": "center",
+          "note": "Unused pool 'puspa.jpg' 2018, 4032x1960 wide interior terrace."
+        },
+        {
+          "source": "2020/12/Puspa-Image-2020-12-11-at-3.53.23-PM-2.jpeg",
+          "wpId": "971",
+          "role": "gallery",
+          "name": "kamar-tidur-1",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Puspa-Image-2020-12-11-at-3.53.23-PM-1.jpeg",
+          "wpId": "970",
+          "role": "gallery",
+          "name": "kamar-tidur-2",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2016/05/IMG_6165-1.jpg",
+          "wpId": "324",
+          "role": "gallery",
+          "name": "kamar-tidur-hijau",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool; full-res original (5472x3648) of old IMG_6165 (page photo 309, 1024 px)."
+        },
+        {
+          "source": "2016/05/IMG_6196.jpg",
+          "wpId": "286",
+          "role": "gallery",
+          "name": "taman-pinus",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": "1024 px."
+        },
+        {
+          "source": "2016/05/00_puspa.jpg",
+          "wpId": "95",
+          "role": "gallery",
+          "name": "tampak-depan",
+          "width": 600,
+          "height": 400,
+          "focal": "center",
+          "note": "Only exterior of the thatched cottage, 600x400 (below 1000 px). Swap if a better exterior turns up."
+        }
+      ]
+    },
+    {
+      "section": "villa",
+      "slug": "puspa-c",
+      "dataFile": "src/data/villas.ts",
+      "photos": [
+        {
+          "source": "2020/12/Puspa-Image-2020-12-11-at-3.53.23-PM.jpeg",
+          "wpId": "969",
+          "role": "hero",
+          "name": "lorong-pintu-kamar",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Stone corridor with two cottage doors; best landscape that shows the unit itself (>=1200)."
+        },
+        {
+          "source": "2016/05/01_puspa-1.jpg",
+          "wpId": "97",
+          "role": "gallery",
+          "name": "teras-pagar-bambu",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": "1024 px."
+        },
+        {
+          "source": "2020/12/Puspa-Image-2020-12-11-at-3.53.22-PM.jpeg",
+          "wpId": "968",
+          "role": "gallery",
+          "name": "teras-bunga",
+          "width": 1280,
+          "height": 622,
+          "focal": "center",
+          "note": "1280x622, very wide crop."
+        },
+        {
+          "source": "2018/06/puspa.jpg",
+          "wpId": "732",
+          "role": "gallery",
+          "name": "teras-kursi-batu",
+          "width": 4032,
+          "height": 1960,
+          "focal": "center",
+          "note": "Unused pool 'puspa.jpg' 2018, 4032x1960 wide interior terrace."
+        },
+        {
+          "source": "2020/12/Puspa-Image-2020-12-11-at-3.53.23-PM-2.jpeg",
+          "wpId": "971",
+          "role": "gallery",
+          "name": "kamar-tidur-1",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Puspa-Image-2020-12-11-at-3.53.23-PM-1.jpeg",
+          "wpId": "970",
+          "role": "gallery",
+          "name": "kamar-tidur-2",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2016/05/IMG_6165-1.jpg",
+          "wpId": "324",
+          "role": "gallery",
+          "name": "kamar-tidur-hijau",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool; full-res original (5472x3648) of old IMG_6165 (page photo 309, 1024 px)."
+        },
+        {
+          "source": "2016/05/IMG_6196.jpg",
+          "wpId": "286",
+          "role": "gallery",
+          "name": "taman-pinus",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": "1024 px."
+        },
+        {
+          "source": "2016/05/00_puspa.jpg",
+          "wpId": "95",
+          "role": "gallery",
+          "name": "tampak-depan",
+          "width": 600,
+          "height": 400,
+          "focal": "center",
+          "note": "Only exterior of the thatched cottage, 600x400 (below 1000 px). Swap if a better exterior turns up."
+        }
+      ]
+    },
+    {
+      "section": "villa",
+      "slug": "batarua",
+      "dataFile": "src/data/villas.ts",
+      "photos": [
+        {
+          "source": "2016/05/IMG_5723.jpg",
+          "wpId": "247",
+          "role": "hero",
+          "name": "tampak-depan",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": "Below 1200 px (1024x683). Nothing larger exists for Batarua."
+        },
+        {
+          "source": "2016/05/IMG_57552.jpg",
+          "wpId": "243",
+          "role": "gallery",
+          "name": "teras",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2016/05/01_batarua.jpg",
+          "wpId": "90",
+          "role": "gallery",
+          "name": "tangga-kayu",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2017/09/IMG_7380a-1.jpg",
+          "wpId": "662",
+          "role": "gallery",
+          "name": "ruang-keluarga",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2016/05/04_batarua.jpg",
+          "wpId": "93",
+          "role": "gallery",
+          "name": "kamar-tidur-1",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2017/09/IMG_7381a.jpg",
+          "wpId": "586",
+          "role": "gallery",
+          "name": "kamar-tidur-2",
+          "width": 926,
+          "height": 654,
+          "focal": "center",
+          "note": "Unused pool IMG_7381a; assigned by file sequence next to Batarua's IMG_7380a."
+        },
+        {
+          "source": "2017/09/IMG_7384a.jpg",
+          "wpId": "587",
+          "role": "gallery",
+          "name": "kamar-tidur-3",
+          "width": 1024,
+          "height": 734,
+          "focal": "center",
+          "note": "Unused pool IMG_7384a; same sequence."
+        },
+        {
+          "source": "2017/09/IMG_7377a.jpg",
+          "wpId": "583",
+          "role": "gallery",
+          "name": "ruang-tangga",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": "Unused pool IMG_7377a; same sequence."
+        }
+      ]
+    },
+    {
+      "section": "villa",
+      "slug": "gaharu",
+      "dataFile": "src/data/villas.ts",
+      "photos": [
+        {
+          "source": "2020/11/Gaharu-Image-2020-11-18-at-2.54.20-PM-3.jpeg",
+          "wpId": "840",
+          "role": "hero",
+          "name": "tampak-malam",
+          "width": 1440,
+          "height": 954,
+          "focal": "center",
+          "note": "Old featured image, night shot 1440x954."
+        },
+        {
+          "source": "2020/11/Gaharu-Image-2020-11-18-at-2.54.21-PM-1.jpeg",
+          "wpId": "842",
+          "role": "gallery",
+          "name": "tampak-siang",
+          "width": 1080,
+          "height": 720,
+          "focal": "center",
+          "note": "1080x720."
+        },
+        {
+          "source": "2016/11/1480006818516.jpg",
+          "wpId": "477",
+          "role": "gallery",
+          "name": "tampak-samping-pinus",
+          "width": 1280,
+          "height": 960,
+          "focal": "center",
+          "note": "Unused pool (2016-11), 1280x960; assigned by date."
+        },
+        {
+          "source": "2020/11/Gaharu-Image-2020-11-18-at-2.54.20-PM.jpeg",
+          "wpId": "837",
+          "role": "gallery",
+          "name": "taman-meja-makan",
+          "width": 1080,
+          "height": 720,
+          "focal": "center",
+          "note": "1080x720."
+        },
+        {
+          "source": "2016/11/1480006824227.jpg",
+          "wpId": "475",
+          "role": "gallery",
+          "name": "balkon",
+          "width": 1280,
+          "height": 960,
+          "focal": "center",
+          "note": "Unused pool (2016-11), 1280x960."
+        },
+        {
+          "source": "2020/11/Gaharu-Image-2020-11-18-at-2.54.19-PM-2.jpeg",
+          "wpId": "835",
+          "role": "gallery",
+          "name": "tangga",
+          "width": 1080,
+          "height": 720,
+          "focal": "center",
+          "note": "Unused pool, titled Gaharu, 1080x720."
+        },
+        {
+          "source": "2020/11/Gaharu-Image-2020-11-18-at-2.54.19-PM.jpeg",
+          "wpId": "833",
+          "role": "gallery",
+          "name": "kamar-tidur-1",
+          "width": 1080,
+          "height": 720,
+          "focal": "center",
+          "note": "1080x720."
+        },
+        {
+          "source": "2016/11/1480006827073.jpg",
+          "wpId": "474",
+          "role": "gallery",
+          "name": "kamar-tidur-2",
+          "width": 1280,
+          "height": 960,
+          "focal": "center",
+          "note": "Unused pool (2016-11), 1280x960."
+        },
+        {
+          "source": "2020/11/Gaharu-Image-2020-11-18-at-2.54.20-PM-2.jpeg",
+          "wpId": "839",
+          "role": "gallery",
+          "name": "kamar-loft",
+          "width": 1440,
+          "height": 953,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/11/Gaharu-Image-2020-11-18-at-2.54.20-PM-1.jpeg",
+          "wpId": "838",
+          "role": "gallery",
+          "name": "kamar-tidur-3",
+          "width": 1440,
+          "height": 953,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/11/Gaharu-Image-2020-11-18-at-2.54.19-PM-3.jpeg",
+          "wpId": "836",
+          "role": "gallery",
+          "name": "kamar-mandi",
+          "width": 1080,
+          "height": 720,
+          "focal": "center",
+          "note": "1080x720."
+        }
+      ]
+    },
+    {
+      "section": "villa",
+      "slug": "mindi",
+      "dataFile": "src/data/villas.ts",
+      "photos": [
+        {
+          "source": "2021/08/mindi-Image-2021-08-02-at-12.23.33-PM.jpeg",
+          "wpId": "1329",
+          "role": "hero",
+          "name": "tampak-depan",
+          "width": 1600,
+          "height": 900,
+          "focal": "center",
+          "note": "Old featured image, 1600x900."
+        },
+        {
+          "source": "2021/01/mindi_IMG-20201119-WA0017.jpg",
+          "wpId": "1251",
+          "role": "gallery",
+          "name": "halaman-depan",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/11/WhatsApp-Image-2020-11-18-at-2.52.23-PM.jpeg",
+          "wpId": "825",
+          "role": "gallery",
+          "name": "teras-samping",
+          "width": 1080,
+          "height": 720,
+          "focal": "center",
+          "note": "1080x720."
+        },
+        {
+          "source": "2020/11/WhatsApp-Image-2020-11-18-at-2.52.24-PM-1.jpeg",
+          "wpId": "827",
+          "role": "gallery",
+          "name": "ruang-keluarga",
+          "width": 1080,
+          "height": 720,
+          "focal": "center",
+          "note": "1080x720."
+        },
+        {
+          "source": "2020/11/WhatsApp-Image-2020-11-18-at-2.52.24-PM.jpeg",
+          "wpId": "826",
+          "role": "gallery",
+          "name": "teras-kayu",
+          "width": 1080,
+          "height": 720,
+          "focal": "center",
+          "note": "1080x720."
+        },
+        {
+          "source": "2020/11/WhatsApp-Image-2020-11-18-at-2.52.24-PM-2.jpeg",
+          "wpId": "828",
+          "role": "gallery",
+          "name": "kamar-tidur-1",
+          "width": 1080,
+          "height": 720,
+          "focal": "center",
+          "note": "1080x720."
+        },
+        {
+          "source": "2020/11/WhatsApp-Image-2020-11-18-at-2.52.25-PM-1.jpeg",
+          "wpId": "830",
+          "role": "gallery",
+          "name": "kamar-tidur-2",
+          "width": 1080,
+          "height": 720,
+          "focal": "center",
+          "note": "1080x720."
+        },
+        {
+          "source": "2020/11/WhatsApp-Image-2020-11-18-at-2.52.25-PM-2.jpeg",
+          "wpId": "831",
+          "role": "gallery",
+          "name": "dapur",
+          "width": 1080,
+          "height": 720,
+          "focal": "center",
+          "note": "1080x720."
+        },
+        {
+          "source": "2020/11/WhatsApp-Image-2020-11-18-at-2.52.25-PM.jpeg",
+          "wpId": "829",
+          "role": "gallery",
+          "name": "kamar-mandi",
+          "width": 1080,
+          "height": 720,
+          "focal": "center",
+          "note": "1080x720."
+        }
+      ]
+    },
+    {
+      "section": "villa",
+      "slug": "kilanang",
+      "dataFile": "src/data/villas.ts",
+      "photos": [
+        {
+          "source": "2020/12/Kilanang-Image-2020-12-04-at-11.46.40-PM-2.jpeg",
+          "wpId": "914",
+          "role": "hero",
+          "name": "tampak-depan",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Old featured 1231 is 1152x546 (below 1200), so the front-on exterior from the gallery is the hero."
+        },
+        {
+          "source": "2020/12/Kilanang-Image-2020-12-04-at-11.46.40-PM-1.jpeg",
+          "wpId": "913",
+          "role": "gallery",
+          "name": "tampak-samping",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Kilanang-Image-2020-12-04-at-11.46.37-PM-1.jpeg",
+          "wpId": "903",
+          "role": "gallery",
+          "name": "ruang-keluarga",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Kilanang-Image-2020-12-04-at-11.46.36-PM-1.jpeg",
+          "wpId": "901",
+          "role": "gallery",
+          "name": "ruang-sofa",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Kilanang-Image-2020-12-04-at-11.48.15-PM.jpeg",
+          "wpId": "924",
+          "role": "gallery",
+          "name": "saung-dapur-makan",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Kilanang-Image-2020-12-04-at-11.46.35-PM.jpeg",
+          "wpId": "899",
+          "role": "gallery",
+          "name": "kamar-tidur-1",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Kilanang-Image-2020-12-04-at-11.46.38-PM-1.jpeg",
+          "wpId": "907",
+          "role": "gallery",
+          "name": "kamar-tidur-2",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Kilanang-Image-2020-12-04-at-11.46.39-PM-1.jpeg",
+          "wpId": "910",
+          "role": "gallery",
+          "name": "kamar-tidur-3",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Kilanang-Image-2020-12-04-at-11.46.38-PM.jpeg",
+          "wpId": "906",
+          "role": "gallery",
+          "name": "kamar-mandi",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Kilanang-Image-2020-12-04-at-11.46.36-PM.jpeg",
+          "wpId": "900",
+          "role": "gallery",
+          "name": "kamar-mandi-2",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Kilanang-Image-2020-12-04-at-11.46.40-PM.jpeg",
+          "wpId": "912",
+          "role": "gallery",
+          "name": "koridor-lantai-atas",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Unused pool, titled Kilanang."
+        }
+      ]
+    },
+    {
+      "section": "villa",
+      "slug": "kimerak",
+      "dataFile": "src/data/villas.ts",
+      "photos": [
+        {
+          "source": "2022/01/kimerak-2022-01-09-at-8.26.39-AM.jpeg",
+          "wpId": "1357",
+          "role": "hero",
+          "name": "tampak-pemandangan",
+          "width": 1280,
+          "height": 960,
+          "focal": "center",
+          "note": "Only landscape in the set (1280x960, 4:3). Everything else is portrait."
+        },
+        {
+          "source": "2022/01/kimerak-2022-01-09-at-8.26.38-AM-1.jpeg",
+          "wpId": "1354",
+          "role": "gallery",
+          "name": "tampak-depan-bunga",
+          "width": 960,
+          "height": 1280,
+          "focal": "center",
+          "note": "Old featured, portrait 960x1280."
+        },
+        {
+          "source": "2022/01/kimerak-2022-01-09-at-8.26.39-AM-1.jpeg",
+          "wpId": "1356",
+          "role": "gallery",
+          "name": "teras-api-unggun",
+          "width": 1200,
+          "height": 1600,
+          "focal": "center",
+          "note": "Portrait 1200x1600."
+        },
+        {
+          "source": "2022/01/kimerak-2022-01-09-at-8.26.38-AM.jpeg",
+          "wpId": "1355",
+          "role": "gallery",
+          "name": "teras-lantai-kayu",
+          "width": 960,
+          "height": 1280,
+          "focal": "center",
+          "note": "Portrait."
+        },
+        {
+          "source": "2022/01/kimerak-2022-01-09-at-8.26.36-AM-1.jpeg",
+          "wpId": "1359",
+          "role": "gallery",
+          "name": "kamar-loft",
+          "width": 960,
+          "height": 1280,
+          "focal": "center",
+          "note": "Portrait."
+        },
+        {
+          "source": "2022/01/kimerak-2022-01-09-at-8.26.37-AM-2.jpeg",
+          "wpId": "1352",
+          "role": "gallery",
+          "name": "tangga-meja",
+          "width": 1200,
+          "height": 1600,
+          "focal": "center",
+          "note": "Portrait 1200x1600."
+        },
+        {
+          "source": "2022/01/kimerak-2022-01-09-at-8.26.37-AM-1.jpeg",
+          "wpId": "1351",
+          "role": "gallery",
+          "name": "kamar-tidur",
+          "width": 960,
+          "height": 1280,
+          "focal": "center",
+          "note": "Portrait."
+        },
+        {
+          "source": "2022/01/kimerak-2022-01-09-at-8.26.36-AM.jpeg",
+          "wpId": "1350",
+          "role": "gallery",
+          "name": "jendela-pemandangan",
+          "width": 960,
+          "height": 1280,
+          "focal": "center",
+          "note": "Portrait."
+        }
+      ]
+    },
+    {
+      "section": "villa",
+      "slug": "leuit",
+      "dataFile": "src/data/villas.ts",
+      "photos": [
+        {
+          "source": "2020/12/Leuit-Image-2020-12-04-at-11.37.10-PM-1.jpeg",
+          "wpId": "850",
+          "role": "hero",
+          "name": "tampak-depan",
+          "width": 1280,
+          "height": 720,
+          "focal": "center",
+          "note": "Old featured image, 1280x720."
+        },
+        {
+          "source": "2020/12/Leuit-Image-2020-12-04-at-11.37.12-PM-2.jpeg",
+          "wpId": "857",
+          "role": "gallery",
+          "name": "halaman-api-unggun",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Leuit-Image-2020-12-04-at-11.37.12-PM-1.jpeg",
+          "wpId": "856",
+          "role": "gallery",
+          "name": "teras-panggung",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Leuit-Image-2020-12-04-at-11.37.11-PM-2.jpeg",
+          "wpId": "854",
+          "role": "gallery",
+          "name": "ruang-tengah-tangga",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Leuit-Image-2020-12-04-at-11.37.11-PM-1.jpeg",
+          "wpId": "853",
+          "role": "gallery",
+          "name": "loft-atas",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Leuit-Image-2020-12-04-at-11.37.10-PM-2.jpeg",
+          "wpId": "851",
+          "role": "gallery",
+          "name": "kamar-tidur",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Leuit-Image-2020-12-04-at-11.37.10-PM.jpeg",
+          "wpId": "849",
+          "role": "gallery",
+          "name": "kamar-loft",
+          "width": 1280,
+          "height": 847,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Leuit-Image-2020-12-04-at-11.37.12-PM.jpeg",
+          "wpId": "855",
+          "role": "gallery",
+          "name": "kamar-mandi",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Leuit-Image-2020-12-04-at-11.37.11-PM.jpeg",
+          "wpId": "852",
+          "role": "gallery",
+          "name": "tangga-spiral",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "section": "villa",
+      "slug": "damar",
+      "dataFile": "src/data/villas.ts",
+      "photos": [
+        {
+          "source": "2020/12/Damar-Image-2020-12-04-at-11.50.42-PM.jpeg",
+          "wpId": "927",
+          "role": "hero",
+          "name": "tampak-depan",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Old featured image, 1280x853."
+        },
+        {
+          "source": "2020/12/Damar-Image-2020-12-04-at-11.50.42-PM-1.jpeg",
+          "wpId": "928",
+          "role": "gallery",
+          "name": "teras",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Damar-Image-2020-12-04-at-11.50.43-PM-3.jpeg",
+          "wpId": "932",
+          "role": "gallery",
+          "name": "ruang-keluarga",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Unused pool, titled Damar."
+        },
+        {
+          "source": "2017/09/IMG_7370a.jpg",
+          "wpId": "581",
+          "role": "gallery",
+          "name": "ruang-makan",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": "1024 px."
+        },
+        {
+          "source": "2020/12/Damar-Image-2020-12-04-at-11.50.45-PM-1.jpeg",
+          "wpId": "936",
+          "role": "gallery",
+          "name": "kamar-tidur-1",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Unused pool, titled Damar."
+        },
+        {
+          "source": "2020/12/Damar-Image-2020-12-04-at-11.50.45-PM-2.jpeg",
+          "wpId": "937",
+          "role": "gallery",
+          "name": "kamar-tidur-2",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Unused pool, titled Damar."
+        },
+        {
+          "source": "2020/12/Damar-Image-2020-12-04-at-11.50.43-PM-1.jpeg",
+          "wpId": "930",
+          "role": "gallery",
+          "name": "kamar-mandi",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Damar-Image-2020-12-04-at-11.50.46-PM.jpeg",
+          "wpId": "939",
+          "role": "gallery",
+          "name": "balkon",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Unused pool, titled Damar."
+        },
+        {
+          "source": "2017/09/IMG_7358a.jpg",
+          "wpId": "576",
+          "role": "gallery",
+          "name": "pantry",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": "1024 px."
+        }
+      ]
+    },
+    {
+      "section": "glamping",
+      "slug": "salak",
+      "dataFile": "src/data/glamping.ts",
+      "photos": [
+        {
+          "source": "2021/01/glamping1_IMG_8844.jpg",
+          "wpId": "1233",
+          "role": "hero",
+          "name": "tampak-taman-meja",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "glamping1_IMG_8844 (name says tent no. 1). 5472x3648."
+        },
+        {
+          "source": "2021/01/IMG_9828.jpg",
+          "wpId": "1191",
+          "role": "gallery",
+          "name": "tampak-daun-pisang",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "IMG_9828, 5472x3648."
+        },
+        {
+          "source": "2020/12/Salak-Image-2020-12-17-at-7.58.02-AM-1.jpeg",
+          "wpId": "1056",
+          "role": "gallery",
+          "name": "tampak-tenda-tangga",
+          "width": 1152,
+          "height": 864,
+          "focal": "center",
+          "note": "Old featured; same pixels as Cikuray 1004."
+        },
+        {
+          "source": "2020/12/Salak-Image-2020-12-17-at-7.55.56-AM.jpeg",
+          "wpId": "1054",
+          "role": "gallery",
+          "name": "interior-kasur-kursi",
+          "width": 1440,
+          "height": 954,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Salak-Image-2020-12-17-at-7.58.03-AM.jpeg",
+          "wpId": "1057",
+          "role": "gallery",
+          "name": "tenda-dalam-depan",
+          "width": 1152,
+          "height": 546,
+          "focal": "center",
+          "note": "1152x546, very wide."
+        },
+        {
+          "source": "2021/01/IMG_9829.jpg",
+          "wpId": "1195",
+          "role": "gallery",
+          "name": "interior-tempat-tidur",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool IMG_9829; inferred from camera sequence after IMG_9828."
+        },
+        {
+          "source": "2021/01/IMG_9836.jpg",
+          "wpId": "1193",
+          "role": "gallery",
+          "name": "interior-kursi-lipat",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool IMG_9836; inferred from sequence and the cot shown in 1054."
+        },
+        {
+          "source": "2020/12/Salak-Image-2020-12-16-at-6.28.58-AM-1-1.jpeg",
+          "wpId": "1053",
+          "role": "gallery",
+          "name": "kamar-mandi",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Titled 'Salak' but used on Salak and Gede; same pixels as Pangrango 1028."
+        },
+        {
+          "source": "2021/01/glamping1_IMG-20201223-WA0029.jpg",
+          "wpId": "1232",
+          "role": "gallery",
+          "name": "tampak-portrait",
+          "width": 960,
+          "height": 1280,
+          "focal": "center",
+          "note": "glamping1_ prefix. Portrait 960x1280."
+        }
+      ]
+    },
+    {
+      "section": "glamping",
+      "slug": "gede",
+      "dataFile": "src/data/glamping.ts",
+      "photos": [
+        {
+          "source": "2021/01/IMG_9844.jpg",
+          "wpId": "1197",
+          "role": "hero",
+          "name": "tampak-daun-pakis",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "IMG_9844, alt text 'Gede', 5472x3648."
+        },
+        {
+          "source": "2020/12/Gede-Image-2020-12-17-at-7.57.38-AM.jpeg",
+          "wpId": "1063",
+          "role": "gallery",
+          "name": "tampak-malam",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2021/01/IMG_9840.jpg",
+          "wpId": "1194",
+          "role": "gallery",
+          "name": "tampak-pisang-pakis",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool IMG_9840; inferred from sequence IMG_9832-9844."
+        },
+        {
+          "source": "2020/12/Gede-Image-2020-12-17-at-7.57.15-AM-1.jpeg",
+          "wpId": "1061",
+          "role": "gallery",
+          "name": "interior-tenda-gelap",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2021/01/IMG_9832.jpg",
+          "wpId": "1192",
+          "role": "gallery",
+          "name": "interior-kasur",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "IMG_9832: on both Gede and Pangrango pages; assigned here."
+        },
+        {
+          "source": "2020/12/Gede-Image-2020-12-17-at-8.27.59-AM.jpeg",
+          "wpId": "1064",
+          "role": "gallery",
+          "name": "interior-kasur-hijau",
+          "width": 1280,
+          "height": 720,
+          "focal": "center",
+          "note": "Unused pool, titled Gede."
+        },
+        {
+          "source": "2020/12/Salak-Image-2020-12-16-at-6.28.58-AM-1-1.jpeg",
+          "wpId": "1053",
+          "role": "gallery",
+          "name": "kamar-mandi",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Same photo as Salak/Pangrango bathroom (identical on the old site)."
+        }
+      ]
+    },
+    {
+      "section": "glamping",
+      "slug": "pangrango",
+      "dataFile": "src/data/glamping.ts",
+      "photos": [
+        {
+          "source": "2021/01/glamping3_IMG_8848.jpg",
+          "wpId": "1234",
+          "role": "hero",
+          "name": "tampak-depan",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "glamping3_IMG_8848 (name says tent no. 3), 5472x3648."
+        },
+        {
+          "source": "2021/01/glamping3_IMG_8850.jpg",
+          "wpId": "1235",
+          "role": "gallery",
+          "name": "tampak-tenda-2",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool glamping3_IMG_8850, 5472x3648."
+        },
+        {
+          "source": "2020/12/Pangrango-Image-2020-12-16-at-6.38.57-AM.jpeg",
+          "wpId": "1030",
+          "role": "gallery",
+          "name": "tampak-taman",
+          "width": 1152,
+          "height": 864,
+          "focal": "center",
+          "note": "Old featured, 1152x864."
+        },
+        {
+          "source": "2018/06/gl2-1.jpg",
+          "wpId": "733",
+          "role": "gallery",
+          "name": "tampak-pisang",
+          "width": 1024,
+          "height": 576,
+          "focal": "center",
+          "note": "1024x576; same image as gl2/gl3 in the unused pool."
+        },
+        {
+          "source": "2020/12/Pangrango-Image-2020-12-16-at-6.44.14-AM.jpeg",
+          "wpId": "1031",
+          "role": "gallery",
+          "name": "interior-tenda",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Pangrango-Image-2020-12-16-at-6.23.35-AM.jpeg",
+          "wpId": "1029",
+          "role": "gallery",
+          "name": "interior-kasur",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Unused pool, titled Pangrango."
+        },
+        {
+          "source": "2020/12/Pangrango-Image-2020-12-16-at-6.23.34-AM.jpeg",
+          "wpId": "1028",
+          "role": "gallery",
+          "name": "kamar-mandi",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Titled Pangrango; same pixels as 1053."
+        },
+        {
+          "source": "2021/01/IMG_9848.jpg",
+          "wpId": "1199",
+          "role": "gallery",
+          "name": "tampak-atap-putih",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool IMG_9848; inferred from sequence."
+        },
+        {
+          "source": "2021/01/IMG_9853.jpg",
+          "wpId": "1200",
+          "role": "gallery",
+          "name": "tampak-pohon",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool IMG_9853; inferred from sequence."
+        }
+      ]
+    },
+    {
+      "section": "glamping",
+      "slug": "papandayan",
+      "dataFile": "src/data/glamping.ts",
+      "photos": [
+        {
+          "source": "2021/01/glamping4_IMG_8853.jpg",
+          "wpId": "1237",
+          "role": "hero",
+          "name": "tampak-dek-tenda",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "glamping4_IMG_8853 (tent no. 4), 5472x3648."
+        },
+        {
+          "source": "2017/09/IMG_0084papandayan.jpg",
+          "wpId": "541",
+          "role": "gallery",
+          "name": "tampak-pakis",
+          "width": 2736,
+          "height": 1824,
+          "focal": "center",
+          "note": "Unused pool IMG_0084papandayan, 2736x1824."
+        },
+        {
+          "source": "2020/12/Papandayan-Image-2020-12-16-at-6.21.44-AM.jpeg",
+          "wpId": "1038",
+          "role": "gallery",
+          "name": "interior-kasur-hijau",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Papandayan-Image-2020-12-16-at-6.21.43-AM.jpeg",
+          "wpId": "1036",
+          "role": "gallery",
+          "name": "kamar-mandi",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2018/06/gl4-a-1-1.jpg",
+          "wpId": "745",
+          "role": "gallery",
+          "name": "tampak-tenda-dek",
+          "width": 1024,
+          "height": 576,
+          "focal": "center",
+          "note": "1024x576."
+        },
+        {
+          "source": "2020/12/Papandayan-Image-2020-12-16-at-6.21.42-AM.jpeg",
+          "wpId": "1035",
+          "role": "gallery",
+          "name": "tampak-sisi",
+          "width": 1152,
+          "height": 546,
+          "focal": "center",
+          "note": "Old featured, 1152x546."
+        },
+        {
+          "source": "2020/12/Papandayan-Image-2020-12-17-at-8.24.04-AM.jpeg",
+          "wpId": "1069",
+          "role": "gallery",
+          "name": "pandangan-hutan",
+          "width": 1280,
+          "height": 622,
+          "focal": "center",
+          "note": "Unused pool, titled Papandayan, 1280x622."
+        }
+      ]
+    },
+    {
+      "section": "glamping",
+      "slug": "burangrang",
+      "dataFile": "src/data/glamping.ts",
+      "photos": [
+        {
+          "source": "2020/12/Burangrang-Image-2020-12-16-at-6.18.51-AM.jpeg",
+          "wpId": "996",
+          "role": "hero",
+          "name": "tampak-dek-pohon",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Unused pool, titled Burangrang. Sharper than 550 (2736x1824, hazy), which is in the gallery as the >=1600 alternative."
+        },
+        {
+          "source": "2020/12/Burangrang-Image-2020-12-16-at-6.37.06-AM.jpeg",
+          "wpId": "997",
+          "role": "gallery",
+          "name": "tampak-depan",
+          "width": 1152,
+          "height": 864,
+          "focal": "center",
+          "note": "Old featured, 1152x864."
+        },
+        {
+          "source": "2017/09/IMG_6920burangrang.jpg",
+          "wpId": "550",
+          "role": "gallery",
+          "name": "tampak-dek-kabut",
+          "width": 2736,
+          "height": 1824,
+          "focal": "center",
+          "note": "Unused pool IMG_6920burangrang, 2736x1824, hazy."
+        },
+        {
+          "source": "2020/12/Burangrang-Image-2020-12-16-at-6.18.50-AM.jpeg",
+          "wpId": "993",
+          "role": "gallery",
+          "name": "interior-kasur",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Burangrang-Image-2020-12-16-at-6.18.50-AM-2.jpeg",
+          "wpId": "995",
+          "role": "gallery",
+          "name": "kamar-mandi",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Burangrang-Image-2020-12-16-at-6.58.21-AM.jpeg",
+          "wpId": "998",
+          "role": "gallery",
+          "name": "tampak-taman",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/Burangrang-Image-2020-12-17-at-8.25.15-AM.jpeg",
+          "wpId": "1072",
+          "role": "gallery",
+          "name": "tampak-panjang",
+          "width": 1280,
+          "height": 622,
+          "focal": "center",
+          "note": "Unused pool, titled Burangrang, 1280x622."
+        }
+      ]
+    },
+    {
+      "section": "glamping",
+      "slug": "malabar",
+      "dataFile": "src/data/glamping.ts",
+      "photos": [
+        {
+          "source": "2017/09/IMG_0068malabar.jpg",
+          "wpId": "537",
+          "role": "hero",
+          "name": "tampak-dek-tangga",
+          "width": 2736,
+          "height": 1586,
+          "focal": "center",
+          "note": "Unused pool IMG_0068malabar, 2736x1586."
+        },
+        {
+          "source": "2020/12/Malabar-Image-2020-12-16-at-6.42.38-AM.jpeg",
+          "wpId": "1026",
+          "role": "gallery",
+          "name": "dek-interior",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Titled Malabar."
+        },
+        {
+          "source": "2020/12/Malabar-Image-2020-12-16-at-6.27.57-AM.jpeg",
+          "wpId": "1023",
+          "role": "gallery",
+          "name": "halaman",
+          "width": 1152,
+          "height": 546,
+          "focal": "center",
+          "note": "Old featured, 1152x546."
+        },
+        {
+          "source": "2020/12/Malabar-Image-2020-12-16-at-6.27.56-AM.jpeg",
+          "wpId": "1022",
+          "role": "gallery",
+          "name": "jalan-pohon",
+          "width": 1152,
+          "height": 546,
+          "focal": "center",
+          "note": "1152x546."
+        },
+        {
+          "source": "2020/12/Papandayan-Image-2020-12-16-at-6.21.44-AM-1.jpeg",
+          "wpId": "1039",
+          "role": "gallery",
+          "name": "interior-kasur-hijau",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "On the Malabar page but titled Papandayan; near-duplicate of Papandayan 1038."
+        },
+        {
+          "source": "2017/09/IMG_7393malabar.jpg",
+          "wpId": "562",
+          "role": "gallery",
+          "name": "suasana-malam",
+          "width": 5472,
+          "height": 2670,
+          "focal": "center",
+          "note": "Unused pool IMG_7393malabar, 5472x2670, dark night shot."
+        }
+      ]
+    },
+    {
+      "section": "glamping",
+      "slug": "cikuray",
+      "dataFile": "src/data/glamping.ts",
+      "photos": [
+        {
+          "source": "2017/09/IMG_0059cikuray-1.jpg",
+          "wpId": "656",
+          "role": "hero",
+          "name": "tampak-atap-putih",
+          "width": 2736,
+          "height": 1824,
+          "focal": "center",
+          "note": "Unused pool IMG_0059cikuray, 2736x1824."
+        },
+        {
+          "source": "2017/09/IMG_0018a-cikuray-1.jpg",
+          "wpId": "563",
+          "role": "gallery",
+          "name": "tampak-pondok-hijau",
+          "width": 2736,
+          "height": 1824,
+          "focal": "center",
+          "note": "Unused pool IMG_0018a-cikuray, 2736x1824."
+        },
+        {
+          "source": "2020/12/CIkuray-Image-2020-12-16-at-6.43.07-AM.jpeg",
+          "wpId": "1010",
+          "role": "gallery",
+          "name": "halaman-api-unggun",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Old featured, 1280x853."
+        },
+        {
+          "source": "2020/12/Cikuray-Image-2020-12-16-at-6.24.50-AM.jpeg",
+          "wpId": "1000",
+          "role": "gallery",
+          "name": "interior-kasur-hijau",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
+          "source": "2020/12/CIkuray-Image-2020-12-16-at-6.34.34-AM-2.jpeg",
+          "wpId": "1007",
+          "role": "gallery",
+          "name": "dek-tenda-oranye",
+          "width": 1152,
+          "height": 864,
+          "focal": "center",
+          "note": "1152x864."
+        },
+        {
+          "source": "2020/12/CIkuray-Image-2020-12-16-at-6.48.35-AM.jpeg",
+          "wpId": "1011",
+          "role": "gallery",
+          "name": "halaman-ban",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Titled Cikuray; also on Malabar page."
+        },
+        {
+          "source": "2020/12/Cikuray-Image-2020-12-16-at-6.34.34-AM-1.jpeg",
+          "wpId": "1005",
+          "role": "gallery",
+          "name": "kamar-mandi",
+          "width": 1152,
+          "height": 864,
+          "focal": "center",
+          "note": "Titled Cikuray; also on Pangrango and Malabar pages."
+        },
+        {
+          "source": "2020/12/CIkuray-Image-2020-12-16-at-6.35.37-AM.jpeg",
+          "wpId": "1009",
+          "role": "gallery",
+          "name": "jalan-setapak",
+          "width": 1152,
+          "height": 864,
+          "focal": "center",
+          "note": "1152x864."
+        }
+      ]
+    },
+    {
+      "section": "glamping",
+      "slug": "ciremey",
+      "dataFile": "src/data/glamping.ts",
+      "photos": [
+        {
+          "source": "2020/12/Cireme-Image-2020-12-16-at-6.46.11-AM.jpeg",
+          "wpId": "1018",
+          "role": "hero",
+          "name": "dek-interior",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Unused pool, titled Cireme, 1280x853. The better exterior shots (1015/1016) are 1152 px, below the 1200 minimum."
+        },
+        {
+          "source": "2020/12/Cireme-Image-2020-12-16-at-6.32.14-AM-1.jpeg",
+          "wpId": "1015",
+          "role": "gallery",
+          "name": "tampak-depan-pakis",
+          "width": 1152,
+          "height": 864,
+          "focal": "center",
+          "note": "Old featured and only old photo, 1152x864."
+        },
+        {
+          "source": "2020/12/Cireme-Image-2020-12-16-at-6.32.14-AM-2.jpeg",
+          "wpId": "1016",
+          "role": "gallery",
+          "name": "tampak-depan-dek",
+          "width": 1152,
+          "height": 864,
+          "focal": "center",
+          "note": "Unused pool, titled Cireme, 1152x864."
+        },
+        {
+          "source": "2020/12/Cireme-Image-2020-12-16-at-6.32.14-AM.jpeg",
+          "wpId": "1014",
+          "role": "gallery",
+          "name": "jalan-menuju-tenda",
+          "width": 1152,
+          "height": 864,
+          "focal": "center",
+          "note": "Unused pool, titled Cireme, 1152x864."
+        },
+        {
+          "source": "2018/06/20180423_164057gl8.jpg",
+          "wpId": "714",
+          "role": "gallery",
+          "name": "tampak-hutan",
+          "width": 1024,
+          "height": 576,
+          "focal": "center",
+          "note": "Unused pool 2018 'gl8', 1024x576."
+        }
+      ]
+    },
+    {
+      "section": "campsite",
+      "slug": "campsite",
+      "dataFile": "src/data/campsite.ts",
+      "photos": [
+        {
+          "source": "2020/12/Campsite-Image-2020-12-17-at-8.07.00-AM.jpeg",
+          "wpId": "1078",
+          "role": "hero",
+          "name": "malam-tenda-merah",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Night shot of red tents, 1280x853."
+        },
+        {
+          "source": "2020/12/Campsite-Image-2020-12-17-at-7.53.12-AM.jpeg",
+          "wpId": "1074",
+          "role": "gallery",
+          "name": "tenda-dome-biru",
+          "width": 1152,
+          "height": 864,
+          "focal": "center",
+          "note": "1152x864."
+        },
+        {
+          "source": "2020/12/Campsite-Image-2020-12-17-at-7.53.13-AM-1.jpeg",
+          "wpId": "1075",
+          "role": "gallery",
+          "name": "area-tenda-saung",
+          "width": 1152,
+          "height": 864,
+          "focal": "center",
+          "note": "1152x864."
+        },
+        {
+          "source": "2020/12/Campsite-Image-2020-12-17-at-8.22.01-AM.jpeg",
+          "wpId": "1082",
+          "role": "gallery",
+          "name": "saung-panggung",
+          "width": 1280,
+          "height": 790,
+          "focal": "center",
+          "note": "1280x790."
+        },
+        {
+          "source": "2020/12/Campsite-Image-2020-12-17-at-8.21.27-AM.jpeg",
+          "wpId": "1081",
+          "role": "gallery",
+          "name": "saung-malam",
+          "width": 1280,
+          "height": 622,
+          "focal": "center",
+          "note": "1280x622."
+        },
+        {
+          "source": "2020/12/Campsite-Image-2020-12-17-at-8.22.35-AM.jpeg",
+          "wpId": "1083",
+          "role": "gallery",
+          "name": "saung-sore",
+          "width": 1280,
+          "height": 622,
+          "focal": "center",
+          "note": "1280x622."
+        },
+        {
+          "source": "2020/12/Campsite-Image-2020-12-17-at-8.20.01-AM.jpeg",
+          "wpId": "1079",
+          "role": "gallery",
+          "name": "hamparan-camp",
+          "width": 1280,
+          "height": 588,
+          "focal": "center",
+          "note": "1280x588."
+        },
+        {
+          "source": "2020/12/Campsite-Image-2020-12-17-at-8.01.00-AM.jpeg",
+          "wpId": "1076",
+          "role": "gallery",
+          "name": "pemandangan-atas",
+          "width": 960,
+          "height": 960,
+          "focal": "center",
+          "note": "Old featured. Aerial view with Mt Salak, 960x960."
+        },
+        {
+          "source": "2021/04/Campsite-Image-2021-04-19-at-8.56.32-AM.jpeg",
+          "wpId": "1297",
+          "role": "gallery",
+          "name": "toilet",
+          "width": 720,
+          "height": 1280,
+          "focal": "center",
+          "note": "Portrait."
+        },
+        {
+          "source": "2021/04/Campsite-Image-2021-04-19-at-8.56.31-AM-2.jpeg",
+          "wpId": "1296",
+          "role": "gallery",
+          "name": "gerbang-campsite",
+          "width": 720,
+          "height": 1280,
+          "focal": "center",
+          "note": "Portrait; wooden CAMPSITE sign."
+        }
+      ]
+    },
+    {
+      "section": "aula",
+      "slug": "aula",
+      "dataFile": "src/data/villas.ts",
+      "photos": [
+        {
+          "source": "2021/01/aulaKalapa_IMG_8801.jpg",
+          "wpId": "1210",
+          "role": "hero",
+          "name": "aula-meja-kursi",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "gallery-page 'aulaKalapa_IMG_8801', 5472x3648. Old featured 1048 is 1152x864."
+        },
+        {
+          "source": "2021/01/aulaKalapa_IMG_8807.jpg",
+          "wpId": "1211",
+          "role": "gallery",
+          "name": "aula-meja-panjang",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "aulaKalapa_IMG_8807, 5472x3648."
+        },
+        {
+          "source": "2021/01/IMG_9865.jpg",
+          "wpId": "1202",
+          "role": "gallery",
+          "name": "aula-lantai-ubin",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "IMG_9865 from gallery page, 5472x3648."
+        },
+        {
+          "source": "2021/01/IMG_9872.jpg",
+          "wpId": "1203",
+          "role": "gallery",
+          "name": "aula-panggung",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool IMG_9872, 5472x3648."
+        },
+        {
+          "source": "2021/01/IMG_9868.jpg",
+          "wpId": "1205",
+          "role": "gallery",
+          "name": "aula-tiang-kayu",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool IMG_9868, 5472x3648."
+        }
+      ]
+    },
+    {
+      "section": "package",
+      "slug": "outbound",
+      "dataFile": "src/data/packages.ts",
+      "photos": [
+        {
+          "source": "2016/08/IMG_6971a.jpg",
+          "wpId": "436",
+          "role": "hero",
+          "name": "peserta-lingkaran-lapangan",
+          "width": 3283,
+          "height": 1476,
+          "focal": "center",
+          "note": "IMG_6971a, 3283x1476 wide; participants far away (no faces). Old featured 816 is dark."
+        },
+        {
+          "source": "2016/08/IMG_7261a.jpg",
+          "wpId": "449",
+          "role": "gallery",
+          "name": "tali-games",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "IMG_7261a (unused pool), 5472x3648."
+        },
+        {
+          "source": "2016/08/IMG_7284a.jpg",
+          "wpId": "450",
+          "role": "gallery",
+          "name": "tim-bola",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "5472x3648; faces visible."
+        },
+        {
+          "source": "2016/08/IMG_7256a.jpg",
+          "wpId": "447",
+          "role": "gallery",
+          "name": "briefing-hutan-pinus",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "5472x3648."
+        },
+        {
+          "source": "2016/08/IMG_7242a.jpg",
+          "wpId": "446",
+          "role": "gallery",
+          "name": "jembatan-tali",
+          "width": 3053,
+          "height": 2353,
+          "focal": "center",
+          "note": "3053x2353."
+        },
+        {
+          "source": "2021/01/outbound_IMG-20171125-WA0001.jpg",
+          "wpId": "1216",
+          "role": "gallery",
+          "name": "holi-warna",
+          "width": 1280,
+          "height": 960,
+          "focal": "center",
+          "note": "1280x960."
+        },
+        {
+          "source": "2021/01/outbound_IMG-20190203-WA0181.jpg",
+          "wpId": "1217",
+          "role": "gallery",
+          "name": "games-lingkaran",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "1280x853."
+        },
+        {
+          "source": "2016/08/IMG_7195a.jpg",
+          "wpId": "438",
+          "role": "gallery",
+          "name": "tim-biru",
+          "width": 1024,
+          "height": 723,
+          "focal": "center",
+          "note": "Unused pool IMG_7195a, 1024x723."
+        },
+        {
+          "source": "2021/01/wisataSekitar_IMG-20190520-WA0046.jpg",
+          "wpId": "1215",
+          "role": "gallery",
+          "name": "susur-sungai-curug",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "'wisataSekitar' prefix; group at a waterfall, 1280x853."
+        }
+      ]
+    },
+    {
+      "section": "package",
+      "slug": "special-school-package",
+      "dataFile": "src/data/packages.ts",
+      "photos": [
+        {
+          "source": "2023/05/WhatsApp-Image-2023-05-19-at-3.04.38-PM.jpeg",
+          "wpId": "1379",
+          "role": "hero",
+          "name": "foto-bersama-peserta",
+          "width": 1600,
+          "height": 1200,
+          "focal": "center",
+          "note": "Only old photo (WhatsApp 2023-05-19), 1600x1200. Large group with banner; faces small."
+        },
+        {
+          "source": "2021/01/outbound_IMG-20190203-WA0181.jpg",
+          "wpId": "1217",
+          "role": "gallery",
+          "name": "games-lingkaran",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Borrowed from the Outbound page to illustrate 'Fun games'."
+        },
+        {
+          "source": "2021/01/wisataSekitar_IMG-20190520-WA0046.jpg",
+          "wpId": "1215",
+          "role": "gallery",
+          "name": "susur-sungai-curug",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Borrowed from the Outbound page to illustrate 'Trekking edukasi'."
+        },
+        {
+          "source": "2016/09/IMG_7414.jpg",
+          "wpId": "472",
+          "role": "gallery",
+          "name": "api-unggun-malam",
+          "width": 2559,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool IMG_7414, portrait 2559x3648."
+        }
+      ]
+    },
+    {
+      "section": "package",
+      "slug": "company-outing",
+      "dataFile": "src/data/packages.ts",
+      "photos": [
+        {
+          "source": "2021/01/aulaKalapa_IMG_8807.jpg",
+          "wpId": "1211",
+          "role": "hero",
+          "name": "aula-meja-panjang",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Re-uses the Aula hall photo (aulaKalapa_IMG_8807), 5472x3648."
+        },
+        {
+          "source": "2021/01/2017_1216_14122600.jpg",
+          "wpId": "1206",
+          "role": "gallery",
+          "name": "sesi-pertemuan",
+          "width": 1776,
+          "height": 1184,
+          "focal": "center",
+          "note": "Unused pool; meeting in the tent-roof hall. Many faces visible."
+        },
+        {
+          "source": "2016/08/IMG_7284a.jpg",
+          "wpId": "450",
+          "role": "gallery",
+          "name": "tim-bola",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Also used in Outbound."
+        },
+        {
+          "source": "2016/08/IMG_7261a.jpg",
+          "wpId": "449",
+          "role": "gallery",
+          "name": "tali-games",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Also used in Outbound."
+        },
+        {
+          "source": "2021/01/package_2016_1202_21300300.jpg",
+          "wpId": "1219",
+          "role": "gallery",
+          "name": "sate-bakar-sosis",
+          "width": 1776,
+          "height": 1184,
+          "focal": "center",
+          "note": "From the old Packages page (food), 1776x1184."
+        },
+        {
+          "source": "2021/01/package_2016_1202_212002002.jpg",
+          "wpId": "1218",
+          "role": "gallery",
+          "name": "sate-bakar-daging",
+          "width": 1776,
+          "height": 1184,
+          "focal": "center",
+          "note": "From the old Packages page (food), 1776x1184."
+        },
+        {
+          "source": "2016/05/IMG-20160319-WA0000.jpg",
+          "wpId": "234",
+          "role": "gallery",
+          "name": "api-unggun-malam",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": "Unused pool, 1024x683, people around a bonfire."
+        }
+      ]
+    },
+    {
+      "section": "package",
+      "slug": "family",
+      "dataFile": "src/data/packages.ts",
+      "photos": [
+        {
+          "source": "2021/04/Gallery-Image-2021-04-19-at-4.25.29-PM-2.jpeg",
+          "wpId": "1305",
+          "role": "hero",
+          "name": "kolam-renang-gedung",
+          "width": 1280,
+          "height": 720,
+          "focal": "center",
+          "note": "Unused pool; clean pool shot, 1280x720."
+        },
+        {
+          "source": "2021/08/kolamrenang210813.jpeg",
+          "wpId": "1339",
+          "role": "gallery",
+          "name": "kolam-renang",
+          "width": 1280,
+          "height": 720,
+          "focal": "center",
+          "note": "'kolamrenang210813', 1280x720."
+        },
+        {
+          "source": "2016/05/MG_2159-kolam-renang-dyan.jpg",
+          "wpId": "262",
+          "role": "gallery",
+          "name": "kolam-renang-taman",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": "Unused pool, 1024x683."
+        },
+        {
+          "source": "2021/01/gallery_IMG-20201229-WA0002.jpg",
+          "wpId": "1213",
+          "role": "gallery",
+          "name": "aliran-sungai-kecil",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Stream beside a house."
+        },
+        {
+          "source": "2017/01/IMG_4284.jpg",
+          "wpId": "491",
+          "role": "gallery",
+          "name": "taman-batu-pijakan",
+          "width": 2189,
+          "height": 1459,
+          "focal": "center",
+          "note": "Unused pool IMG_4284, 2189x1459."
+        },
+        {
+          "source": "2021/01/IMG_9822.jpg",
+          "wpId": "1190",
+          "role": "gallery",
+          "name": "villa-dan-palem",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool IMG_9822, 5472x3648."
+        },
+        {
+          "source": "2016/09/IMG_7414.jpg",
+          "wpId": "472",
+          "role": "gallery",
+          "name": "api-unggun-malam",
+          "width": 2559,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool IMG_7414, portrait."
+        }
+      ]
+    },
+    {
+      "section": "gallery",
+      "slug": "villa-bambu",
+      "dataFile": "src/data/gallery-items.ts",
+      "photos": [
+        {
+          "source": "2020/12/Bambu_20200829_091518.jpg",
+          "wpId": "1152",
+          "role": "hero",
+          "name": "teras-bambu",
+          "width": 2184,
+          "height": 4608,
+          "focal": "center",
+          "note": "Portrait 2184x4608; no Bambu terrace shot exists, this is the hut and its path."
+        }
+      ]
+    },
+    {
+      "section": "gallery",
+      "slug": "villa-cendana",
+      "dataFile": "src/data/gallery-items.ts",
+      "photos": [
+        {
+          "source": "2020/12/Cendana-Image-2020-12-04-at-11.44.05-PM.jpeg",
+          "wpId": "873",
+          "role": "hero",
+          "name": "villa-cendana",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Tree-fern facade, 1280x853."
+        }
+      ]
+    },
+    {
+      "section": "gallery",
+      "slug": "taman-bunga",
+      "dataFile": "src/data/gallery-items.ts",
+      "photos": [
+        {
+          "source": "2017/01/IMG_4284.jpg",
+          "wpId": "491",
+          "role": "hero",
+          "name": "taman-bunga",
+          "width": 2189,
+          "height": 1459,
+          "focal": "center",
+          "note": "Unused pool IMG_4284, 2189x1459; stepping stones and flowers."
+        }
+      ]
+    },
+    {
+      "section": "gallery",
+      "slug": "tenda-salak",
+      "dataFile": "src/data/gallery-items.ts",
+      "photos": [
+        {
+          "source": "2021/01/glamping1_IMG_8844.jpg",
+          "wpId": "1233",
+          "role": "hero",
+          "name": "tenda-salak",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Daytime shot; the caption says dusk."
+        }
+      ]
+    },
+    {
+      "section": "gallery",
+      "slug": "api-unggun",
+      "dataFile": "src/data/gallery-items.ts",
+      "photos": [
+        {
+          "source": "2016/09/IMG_7414.jpg",
+          "wpId": "472",
+          "role": "hero",
+          "name": "api-unggun",
+          "width": 2559,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool IMG_7414, portrait 2559x3648, no people."
+        }
+      ]
+    },
+    {
+      "section": "gallery",
+      "slug": "outbound-games",
+      "dataFile": "src/data/gallery-items.ts",
+      "photos": [
+        {
+          "source": "2016/08/IMG_7261a.jpg",
+          "wpId": "449",
+          "role": "hero",
+          "name": "outbound-games",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool IMG_7261a, 5472x3648."
+        }
+      ]
+    },
+    {
+      "section": "gallery",
+      "slug": "trekking-curug",
+      "dataFile": "src/data/gallery-items.ts",
+      "photos": [
+        {
+          "source": "2021/01/wisataSekitar_IMG-20190520-WA0046.jpg",
+          "wpId": "1215",
+          "role": "hero",
+          "name": "trekking-curug",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "'wisataSekitar' prefix; group at a waterfall."
+        }
+      ]
+    },
+    {
+      "section": "gallery",
+      "slug": "hutan-pinus",
+      "dataFile": "src/data/gallery-items.ts",
+      "photos": [
+        {
+          "source": "2016/04/hutan-pinus-2.jpg",
+          "wpId": "31",
+          "role": "hero",
+          "name": "hutan-pinus",
+          "width": 1500,
+          "height": 1000,
+          "focal": "center",
+          "note": "Unused pool 'hutan-pinus-2', 1500x1000; exact duplicate of 194."
+        }
+      ]
+    },
+    {
+      "section": "gallery",
+      "slug": "sungai-jernih",
+      "dataFile": "src/data/gallery-items.ts",
+      "photos": [
+        {
+          "source": "2021/01/IMG_9879.jpg",
+          "wpId": "1204",
+          "role": "hero",
+          "name": "sungai-jernih",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool IMG_9879, 5472x3648, from the same shoot as the Aula and tent photos."
+        }
+      ]
+    },
+    {
+      "section": "gallery",
+      "slug": "gathering-aula",
+      "dataFile": "src/data/gallery-items.ts",
+      "photos": [
+        {
+          "source": "2021/01/2017_1216_14122600.jpg",
+          "wpId": "1206",
+          "role": "hero",
+          "name": "gathering-aula",
+          "width": 1776,
+          "height": 1184,
+          "focal": "center",
+          "note": "Meeting in the tent-roof hall; many faces visible, 1776x1184."
+        }
+      ]
+    },
+    {
+      "section": "gallery",
+      "slug": "malam-gathering",
+      "dataFile": "src/data/gallery-items.ts",
+      "photos": [
+        {
+          "source": "2016/05/IMG-20160319-WA0000.jpg",
+          "wpId": "234",
+          "role": "hero",
+          "name": "malam-gathering",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": "1024x683; bonfire, no guitar visible."
+        }
+      ]
+    },
+    {
+      "section": "home",
+      "slug": "hero",
+      "dataFile": "src/data/home.ts",
+      "photos": [
+        {
+          "source": "2017/01/IMG_4301.jpg",
+          "wpId": "485",
+          "role": "hero",
+          "name": "path-bunga-villa",
+          "width": 2462,
+          "height": 1642,
+          "focal": "center",
+          "note": "Unused pool IMG_4301, 2462x1642."
+        }
+      ]
+    },
+    {
+      "section": "home",
+      "slug": "showcase-villa",
+      "dataFile": "src/data/home.ts",
+      "photos": [
+        {
+          "source": "2020/12/Kiriung_20201223-130440_Gallery.jpg",
+          "wpId": "1148",
+          "role": "hero",
+          "name": "villa-kiriung",
+          "width": 1766,
+          "height": 1180,
+          "focal": "center",
+          "note": "Re-uses the Kiriung hero."
+        }
+      ]
+    },
+    {
+      "section": "home",
+      "slug": "showcase-glamping",
+      "dataFile": "src/data/home.ts",
+      "photos": [
+        {
+          "source": "2017/09/IMG_0059cikuray-1.jpg",
+          "wpId": "656",
+          "role": "hero",
+          "name": "glamping-cikuray",
+          "width": 2736,
+          "height": 1824,
+          "focal": "center",
+          "note": "Re-uses the Cikuray hero."
+        }
+      ]
+    },
+    {
+      "section": "home",
+      "slug": "showcase-campsite",
+      "dataFile": "src/data/home.ts",
+      "photos": [
+        {
+          "source": "2020/12/Campsite-Image-2020-12-17-at-8.07.00-AM.jpeg",
+          "wpId": "1078",
+          "role": "hero",
+          "name": "campsite-malam",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Re-uses the campsite hero."
+        }
+      ]
+    },
+    {
+      "section": "activity",
+      "slug": "home-activity-play",
+      "dataFile": "src/data/home.ts",
+      "photos": [
+        {
+          "source": "2016/08/IMG_7261a.jpg",
+          "wpId": "449",
+          "role": "hero",
+          "name": "outbound-games",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Re-uses the rope-games shot."
+        }
+      ]
+    },
+    {
+      "section": "activity",
+      "slug": "home-activity-explore",
+      "dataFile": "src/data/home.ts",
+      "photos": [
+        {
+          "source": "2021/01/wisataSekitar_IMG-20190520-WA0046.jpg",
+          "wpId": "1215",
+          "role": "hero",
+          "name": "trekking-curug",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Generic waterfall group; the card label says Curug Seribu and this photo is not confirmed to be there."
+        }
+      ]
+    },
+    {
+      "section": "activity",
+      "slug": "home-activity-gather",
+      "dataFile": "src/data/home.ts",
+      "photos": [
+        {
+          "source": "2021/01/aulaKalapa_IMG_8801.jpg",
+          "wpId": "1210",
+          "role": "hero",
+          "name": "aula-gathering",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Re-uses the Aula hero."
+        }
+      ]
+    },
+    {
+      "section": "about",
+      "slug": "about-us",
+      "dataFile": "src/pages/about-us.astro",
+      "photos": [
+        {
+          "source": "2021/01/IMG_9822.jpg",
+          "wpId": "1190",
+          "role": "hero",
+          "name": "villa-dan-palem",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool IMG_9822, 5472x3648."
+        }
+      ]
+    },
+    {
+      "section": "post",
+      "slug": "panduan-camping-gunung-salak-endah",
+      "dataFile": "src/data/posts.ts",
+      "photos": [
+        {
+          "source": "2017/09/IMG_7415.jpg",
+          "wpId": "657",
+          "role": "hero",
+          "name": "tenda-dome-merah",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Unused pool IMG_7415, 5472x3648; dome tent inside a glamping tent."
+        }
+      ]
+    },
+    {
+      "section": "post",
+      "slug": "villa-bambu-bogor-kabur-dari-kota",
+      "dataFile": "src/data/posts.ts",
+      "photos": [
+        {
+          "source": "2020/12/Bambu-Image-2020-12-11-at-4.00.17-PM.jpeg",
+          "wpId": "990",
+          "role": "hero",
+          "name": "kamar-bambu",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Re-uses the Bambu hero."
+        }
+      ]
+    },
+    {
+      "section": "post",
+      "slug": "curug-terbaik-sekitar-gunung-salak",
+      "dataFile": "src/data/posts.ts",
+      "photos": [
+        {
+          "source": "2016/05/cigamea.jpg",
+          "wpId": "325",
+          "role": "hero",
+          "name": "curug-cigamea",
+          "width": 1500,
+          "height": 1000,
+          "focal": "center",
+          "note": "Unused pool 'cigamea', 1500x1000; name match."
+        }
+      ]
+    },
+    {
+      "section": "activity",
+      "slug": "curug-cigamea",
+      "dataFile": "src/data/attractions.ts",
+      "photos": [
+        {
+          "source": "2016/05/cigamea.jpg",
+          "wpId": "325",
+          "role": "hero",
+          "name": "curug-cigamea",
+          "width": 1500,
+          "height": 1000,
+          "focal": "center",
+          "note": "Unused pool 'cigamea', 1500x1000; name match only, owner should confirm it is the twin falls."
+        }
+      ]
+    },
+    {
+      "section": "activity",
+      "slug": "curug-ngumpet",
+      "dataFile": "src/data/attractions.ts",
+      "photos": [
+        {
+          "source": "2016/05/curug-ngumpet.jpg",
+          "wpId": "192",
+          "role": "hero",
+          "name": "curug-ngumpet",
+          "width": 683,
+          "height": 1024,
+          "focal": "center",
+          "note": "Unused pool 'curug-ngumpet', portrait 683x1024 (below 1200). Name match."
+        }
+      ]
+    }
+  ],
+  "flags": [
+    {
+      "slug": "bambu-a / bambu-b",
+      "issue": "Old 'Type Bambu' has one page and one set of photos; the two units cannot be told apart, so both get the identical set. Only 4 usable photos (2 of the 7 are plant close-ups), no landscape exterior, hero is a bedroom at 1280 px. The best exterior (1152) is portrait 2184x4608."
+    },
+    {
+      "slug": "puspa-a / puspa-b / puspa-c",
+      "issue": "Old 'Type Puspa' is one page for three units and the photos give no way to tell them apart (no unit numbers, same cottage design), so all three get the identical set. Only 8 usable photos; the sole exterior (95) is 600x400."
+    },
+    {
+      "slug": "ciremey",
+      "issue": "Old page has 1 photo. Filled from the unused pool (2020-12 'Cireme' series, 3 photos) plus one 2018 'gl8' file. Nothing is >=1600 px; the best exterior shots (1015, 1016) are 1152 px, so the hero is the 1280x853 deck interior (1018). Still only 5 photos total, no bathroom."
+    },
+    {
+      "slug": "glamping (all 8)",
+      "issue": "The old site used the same image on several tent pages (for example the tent bathroom 1053/1028 is on Salak, Gede and, titled Pangrango, on a third; 1056 is also titled Cikuray; 1192 is on both Gede and Pangrango; 1011 and 1005 are titled Cikuray but sat on Malabar/Pangrango). Tents look alike, so assignment uses titles, file prefixes (glamping1_/3_/4_, ...cikuray, ...malabar, ...papandayan, ...burangrang) and camera sequence. Inferred ones are marked in the photo note. Owner should check Salak/Gede/Pangrango interiors (1195, 1193, 1192, 1194, 1199, 1200)."
+    },
+    {
+      "slug": "malabar",
+      "issue": "Only 3 photos belong to Malabar by title; the rest are borrowed or near-duplicates. 5 gallery photos incl. a dark night shot (562)."
+    },
+    {
+      "slug": "batarua",
+      "issue": "All photos max 1024 px; hero is 1024x683 (below the 1200 minimum). 3 gallery photos come from the unused pool by file sequence (IMG_7377a-7384a)."
+    },
+    {
+      "slug": "kimerak",
+      "issue": "Every photo except the hero (1357) is portrait."
+    },
+    {
+      "slug": "kihyang / ilegole",
+      "issue": "On the old site the featured images' file names are swapped (Kihyang's featured file is named 'illegole', Ilegole's is named 'Kihyang'). The pictures match the right page's gallery, so selection follows the pictures. Kihyang's old gallery was all portrait interiors; 5 landscape photos (981-987) were taken from the unused pool by title 'Kihyang Image 2020-12-11'. Kihyang has no bathroom photo."
+    },
+    {
+      "slug": "kiriung",
+      "issue": "No bathroom photo; 4 bedrooms listed but only 2 photographed."
+    },
+    {
+      "slug": "inventory sizes",
+      "issue": "inventory.json pixel sizes are wrong for 42 files (originals are larger than the recorded size, e.g. IMG_9828 is 5472x3648, not 2560x1707; EXIF-rotated files have width/height swapped). The manifest and contact sheet use real pixel sizes read from the files."
+    },
+    {
+      "slug": "overlays",
+      "issue": "Two hi-res photos carry burned-in text: 564 (Cendana exterior, 'Villa type Cendana') and 269 (pool, 'Kolam Renang'). They are not used; both are listed as rejected alternates."
+    },
+    {
+      "slug": "people / consent",
+      "issue": "Faces are visible in 450, 438, 1206, 234 and in the group photo 1379 (special-school-package, possibly children). The owner should confirm the right to publish."
+    },
+    {
+      "slug": "package / gallery borrowings",
+      "issue": "family and company-outing have no old page, and special-school-package has one photo. Their galleries borrow clear matches (pool, aula, outbound games, bonfire, grill food) from the old Outbound/Packages pages and the unused pool; hero re-uses the Aula and a pool shot."
+    },
+    {
+      "slug": "gallery-items captions",
+      "issue": "tenda-salak: caption says dusk, photo is daytime. malam-gathering: caption mentions a guitar, photo shows a bonfire only. villa-bambu: caption says terrace; there is no Bambu terrace photo, so the hut and path is used. sungai-jernih: 1204 is assumed to be on-site (same shoot as the Aula/tent photos); confirm."
+    },
+    {
+      "slug": "attractions",
+      "issue": "Only curug-cigamea (325) and curug-ngumpet (192) could be matched, by file name only. 192 is portrait 683x1024. The home 'explore' card is labelled Curug Seribu but uses a generic waterfall group shot (1215)."
+    },
+    {
+      "slug": "videos",
+      "issue": "9 .mp4 files sit in the unused pool (ids 1120, 1157, 1159, 1161, 1307, 1308, 1310, 1312, 1378). They are not photos and were skipped; two are 1920x1080 and might suit a hero video."
+    },
+    {
+      "slug": "aula",
+      "issue": "Owner decision 2026-11-26: the Aula page shows Aula Kalapa only (timber hall, tile floor). Tent-roof deck photos removed pending management decision on listing the glamping tent aula: 2020/12/Aula-Image-2020-12-16-at-6.30.23-AM.jpeg, 2018/06/20180423_164421aulagl.jpg, 2020/12/Aula-Image-2020-12-16-at-6.30.24-AM-1.jpeg, 2020/12/Aula-Image-2020-12-16-at-6.30.24-AM-2.jpeg"
+    }
+  ],
+  "emptySlots": [
+    {
+      "section": "gallery",
+      "slug": "sarapan-tenda",
+      "reason": "No breakfast-at-tent photo exists. Only grill/food shots (from the old Packages page) are close, and none is at a tent."
+    },
+    {
+      "section": "activity",
+      "slug": "kawah-ratu",
+      "reason": "Off-site attraction; no Kawah Ratu photo in the old site."
+    },
+    {
+      "section": "activity",
+      "slug": "curug-seribu",
+      "reason": "Off-site attraction; no Curug Seribu photo in the old site."
+    },
+    {
+      "section": "activity",
+      "slug": "air-panas-ciparay",
+      "reason": "Off-site attraction; no hot-spring photo in the old site."
+    },
+    {
+      "section": "activity",
+      "slug": "curug-goa-lumut",
+      "reason": "Off-site attraction; no Goa Lumut photo in the old site."
+    },
+    {
+      "section": "activity",
+      "slug": "attractions-index-hero",
+      "reason": "src/pages/attractions.astro hero (16/8): off-site landscape needed; only name-matched curug photos exist and they are low-res/portrait. Left for the owner (could reuse 325)."
+    },
+    {
+      "section": "post",
+      "slug": "blog-index-hero",
+      "reason": "src/pages/blog/index.astro hero (16/8): not tied to a post; owner can reuse a post hero."
+    }
+  ]
+}
