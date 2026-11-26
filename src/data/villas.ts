@@ -6,7 +6,10 @@ const text = z.object({ id: z.string(), en: z.string() });
 /** One villa / cottage / hall row. Price + capacity + spec mirror
  *  rasamala-app seed verbatim (single IDR/night, no weekday split).
  *  Seed spellings corrected per owner lock: Khiyang→Kihyang (URL kihyang),
- *  Illegole kept (URL ilegole). Aula is owner-supplied (not in seed). */
+ *  Illegole kept (URL ilegole). Aula is owner-supplied (not in seed).
+ *  Bambu B and Puspa B/C have no photos of their own: the old site had one
+ *  page per type, so they point at bambu-a / puspa-a files (manifest
+ *  `sameAs`) and only the alt text names the unit. */
 export const VillaSchema = z.object({
 	slug: z.string(), // e.g. "kiriung" (URL path derived, not stored)
 	name: z.string(), // canonical display name (owner-locked)
@@ -103,20 +106,20 @@ export const villas = [
 			"Villa Bambu B adalah wajah Pondok Rasamala: bangunan bambu dan kayu di tengah taman yang rindang. Dua kamar tidur, teras, dan 2 kamar mandi untuk 4–6 orang, ideal untuk keluarga kecil yang baru pertama ke Gunung Salak Endah. Harganya paling bersahabat di antara villa-villa di sini, dengan suasana pedesaan yang paling kental.",
 			"Villa Bambu B is the face of Pondok Rasamala: bamboo and timber construction amid shady gardens. Two bedrooms, a terrace, and 2 bathrooms for 4–6 guests, ideal for small families visiting Gunung Salak Endah for the first time. The friendliest villa rate here, with the strongest countryside character.",
 		),
-		amenities: { id: ["2 kamar tidur", "2 kamar mandi", "Teras"], en: ["2 bedrooms", "2 bathrooms", "Terrace"] }, hero: photo("villa/bambu-b/01-kamar-tidur", {
+		amenities: { id: ["2 kamar tidur", "2 kamar mandi", "Teras"], en: ["2 bedrooms", "2 bathrooms", "Terrace"] }, hero: photo("villa/bambu-a/01-kamar-tidur", {
 			id: "Kamar tidur Villa Bambu B dengan dinding anyaman bambu dan bata merah, kasur hijau, dan kamar mandi berdinding batu.",
 			en: "Bedroom in Villa Bambu B with woven bamboo and red brick walls, a lime-green bed and a stone-walled bathroom beyond.",
 		}),
 		gallery: [
-			photo("villa/bambu-b/02-jalan-menuju-bambu", {
+			photo("villa/bambu-a/02-jalan-menuju-bambu", {
 				id: "Jalan batu setapak menuju pondok Bambu B beratap ilalang, diapit tanaman hijau dan pohon besar.",
 				en: "Flagstone path leading to the thatched Bambu B hut, framed by lush greenery and a large tree.",
 			}),
-			photo("villa/bambu-b/03-kolam-renang", {
+			photo("villa/bambu-a/03-kolam-renang", {
 				id: "Kolam renang resor berair biru dengan rumah panggung kayu di antara pohon pinus di belakangnya.",
 				en: "Blue resort swimming pool with a wooden stilt house among the pine trees behind it.",
 			}),
-			photo("villa/bambu-b/04-kamar-tidur-gelap", {
+			photo("villa/bambu-a/04-kamar-tidur-gelap", {
 				id: "Ranjang berseprai hijau dan selimut cokelat di kamar bambu, dengan cahaya hangat masuk lewat gorden.",
 				en: "Bed with green sheets and a brown blanket in the bamboo bedroom, warm light coming through the curtain.",
 			}),
@@ -483,40 +486,40 @@ export const villas = [
 			"Villa Puspa B mungil dan tenang: 2 kamar tidur, teras, dan 2 kamar mandi untuk 4–8 orang. Paling cocok untuk pasangan atau keluarga kecil yang mau kabur dari bising kota tanpa anggaran besar. Sore hari di teras Puspa, ditemani suara serangga dan udara gunung, adalah definisi liburan pelan.",
 			"Villa Puspa B is small and quiet: 2 bedrooms, a terrace, and 2 bathrooms for 4–8 guests. Best for couples or small families escaping city noise on a modest budget. An afternoon on Puspa's terrace, insects humming, mountain air cool, is the definition of a slow holiday.",
 		),
-		amenities: { id: ["2 kamar tidur", "2 kamar mandi", "Teras"], en: ["2 bedrooms", "2 bathrooms", "Terrace"] }, hero: photo("villa/puspa-b/01-lorong-pintu-kamar", {
+		amenities: { id: ["2 kamar tidur", "2 kamar mandi", "Teras"], en: ["2 bedrooms", "2 bathrooms", "Terrace"] }, hero: photo("villa/puspa-a/01-lorong-pintu-kamar", {
 			id: "Lorong batu di Villa Puspa B dengan dua pintu kamar berdampingan, tiang kayu bercabang, dan bunga heliconia di rak kayu.",
 			en: "Stone-walled corridor at Villa Puspa B with two bedroom doors, branching timber posts and heliconia flowers on a shelf.",
 		}),
 		gallery: [
-			photo("villa/puspa-b/02-teras-pagar-bambu", {
+			photo("villa/puspa-a/02-teras-pagar-bambu", {
 				id: "Teras panjang Villa Puspa B beratap ilalang dengan pagar bambu bulat dan jalan batu pipih di sampingnya.",
 				en: "Long porch at Villa Puspa B under a thatched roof with a round-bamboo railing and a flagstone path beside it.",
 			}),
-			photo("villa/puspa-b/03-teras-bunga", {
+			photo("villa/puspa-a/03-teras-bunga", {
 				id: "Teras Villa Puspa B berdinding batu dengan meja dan bangku kayu akar, serta heliconia kuning di dalam vas.",
 				en: "Stone-walled porch at Villa Puspa B with root-wood table and benches and yellow heliconia in a vase.",
 			}),
-			photo("villa/puspa-b/04-teras-kursi-batu", {
+			photo("villa/puspa-a/04-teras-kursi-batu", {
 				id: "Teras Villa Puspa B dengan bangku kayu bulat, meja kayu alami, pintu kamar, dan dinding batu.",
 				en: "Porch of Villa Puspa B with a round-log bench, a natural-edge wood table, a bedroom door and a stone wall.",
 			}),
-			photo("villa/puspa-b/05-kamar-tidur-1", {
+			photo("villa/puspa-a/05-kamar-tidur-1", {
 				id: "Kamar tidur Villa Puspa B berdinding anyaman bambu dengan ranjang berseprai kuning-hijau dan kamar mandi di sisi kanan.",
 				en: "Bedroom in Villa Puspa B with woven bamboo walls, a yellow-green bed and the bathroom on the right.",
 			}),
-			photo("villa/puspa-b/06-kamar-tidur-2", {
+			photo("villa/puspa-a/06-kamar-tidur-2", {
 				id: "Kamar tidur kedua Villa Puspa B dengan dinding anyaman bambu, ranjang kayu bulat berseprai hijau, dan gorden putih.",
 				en: "Second bedroom in Villa Puspa B with woven bamboo walls, a round-log bed in green linen and a white curtain.",
 			}),
-			photo("villa/puspa-b/07-kamar-tidur-hijau", {
+			photo("villa/puspa-a/07-kamar-tidur-hijau", {
 				id: "Dua bantal dan seprai hijau segar di atas ranjang bambu Villa Puspa B, dilihat dari dekat.",
 				en: "Close view of two pillows and fresh green sheets on the bamboo bed in Villa Puspa B.",
 			}),
-			photo("villa/puspa-b/08-taman-pinus", {
+			photo("villa/puspa-a/08-taman-pinus", {
 				id: "Taman Villa Puspa B di bawah pohon pinus, dengan deretan tanaman daun merah muda dan pondok ilalang di belakang.",
 				en: "Garden at Villa Puspa B under pine trees, with a border of pink-and-green foliage and a thatched hut behind.",
 			}),
-			photo("villa/puspa-b/09-tampak-depan", {
+			photo("villa/puspa-a/09-tampak-depan", {
 				id: "Tampak depan Villa Puspa B: pondok dua tingkat beratap ilalang dengan pagar bambu bulat, dinaungi pakis pohon.",
 				en: "Front of Villa Puspa B: a two-tier thatched cottage with a round-bamboo railing, shaded by a tree fern.",
 			}),
@@ -530,40 +533,40 @@ export const villas = [
 			"Villa Puspa C mungil dan tenang: 2 kamar tidur, teras, dan 2 kamar mandi untuk 4–8 orang. Paling cocok untuk pasangan atau keluarga kecil yang mau kabur dari bising kota tanpa anggaran besar. Sore hari di teras Puspa, ditemani suara serangga dan udara gunung, adalah definisi liburan pelan.",
 			"Villa Puspa C is small and quiet: 2 bedrooms, a terrace, and 2 bathrooms for 4–8 guests. Best for couples or small families escaping city noise on a modest budget. An afternoon on Puspa's terrace, insects humming, mountain air cool, is the definition of a slow holiday.",
 		),
-		amenities: { id: ["2 kamar tidur", "2 kamar mandi", "Teras"], en: ["2 bedrooms", "2 bathrooms", "Terrace"] }, hero: photo("villa/puspa-c/01-lorong-pintu-kamar", {
+		amenities: { id: ["2 kamar tidur", "2 kamar mandi", "Teras"], en: ["2 bedrooms", "2 bathrooms", "Terrace"] }, hero: photo("villa/puspa-a/01-lorong-pintu-kamar", {
 			id: "Lorong batu di Villa Puspa C dengan dua pintu kamar berdampingan, tiang kayu bercabang, dan bunga heliconia di rak kayu.",
 			en: "Stone-walled corridor at Villa Puspa C with two bedroom doors, branching timber posts and heliconia flowers on a shelf.",
 		}),
 		gallery: [
-			photo("villa/puspa-c/02-teras-pagar-bambu", {
+			photo("villa/puspa-a/02-teras-pagar-bambu", {
 				id: "Teras panjang Villa Puspa C beratap ilalang dengan pagar bambu bulat dan jalan batu pipih di sampingnya.",
 				en: "Long porch at Villa Puspa C under a thatched roof with a round-bamboo railing and a flagstone path beside it.",
 			}),
-			photo("villa/puspa-c/03-teras-bunga", {
+			photo("villa/puspa-a/03-teras-bunga", {
 				id: "Teras Villa Puspa C berdinding batu dengan meja dan bangku kayu akar, serta heliconia kuning di dalam vas.",
 				en: "Stone-walled porch at Villa Puspa C with root-wood table and benches and yellow heliconia in a vase.",
 			}),
-			photo("villa/puspa-c/04-teras-kursi-batu", {
+			photo("villa/puspa-a/04-teras-kursi-batu", {
 				id: "Teras Villa Puspa C dengan bangku kayu bulat, meja kayu alami, pintu kamar, dan dinding batu.",
 				en: "Porch of Villa Puspa C with a round-log bench, a natural-edge wood table, a bedroom door and a stone wall.",
 			}),
-			photo("villa/puspa-c/05-kamar-tidur-1", {
+			photo("villa/puspa-a/05-kamar-tidur-1", {
 				id: "Kamar tidur Villa Puspa C berdinding anyaman bambu dengan ranjang berseprai kuning-hijau dan kamar mandi di sisi kanan.",
 				en: "Bedroom in Villa Puspa C with woven bamboo walls, a yellow-green bed and the bathroom on the right.",
 			}),
-			photo("villa/puspa-c/06-kamar-tidur-2", {
+			photo("villa/puspa-a/06-kamar-tidur-2", {
 				id: "Kamar tidur kedua Villa Puspa C dengan dinding anyaman bambu, ranjang kayu bulat berseprai hijau, dan gorden putih.",
 				en: "Second bedroom in Villa Puspa C with woven bamboo walls, a round-log bed in green linen and a white curtain.",
 			}),
-			photo("villa/puspa-c/07-kamar-tidur-hijau", {
+			photo("villa/puspa-a/07-kamar-tidur-hijau", {
 				id: "Dua bantal dan seprai hijau segar di atas ranjang bambu Villa Puspa C, dilihat dari dekat.",
 				en: "Close view of two pillows and fresh green sheets on the bamboo bed in Villa Puspa C.",
 			}),
-			photo("villa/puspa-c/08-taman-pinus", {
+			photo("villa/puspa-a/08-taman-pinus", {
 				id: "Taman Villa Puspa C di bawah pohon pinus, dengan deretan tanaman daun merah muda dan pondok ilalang di belakang.",
 				en: "Garden at Villa Puspa C under pine trees, with a border of pink-and-green foliage and a thatched hut behind.",
 			}),
-			photo("villa/puspa-c/09-tampak-depan", {
+			photo("villa/puspa-a/09-tampak-depan", {
 				id: "Tampak depan Villa Puspa C: pondok dua tingkat beratap ilalang dengan pagar bambu bulat, dinaungi pakis pohon.",
 				en: "Front of Villa Puspa C: a two-tier thatched cottage with a round-bamboo railing, shaded by a tree fern.",
 			}),

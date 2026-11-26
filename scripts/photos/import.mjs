@@ -4,7 +4,9 @@
 //   node scripts/photos/import.mjs [--sections=villa,aula] [--force] [--src=<dir>]
 //
 // For every photo of the selected manifest sections it:
-//   1. reads the original from the (read-only) legacy uploads folder,
+//   1. reads the original: a manifest `source` that is a relative path is
+//      looked up in the legacy uploads folder (--src / PHOTO_SRC / default,
+//      read-only); an absolute path is used as is (photos from a new shoot),
 //   2. applies EXIF orientation with .rotate(),
 //   3. fits it inside 2400 px on the long edge, never enlarging,
 //   4. writes WebP (quality 88) with NO metadata (EXIF/GPS/ICC dropped),
@@ -15,6 +17,11 @@
 // QUALITY / MAX_EDGE, run with `--force` to redo everything.
 // Files in a processed slug folder that the manifest no longer lists are
 // deleted, so a re-ordered manifest cannot leave stale numbered files behind.
+//
+// An entry with `"sameAs": "<other slug>"` (same section) has no photos of its
+// own: it shares that entry's files, so nothing is written for it, its folder
+// is removed if one exists, and data files point at the other slug's keys.
+// See scripts/photos/README.md for the add/replace workflow.
 
 import { existsSync } from "node:fs";
 import { mkdir, readFile, readdir, rm, stat } from "node:fs/promises";
@@ -44,9 +51,13 @@ if (!sections?.length) {
 	console.error("Pass --sections=<comma list>, e.g. --sections=villa,aula");
 	process.exit(1);
 }
-if (!existsSync(srcRoot)) {
-	console.error(`Photo source folder not found: ${srcRoot} (set --src or PHOTO_SRC)`);
-	process.exit(1);
+/** Absolute `source` -> as is; relative -> inside the uploads folder. */
+function resolveSource(source) {
+	if (path.isAbsolute(source)) return source;
+	if (!existsSync(srcRoot)) {
+		throw new Error(`uploads folder not found: ${srcRoot} (set --src or PHOTO_SRC), needed for relative source "${source}"`);
+	}
+	return path.join(srcRoot, source);
 }
 
 const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
@@ -55,6 +66,17 @@ const unknown = sections.filter((s) => !manifest.entries.some((e) => e.section =
 if (unknown.length) {
 	console.error(`No manifest entries for section(s): ${unknown.join(", ")}`);
 	process.exit(1);
+}
+
+for (const entry of manifest.entries) {
+	if (!entry.sameAs) continue;
+	const target = manifest.entries.find((e) => e.section === entry.section && e.slug === entry.sameAs);
+	if (!target?.photos?.length || target.sameAs || entry.photos) {
+		console.error(
+			`Manifest entry ${entry.section}/${entry.slug}: "sameAs" must name another ${entry.section} entry that has its own photos, and the entry must not list photos itself.`,
+		);
+		process.exit(1);
+	}
 }
 
 const kb = (n) => `${(n / 1024).toFixed(0)} KB`;
@@ -66,6 +88,14 @@ const failures = [];
 
 for (const entry of entries) {
 	const dir = path.join(outRoot, entry.section, entry.slug);
+	if (entry.sameAs) {
+		if (existsSync(dir)) {
+			await rm(dir, { recursive: true });
+			pruned++;
+			console.log(`  removed ${entry.section}/${entry.slug}/ (shares ${entry.sameAs})`);
+		}
+		continue;
+	}
 	await mkdir(dir, { recursive: true });
 	const wanted = new Set();
 
@@ -73,10 +103,11 @@ for (const entry of entries) {
 		const nn = String(i + 1).padStart(2, "0");
 		const file = `${nn}-${photo.name}.webp`;
 		const out = path.join(dir, file);
-		const src = path.join(srcRoot, photo.source);
 		wanted.add(file);
 
 		try {
+			if (!/^[a-z0-9-]+$/.test(photo.name)) throw new Error(`name "${photo.name}" must be lowercase letters, digits and dashes`);
+			const src = resolveSource(photo.source);
 			const srcStat = await stat(src);
 			const outStat = existsSync(out) ? await stat(out) : null;
 			if (!force && outStat && outStat.mtimeMs > srcStat.mtimeMs) {
