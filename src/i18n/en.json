@@ -44,6 +44,8 @@
 		"viewAll": "View All",
 		"openMenu": "Open menu",
 		"closeMenu": "Close menu",
+		"previousPhoto": "Previous photo",
+		"nextPhoto": "Next photo",
 		"switchToDark": "Switch to dark mode",
 		"switchToLight": "Switch to light mode",
 		"chooseLanguage": "Choose language"
