@@ -7,9 +7,13 @@ import PhotoPlaceholder from "./PhotoPlaceholder.astro";
 interface Props {
 	items: Array<{ label: string; src?: string }>;
 	closeLabel: string;
+	prevLabel: string;
+	nextLabel: string;
 }
 
-const { items, closeLabel } = Astro.props;
+const { items, closeLabel, prevLabel, nextLabel } = Astro.props;
+// Per instance: a page may render more than one lightbox.
+const uid = `lb-${crypto.randomUUID().slice(0, 8)}`;
 ---
 
 <div class="photo-strip" data-strip data-items={JSON.stringify(items.map((i) => i.label))}>
@@ -24,16 +28,16 @@ const { items, closeLabel } = Astro.props;
 	))}
 </div>
 
-<dialog class="lightbox" aria-label={closeLabel}>
+<dialog class="lightbox" closedby="any" aria-labelledby={`${uid}-caption`}>
 	<div class="lightbox-inner" data-full>
 		<PhotoPlaceholder label={items[0]?.label ?? ""} ratio="16 / 10" />
-		<p class="lightbox-caption" data-caption>{items[0]?.label ?? ""}</p>
+		<p class="lightbox-caption" id={`${uid}-caption`} data-caption>{items[0]?.label ?? ""}</p>
 	</div>
 	<div class="lightbox-bar">
-		<button type="button" data-prev aria-label="←">←</button>
-		<span data-count>1 / {items.length}</span>
-		<button type="button" data-next aria-label="→">→</button>
-		<button type="button" data-close>{closeLabel}</button>
+		<button type="button" data-prev aria-label={prevLabel}>←</button>
+		<span data-count aria-live="polite">1 / {items.length}</span>
+		<button type="button" data-next aria-label={nextLabel}>→</button>
+		<form method="dialog"><button type="submit">{closeLabel}</button></form>
 	</div>
 </dialog>
 
@@ -71,10 +75,23 @@ const { items, closeLabel } = Astro.props;
 			index = (index + 1) % labels.length;
 			render();
 		});
-		dialog.querySelector("[data-close]")?.addEventListener("click", () => dialog.close());
-		dialog.addEventListener("click", (e) => {
-			if (e.target === dialog) dialog.close();
+		dialog.addEventListener("keydown", (e) => {
+			if (e.key === "ArrowLeft") dialog.querySelector<HTMLElement>("[data-prev]")?.click();
+			else if (e.key === "ArrowRight") dialog.querySelector<HTMLElement>("[data-next]")?.click();
 		});
+		// Light dismiss is declarative (closedby="any") where supported. Safari
+		// lacks it, so fall back to a click that lands outside the dialog's box.
+		// Comparing coordinates, not just e.target === dialog, matters: a click
+		// on the dialog's own padding also targets the dialog but is not outside.
+		if (!("closedBy" in HTMLDialogElement.prototype)) {
+			dialog.addEventListener("click", (e) => {
+				if (e.target !== dialog) return;
+				const r = dialog.getBoundingClientRect();
+				const inside =
+					r.top <= e.clientY && e.clientY <= r.bottom && r.left <= e.clientX && e.clientX <= r.right;
+				if (!inside) dialog.close();
+			});
+		}
 	});
 </script>
 
@@ -105,9 +122,22 @@ const { items, closeLabel } = Astro.props;
 		padding: var(--spacing-lg);
 		max-width: min(880px, 92vw);
 		width: 100%;
+		/* The global `* { margin: 0 }` reset beats the UA `margin: auto` that
+		   centres a modal dialog, so restore it here. */
+		margin: auto;
+	}
+	/* Keep wheel/touch scrolling from chaining to the page. No overflow lock on
+	   <html>/<body>: that shifts layout and does not stop iOS overscroll. */
+	.lightbox:modal {
+		overscroll-behavior: contain;
 	}
 	.lightbox::backdrop {
+		overflow: hidden;
+		overscroll-behavior: contain;
 		background: rgb(0 0 0 / 0.6);
+	}
+	.lightbox-bar form {
+		display: contents;
 	}
 	.lightbox-caption {
 		margin-top: var(--spacing-sm);

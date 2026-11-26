@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import Lightbox from "../components/ui/Lightbox.astro";
 import SectionHeader from "../components/ui/SectionHeader.astro";
+import { getStrings } from "../lib/i18n";
 import { galleryCategories, galleryItems } from "../data/gallery-items";
 
 export const prerender = true;
@@ -22,6 +23,7 @@ const copy = {
 	} as Record<string, string>,
 	close: "Tutup",
 };
+const ui = getStrings(locale).actions;
 const lightboxItems = galleryItems.map((g) => ({ label: g.caption.id }));
 ---
 
@@ -52,7 +54,12 @@ const lightboxItems = galleryItems.map((g) => ({ label: g.caption.id }));
 				))}
 			</div>
 			<div class="lightbox-mount">
-				<Lightbox items={lightboxItems} closeLabel={copy.close} />
+				<Lightbox
+					items={lightboxItems}
+					closeLabel={copy.close}
+					prevLabel={ui.previousPhoto}
+					nextLabel={ui.nextPhoto}
+				/>
 			</div>
 		</div>
 	</div>
@@ -185,7 +192,9 @@ const lightboxItems = galleryItems.map((g) => ({ label: g.caption.id }));
 		color: var(--color-muted);
 		line-height: 1.5;
 	}
-	.lightbox-mount {
+	/* Hide only the photo strip. The <dialog> must not sit under display:none,
+	   or showModal() opens a dialog that is never rendered. */
+	.lightbox-mount :global([data-strip]) {
 		display: none;
 	}
 	@media (max-width: 900px) {
