@@ -1,8 +1,78 @@
 # Legacy WordPress URLs → new. Mirror of src/lib/constants.ts REDIRECTS.
-/category/type-of-villa/ /villa/ 301
-/category/glamping/ /glamping/ 301
-/category/campsite/ /campsite/ 301
+# Cloudflare matches paths literally (no trailing-slash normalisation), so every
+# old /path/ is listed twice: /path/ and /path. Targets always use the canonical
+# trailing-slash form so a redirect lands on a 200 without a second hop.
+
+# Renamed or merged pages
+/type-bambu/ /type-bambu-a/ 301
+/type-bambu /type-bambu-a/ 301
+/type-puspa/ /type-puspa-a/ 301
+/type-puspa /type-puspa-a/ 301
+/pondok-rasamala/ / 301
+/pondok-rasamala / 301
 /outbound/ /package/outbound/ 301
+/outbound /package/outbound/ 301
 /special-school-package/ /package/special-school-package/ 301
+/special-school-package /package/special-school-package/ 301
+/dexter/ / 301
 /dexter / 301
+
+# Category archives (old category_base was "/", so also served at /<slug>/)
+/category/type-of-villa/ /villa/ 301
+/category/type-of-villa /villa/ 301
+/type-of-villa/ /villa/ 301
+/type-of-villa /villa/ 301
+/category/glamping/ /glamping/ 301
+/category/glamping /glamping/ 301
+/category/campsite/ /campsite/ 301
+/category/campsite /campsite/ 301
+/category/uncategorized/ / 301
+/category/uncategorized / 301
+/uncategorized/ / 301
+/uncategorized / 301
+
+# Author archive
 /author/adminpondok/ / 301
+/author/adminpondok / 301
+
+# Attachment pages that had a parent -> the parent's new page
+/location/map-rasalama-v3/ /location/ 301
+/location/map-rasalama-v3 /location/ 301
+/location/hutan-pinus-2/ /location/ 301
+/location/hutan-pinus-2 /location/ 301
+/package/img_0180_final/ /package/ 301
+/package/img_0180_final /package/ 301
+/outbound/img_4076/ /package/outbound/ 301
+/outbound/img_4076 /package/outbound/ 301
+/type-bambu/03_bambu/ /type-bambu-a/ 301
+/type-bambu/03_bambu /type-bambu-a/ 301
+/gallery/01_galery/ /gallery/ 301
+/gallery/01_galery /gallery/ 301
+/gallery/03_galery/ /gallery/ 301
+/gallery/03_galery /gallery/ 301
+/gallery/04_galery/ /gallery/ 301
+/gallery/04_galery /gallery/ 301
+/gallery/05_galery/ /gallery/ 301
+/gallery/05_galery /gallery/ 301
+/gallery/06_galery/ /gallery/ 301
+/gallery/06_galery /gallery/ 301
+/type-damar/img_7351a/ /type-damar/ 301
+/type-damar/img_7351a /type-damar/ 301
+/type-mindi/whatsapp-image-2018-01-30-at-2-57-57-pm/ /type-mindi/ 301
+/type-mindi/whatsapp-image-2018-01-30-at-2-57-57-pm /type-mindi/ 301
+/outbound/hutan-pinus-5/ /package/outbound/ 301
+/outbound/hutan-pinus-5 /package/outbound/ 301
+/location/edit-gede-gbr3-2/ /location/ 301
+/location/edit-gede-gbr3-2 /location/ 301
+/special-school-package/whatsapp-video-2023-05-19-at-3-04-42-pm/ /package/special-school-package/ 301
+/special-school-package/whatsapp-video-2023-05-19-at-3-04-42-pm /package/special-school-package/ 301
+/special-school-package/whatsapp-image-2023-05-19-at-3-04-38-pm/ /package/special-school-package/ 301
+/special-school-package/whatsapp-image-2023-05-19-at-3-04-38-pm /package/special-school-package/ 301
+
+# Feeds and sitemaps
+/feed/ /rss.xml 301
+/feed /rss.xml 301
+/comments/feed/ /rss.xml 301
+/comments/feed /rss.xml 301
+/wp-sitemap.xml /sitemap-index.xml 301
+/sitemap.xml /sitemap-index.xml 301

@@ -17,13 +17,79 @@ export const SITE = {
 	},
 } as const;
 
-/** 301 map: legacy WordPress → new. Mirrored in wrangler.jsonc [[redirects]]. */
+/**
+ * 301 map: legacy WordPress → new. Mirrored 1:1 in public/_redirects (Cloudflare
+ * static-assets redirects; wrangler.jsonc has no redirect config). Cloudflare
+ * matches literally, so each /path/ is listed with and without the trailing slash.
+ */
 export const REDIRECTS: Array<[string, string]> = [
-	["/category/type-of-villa/", "/villa/"],
-	["/category/glamping/", "/glamping/"],
-	["/category/campsite/", "/campsite/"],
+	// Renamed or merged pages
+	["/type-bambu/", "/type-bambu-a/"],
+	["/type-bambu", "/type-bambu-a/"],
+	["/type-puspa/", "/type-puspa-a/"],
+	["/type-puspa", "/type-puspa-a/"],
+	["/pondok-rasamala/", "/"],
+	["/pondok-rasamala", "/"],
 	["/outbound/", "/package/outbound/"],
+	["/outbound", "/package/outbound/"],
 	["/special-school-package/", "/package/special-school-package/"],
+	["/special-school-package", "/package/special-school-package/"],
+	["/dexter/", "/"],
 	["/dexter", "/"],
+	// Category archives (old category_base was "/", so also served at /<slug>/)
+	["/category/type-of-villa/", "/villa/"],
+	["/category/type-of-villa", "/villa/"],
+	["/type-of-villa/", "/villa/"],
+	["/type-of-villa", "/villa/"],
+	["/category/glamping/", "/glamping/"],
+	["/category/glamping", "/glamping/"],
+	["/category/campsite/", "/campsite/"],
+	["/category/campsite", "/campsite/"],
+	["/category/uncategorized/", "/"],
+	["/category/uncategorized", "/"],
+	["/uncategorized/", "/"],
+	["/uncategorized", "/"],
+	// Author archive
 	["/author/adminpondok/", "/"],
+	["/author/adminpondok", "/"],
+	// Attachment pages that had a parent -> the parent's new page
+	["/location/map-rasalama-v3/", "/location/"],
+	["/location/map-rasalama-v3", "/location/"],
+	["/location/hutan-pinus-2/", "/location/"],
+	["/location/hutan-pinus-2", "/location/"],
+	["/package/img_0180_final/", "/package/"],
+	["/package/img_0180_final", "/package/"],
+	["/outbound/img_4076/", "/package/outbound/"],
+	["/outbound/img_4076", "/package/outbound/"],
+	["/type-bambu/03_bambu/", "/type-bambu-a/"],
+	["/type-bambu/03_bambu", "/type-bambu-a/"],
+	["/gallery/01_galery/", "/gallery/"],
+	["/gallery/01_galery", "/gallery/"],
+	["/gallery/03_galery/", "/gallery/"],
+	["/gallery/03_galery", "/gallery/"],
+	["/gallery/04_galery/", "/gallery/"],
+	["/gallery/04_galery", "/gallery/"],
+	["/gallery/05_galery/", "/gallery/"],
+	["/gallery/05_galery", "/gallery/"],
+	["/gallery/06_galery/", "/gallery/"],
+	["/gallery/06_galery", "/gallery/"],
+	["/type-damar/img_7351a/", "/type-damar/"],
+	["/type-damar/img_7351a", "/type-damar/"],
+	["/type-mindi/whatsapp-image-2018-01-30-at-2-57-57-pm/", "/type-mindi/"],
+	["/type-mindi/whatsapp-image-2018-01-30-at-2-57-57-pm", "/type-mindi/"],
+	["/outbound/hutan-pinus-5/", "/package/outbound/"],
+	["/outbound/hutan-pinus-5", "/package/outbound/"],
+	["/location/edit-gede-gbr3-2/", "/location/"],
+	["/location/edit-gede-gbr3-2", "/location/"],
+	["/special-school-package/whatsapp-video-2023-05-19-at-3-04-42-pm/", "/package/special-school-package/"],
+	["/special-school-package/whatsapp-video-2023-05-19-at-3-04-42-pm", "/package/special-school-package/"],
+	["/special-school-package/whatsapp-image-2023-05-19-at-3-04-38-pm/", "/package/special-school-package/"],
+	["/special-school-package/whatsapp-image-2023-05-19-at-3-04-38-pm", "/package/special-school-package/"],
+	// Feeds and sitemaps
+	["/feed/", "/rss.xml"],
+	["/feed", "/rss.xml"],
+	["/comments/feed/", "/rss.xml"],
+	["/comments/feed", "/rss.xml"],
+	["/wp-sitemap.xml", "/sitemap-index.xml"],
+	["/sitemap.xml", "/sitemap-index.xml"],
 ];
