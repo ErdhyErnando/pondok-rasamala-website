@@ -1,36 +1,72 @@
 ---
-import PhotoPlaceholder from "./PhotoPlaceholder.astro";
+import Photo from "./Photo.astro";
+import type { Locale } from "../../lib/i18n";
+import type { Photo as PhotoData } from "../../lib/photos";
 
 // Photo strip + native <dialog> lightbox, vanilla JS only.
-// Works with label-only entries until Day-6 keepers land (src optional).
+// Items with a `photo` render real WebP images; label-only items keep the
+// placeholder (the gallery page still uses those). The dialog holds one
+// full-size <Photo> per item and only the current one is visible: images in
+// a closed dialog are not fetched (loading="lazy"), and each step shows the
+// next one from the same source at a larger width than the strip thumbnail.
 // Wiring is per-instance via DOM data (no define:vars, no framework).
 interface Props {
-	items: Array<{ label: string; src?: string }>;
+	items: Array<{ label: string; photo?: PhotoData }>;
 	closeLabel: string;
 	prevLabel: string;
 	nextLabel: string;
+	locale?: Locale;
+	/** First item shown in the strip. Earlier items are still in the dialog,
+	 *  for pages that already show them elsewhere (the detail-page grid). */
+	stripFrom?: number;
+	/** `sizes` for the strip thumbnails (3 columns, 2 under 600 px). */
+	stripSizes?: string;
 }
 
-const { items, closeLabel, prevLabel, nextLabel } = Astro.props;
+const {
+	items,
+	closeLabel,
+	prevLabel,
+	nextLabel,
+	locale = "id",
+	stripFrom = 0,
+	stripSizes = "(min-width: 601px) calc(33vw - 24px), 50vw",
+} = Astro.props;
 // Per instance: a page may render more than one lightbox.
 const uid = `lb-${crypto.randomUUID().slice(0, 8)}`;
+// Dialog: min(880px, 92vw) wide, minus 24px padding and 1px border each side.
+const fullSizes = "(min-width: 957px) 830px, calc(92vw - 50px)";
 ---
 
 <div class="photo-strip" data-strip data-items={JSON.stringify(items.map((i) => i.label))}>
-	{items.map((item, i) => (
-		<button type="button" class="strip-item" data-index={i} aria-label={item.label}>
-			{item.src ? (
-				<img src={item.src} alt={item.label} loading="lazy" />
-			) : (
-				<PhotoPlaceholder label={item.label} ratio="4 / 3" />
-			)}
+	{items.map((item, i) => i >= stripFrom && (
+		<button
+			type="button"
+			class="strip-item"
+			data-index={i}
+			aria-label={item.photo ? undefined : item.label}
+			aria-haspopup="dialog"
+		>
+			<Photo photo={item.photo} locale={locale} sizes={stripSizes} widths={[480, 960]} ratio="4 / 3" label={item.label} />
 		</button>
 	))}
 </div>
 
 <dialog class="lightbox" closedby="any" aria-labelledby={`${uid}-caption`}>
 	<div class="lightbox-inner" data-full>
-		<PhotoPlaceholder label={items[0]?.label ?? ""} ratio="16 / 10" />
+		{items.map((item, i) => (
+			<div data-full-item hidden={i !== 0}>
+				<Photo
+					photo={item.photo}
+					locale={locale}
+					sizes={fullSizes}
+					widths={[960, 1600, 2400]}
+					class="lightbox-photo"
+					label={item.label}
+					ratio="16 / 10"
+				/>
+			</div>
+		))}
 		<p class="lightbox-caption" id={`${uid}-caption`} data-caption>{items[0]?.label ?? ""}</p>
 	</div>
 	<div class="lightbox-bar">
@@ -46,16 +82,15 @@ const uid = `lb-${crypto.randomUUID().slice(0, 8)}`;
 		const labels = JSON.parse(strip.dataset.items ?? "[]") as string[];
 		const dialog = strip.nextElementSibling;
 		if (!(dialog instanceof HTMLDialogElement)) return;
-		const full = dialog.querySelector("[data-full]");
+		const fullItems = dialog.querySelectorAll<HTMLElement>("[data-full-item]");
 		const caption = dialog.querySelector("[data-caption]");
 		const count = dialog.querySelector("[data-count]");
 		let index = 0;
 
 		function render() {
 			const label = labels[index];
-			if (!full || label === undefined) return;
-			full.querySelector(".photo-placeholder span")?.replaceChildren(label);
-			full.querySelector(".photo-placeholder")?.setAttribute("aria-label", label);
+			if (label === undefined) return;
+			fullItems.forEach((el, i) => (el.hidden = i !== index));
 			if (caption) caption.textContent = label;
 			if (count) count.textContent = `${index + 1} / ${labels.length}`;
 		}
@@ -66,6 +101,13 @@ const uid = `lb-${crypto.randomUUID().slice(0, 8)}`;
 				render();
 				dialog.showModal();
 			});
+		});
+		// Other parts of a page (e.g. the detail-page photo grid) open the dialog
+		// at a given item by dispatching `lightbox-open` on the strip.
+		strip.addEventListener("lightbox-open", (e) => {
+			index = Number((e as CustomEvent<number>).detail) || 0;
+			render();
+			if (!dialog.open) dialog.showModal();
 		});
 		dialog.querySelector("[data-prev]")?.addEventListener("click", () => {
 			index = (index - 1 + labels.length) % labels.length;
@@ -108,11 +150,8 @@ const uid = `lb-${crypto.randomUUID().slice(0, 8)}`;
 		cursor: zoom-in;
 		font: inherit;
 	}
-	.strip-item img {
+	.strip-item :global(.photo-img) {
 		border-radius: var(--radius);
-		aspect-ratio: 4 / 3;
-		object-fit: cover;
-		width: 100%;
 	}
 	.lightbox {
 		border: 1px solid var(--color-border);
@@ -138,6 +177,17 @@ const uid = `lb-${crypto.randomUUID().slice(0, 8)}`;
 	}
 	.lightbox-bar form {
 		display: contents;
+	}
+	/* Real photos keep their own ratio but never outgrow the viewport
+	   (portrait shots are about 1:2). Placeholders keep their 16 / 10 box. */
+	.lightbox :global(img.lightbox-photo) {
+		width: auto;
+		max-width: 100%;
+		max-height: min(70vh, 70svh);
+		margin-inline: auto;
+		object-fit: contain;
+		background: transparent;
+		border-radius: var(--radius);
 	}
 	.lightbox-caption {
 		margin-top: var(--spacing-sm);

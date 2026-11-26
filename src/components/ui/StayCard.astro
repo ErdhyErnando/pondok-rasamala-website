@@ -1,5 +1,7 @@
 ---
-import PhotoPlaceholder from "./PhotoPlaceholder.astro";
+import Photo from "./Photo.astro";
+import type { Locale } from "../../lib/i18n";
+import type { Photo as PhotoData } from "../../lib/photos";
 import type { StayFact } from "../../lib/stay";
 
 // One card anatomy for every stay (villa, glamping, campsite lot):
@@ -11,6 +13,13 @@ interface Props {
 	name: string;
 	blurb: string;
 	imageLabel: string;
+	/** Real photo; without one the card shows the labelled placeholder. */
+	photo?: PhotoData;
+	locale?: Locale;
+	/** Card width per breakpoint. The default matches the shared 3 / 2 / 1
+	 *  column stay grid (StayIndex and the "other stays" row): 1200 px
+	 *  container, 24 px padding, 32 px gaps, breakpoints at 960 and 600. */
+	sizes?: string;
 	facts?: StayFact[];
 	cta?: string;
 	external?: boolean;
@@ -20,7 +29,21 @@ interface Props {
 	minPrice?: number;
 }
 
-const { href, name, blurb, imageLabel, facts, cta, external = false, paxMin, paxMax, minPrice } = Astro.props;
+const {
+	href,
+	name,
+	blurb,
+	imageLabel,
+	photo,
+	locale = "id",
+	sizes = "(min-width: 1200px) 363px, (min-width: 961px) calc((100vw - 112px) / 3), (min-width: 601px) calc((100vw - 80px) / 2), calc(100vw - 48px)",
+	facts,
+	cta,
+	external = false,
+	paxMin,
+	paxMax,
+	minPrice,
+} = Astro.props;
 ---
 
 <article
@@ -30,8 +53,8 @@ const { href, name, blurb, imageLabel, facts, cta, external = false, paxMin, pax
 	data-pax-max={paxMax}
 	data-price={minPrice}
 >
-	<span class="card-visual" aria-hidden="true">
-		<PhotoPlaceholder label={imageLabel} ratio="4 / 3" />
+	<span class="card-visual" aria-hidden={photo ? undefined : "true"}>
+		<Photo photo={photo} locale={locale} sizes={sizes} widths={[480, 960]} ratio="4 / 3" label={imageLabel} />
 	</span>
 	<h3 class="card-name">
 		<a href={href} target={external ? "_blank" : undefined} rel={external ? "noopener" : undefined}>{name}</a>
@@ -58,12 +81,14 @@ const { href, name, blurb, imageLabel, facts, cta, external = false, paxMin, pax
 	.stay-card[hidden] {
 		display: none;
 	}
-	.card-visual :global(.photo-placeholder) {
+	.card-visual :global(.photo-placeholder),
+	.card-visual :global(.photo-img) {
 		border-radius: var(--radius);
 		margin-bottom: var(--spacing-sm);
 		transition: transform var(--transition-base);
 	}
-	.stay-card:hover .card-visual :global(.photo-placeholder) {
+	.stay-card:hover .card-visual :global(.photo-placeholder),
+	.stay-card:hover .card-visual :global(.photo-img) {
 		transform: translateY(-2px);
 	}
 	.card-name {
@@ -112,7 +137,8 @@ const { href, name, blurb, imageLabel, facts, cta, external = false, paxMin, pax
 		color: var(--color-brand);
 	}
 	@media (prefers-reduced-motion: reduce) {
-		.card-visual :global(.photo-placeholder) {
+		.card-visual :global(.photo-placeholder),
+		.card-visual :global(.photo-img) {
 			transition: none;
 		}
 	}

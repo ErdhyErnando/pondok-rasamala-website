@@ -1,11 +1,12 @@
 ---
 import SectionHeader from "../ui/SectionHeader.astro";
-import PhotoPlaceholder from "../ui/PhotoPlaceholder.astro";
+import Photo from "../ui/Photo.astro";
 import { featured, showcase, tx, type Featured } from "../../data/home";
 import { campsite } from "../../data/campsite";
 import { glamping, glampingPath } from "../../data/glamping";
 import { villas, villaPath } from "../../data/villas";
 import { localizePath, type Locale } from "../../lib/i18n";
+import type { Photo as PhotoData } from "../../lib/photos";
 
 // Homepage rails (Paper DS v1, Well Traveled ref): one rail per
 // category with a big serif divider cell (dot + VILLA / GLAMPING +
@@ -25,7 +26,20 @@ interface Card {
 	name: string;
 	blurb: string;
 	imageLabel: string;
+	/** Real photo; without one the card keeps the labelled placeholder. */
+	photo?: PhotoData;
 }
+
+// Card image widths. Desktop (>900 px): the rail is a 240 px divider plus the
+// cards, inside a 1200 px container with 24 px padding; each card has 32 px
+// padding per side. 2-card rails (villa, campsite) split the rest in two, the
+// 3-card glamping rail in three. Mobile (<=900 px): the rail scrolls sideways
+// and each card is 78% of the rail (100vw - 48px padding - 2px border) minus
+// the same 64px of card padding.
+const sizes2 =
+	"(min-width: 1200px) 392px, (min-width: 901px) calc((100vw - 288px) / 2 - 64px), calc(0.78 * (100vw - 50px) - 64px)";
+const sizes3 =
+	"(min-width: 1200px) 240px, (min-width: 901px) calc((100vw - 288px) / 3 - 64px), calc(0.78 * (100vw - 50px) - 64px)";
 
 const toCard = (f: Featured): Card => {
 	if (f.kind === "villa") {
@@ -35,6 +49,7 @@ const toCard = (f: Featured): Card => {
 			name: `Villa ${v.name}`,
 			blurb: tx(f.blurb, locale),
 			imageLabel: `Villa ${v.name}: foto menyusul`,
+			photo: v.hero,
 		};
 	}
 	const g = glamping.find((x) => x.slug === f.slug)!;
@@ -94,8 +109,8 @@ const campsiteCards: Card[] = [
 				</div>
 				{villaCards.map((c) => (
 					<article class="stay-card reveal">
-						<span class="card-visual" aria-hidden="true">
-							<PhotoPlaceholder label={c.imageLabel} ratio="16 / 8" />
+						<span class="card-visual" aria-hidden={c.photo ? undefined : "true"}>
+							<Photo photo={c.photo} locale={locale} sizes={sizes2} widths={[480, 960]} ratio="16 / 8" label={c.imageLabel} />
 						</span>
 						<h3 class="card-name"><a href={c.href}>{c.name}</a></h3>
 						<p class="card-blurb">{c.blurb}</p>
@@ -105,8 +120,8 @@ const campsiteCards: Card[] = [
 			<div class="rail rail-flip">
 				{glampingCards.map((c) => (
 					<article class="stay-card reveal">
-						<span class="card-visual" aria-hidden="true">
-							<PhotoPlaceholder label={c.imageLabel} ratio="16 / 8" />
+						<span class="card-visual" aria-hidden={c.photo ? undefined : "true"}>
+							<Photo photo={c.photo} locale={locale} sizes={sizes3} widths={[480, 960]} ratio="16 / 8" label={c.imageLabel} />
 						</span>
 						<h3 class="card-name"><a href={c.href}>{c.name}</a></h3>
 						<p class="card-blurb">{c.blurb}</p>
@@ -128,8 +143,8 @@ const campsiteCards: Card[] = [
 				</div>
 				{campsiteCards.map((c) => (
 					<article class="stay-card reveal">
-						<span class="card-visual" aria-hidden="true">
-							<PhotoPlaceholder label={c.imageLabel} ratio="16 / 8" />
+						<span class="card-visual" aria-hidden={c.photo ? undefined : "true"}>
+							<Photo photo={c.photo} locale={locale} sizes={sizes2} widths={[480, 960]} ratio="16 / 8" label={c.imageLabel} />
 						</span>
 						<h3 class="card-name"><a href={c.href}>{c.name}</a></h3>
 						<p class="card-blurb">{c.blurb}</p>
@@ -214,11 +229,13 @@ const campsiteCards: Card[] = [
 	.card-visual {
 		display: block;
 	}
-	.card-visual :global(.photo-placeholder) {
+	.card-visual :global(.photo-placeholder),
+	.card-visual :global(.photo-img) {
 		border-radius: var(--radius);
 		transition: transform var(--transition-base);
 	}
-	.stay-card:hover .card-visual :global(.photo-placeholder) {
+	.stay-card:hover .card-visual :global(.photo-placeholder),
+	.stay-card:hover .card-visual :global(.photo-img) {
 		transform: translateY(-2px);
 	}
 	.card-name {
@@ -281,7 +298,8 @@ const campsiteCards: Card[] = [
 		}
 	}
 	@media (prefers-reduced-motion: reduce) {
-		.card-visual :global(.photo-placeholder) {
+		.card-visual :global(.photo-placeholder),
+		.card-visual :global(.photo-img) {
 			transition: none;
 		}
 		.rail {
