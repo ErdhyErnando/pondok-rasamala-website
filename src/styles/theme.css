@@ -48,13 +48,15 @@
 }
 
 /* Header theme toggle. Every colour above is a light-dark() pair, so one
-   color-scheme on <html> re-resolves the whole palette. data-theme is set
-   before first paint by the inline script in Base.astro; without it
-   `color-scheme: light dark` (tokens.css) follows the OS. */
-:root[data-theme="light"] {
+   color-scheme on <html> re-resolves the whole palette. The inline script in
+   Base.astro / ThemeToggle.astro sets <meta name="color-scheme"> to "light" or
+   "dark" for an explicit override and leaves it at "light dark" otherwise;
+   these rules map it onto <html>. With no override (or JS off) the
+   `color-scheme: light dark` in tokens.css follows the OS. */
+:root:has(> head > meta[name="color-scheme"][content="light"]) {
 	color-scheme: light;
 }
-:root[data-theme="dark"] {
+:root:has(> head > meta[name="color-scheme"][content="dark"]) {
 	color-scheme: dark;
 }
 
