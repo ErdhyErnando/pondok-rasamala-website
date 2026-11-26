@@ -53,8 +53,10 @@ const pageCtx = createPublicPageContext({
 	pageTitle: title ?? siteTitle,
 	description: metaDescription,
 	canonical: canonicalUrl,
-	image,
-	seo: { ogImage: image },
+	image: ogImage,
+	// EmDashHead owns description/canonical/og:*/twitter:*. Pass the full
+	// "| Pondok Rasamala" title so social titles keep the suffix.
+	seo: { ogImage, ogTitle: fullTitle },
 	siteName: siteTitle,
 });
 
@@ -85,16 +87,9 @@ const beaconToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
 		</script>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>{fullTitle}</title>
-		<meta name="description" content={metaDescription} />
-		<link rel="canonical" href={canonicalUrl} />
 		<link rel="alternate" hreflang="id" href={idUrl} />
 		<link rel="alternate" hreflang="en" href={enUrl} />
 		<link rel="alternate" hreflang="x-default" href={idUrl} />
-		<meta property="og:type" content="website" />
-		<meta property="og:site_name" content={siteTitle} />
-		<meta property="og:title" content={fullTitle} />
-		<meta property="og:description" content={metaDescription} />
-		<meta property="og:url" content={canonicalUrl} />
 		<meta property="og:locale" content={ogLocale} />
 		{
 			ogLocale === "id_ID" ? (
@@ -103,11 +98,6 @@ const beaconToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
 				<meta property="og:locale:alternate" content="id_ID" />
 			)
 		}
-		{ogImage && <meta property="og:image" content={ogImage} />}
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content={fullTitle} />
-		<meta name="twitter:description" content={metaDescription} />
-		{ogImage && <meta name="twitter:image" content={ogImage} />}
 		<meta name="theme-color" content="#016747" />
 		<link rel="icon" href="/favicon.ico" sizes="32x32" />
 		<link rel="icon" href="/favicon/favicon-32x32.png" type="image/png" sizes="32x32" />
