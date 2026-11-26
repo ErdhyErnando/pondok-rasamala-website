@@ -28,15 +28,15 @@ const fmt = (d: string) =>
 <Base title={copy.title} description={copy.meta} locale={locale}>
 	<div class="container page">
 		<div class="blog-head">
-			<h1>{copy.title}</h1>
+			<h1 class="reveal-load">{copy.title}</h1>
 		</div>
-		<div class="page-visual">
+		<div class="page-visual reveal-load" style="--reveal-delay: 0.06s">
 			<PhotoPlaceholder label="Blog: photo to follow" ratio="16 / 8" />
 		</div>
-		<p class="lede">{copy.description}</p>
+		<p class="lede reveal-load" style="--reveal-delay: 0.12s">{copy.description}</p>
 		<div class="post-rows">
 			{posts.map((p, i) => (
-				<article class:list={["post-row", { reveal: i > 0 }]}>
+				<article class:list={["post-row", i === 0 ? "reveal-load" : "reveal"]}>
 					<div class="row-visual" aria-hidden="true">
 						<PhotoPlaceholder label={`${p.title.en}: photo to follow`} ratio="16 / 10" />
 					</div>

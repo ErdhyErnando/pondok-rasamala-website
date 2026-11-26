@@ -54,12 +54,12 @@ const copy = {
 
 <Base title={copy.title} description={copy.meta} locale={locale}>
 	<div class="container page">
-		<h1 class="page-title">{copy.title}</h1>
-		<p class="statement">{copy.statement}</p>
+		<h1 class="page-title reveal-load">{copy.title}</h1>
+		<p class="statement reveal-load" style="--reveal-delay: 0.08s">{copy.statement}</p>
 		<div class="split-grid">
 			<div class="info-stack">
 				{copy.routes.map((r, i) => (
-					<article class="info-card">
+					<article class="info-card reveal-load">
 						<span class="row-index" aria-hidden="true">
 							{String(i + 1).padStart(2, "0")}
 						</span>
@@ -83,7 +83,7 @@ const copy = {
 				</article>
 				<p class="verify-note reveal">{copy.verify}</p>
 			</div>
-			<div class="map-wrap">
+			<div class="map-wrap reveal">
 				<MapFacade loadLabel={copy.mapLabel} auto />
 				<p class="map-link">
 					<a href={SITE.mapsUrl} target="_blank" rel="noopener"
@@ -198,6 +198,13 @@ const copy = {
 		}
 		.map-wrap {
 			position: static;
+		}
+	}
+	/* Right column sits in the first viewport only in the 2-column layout. */
+	@media (min-width: 901px) {
+		.map-wrap {
+			animation: var(--reveal-load);
+			animation-delay: 0.1s;
 		}
 	}
 </style>

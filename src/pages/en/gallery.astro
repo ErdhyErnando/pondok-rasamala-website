@@ -33,7 +33,7 @@ const lightboxItems = galleryItems.map((g) => ({ label: g.caption.en }));
 				title={copy.title}
 				description={copy.description}
 			/>
-			<div class="filter-pills" role="group" aria-label="Filter">
+			<div class="filter-pills reveal-load" role="group" aria-label="Filter">
 				<button type="button" data-filter="all" class="active">{copy.all}</button>
 				{galleryCategories.map((c) => (
 					<button type="button" data-filter={c}>{copy.categories[c]}</button>
@@ -207,17 +207,17 @@ const lightboxItems = galleryItems.map((g) => ({ label: g.caption.en }));
 	/* First row sits in the first viewport: no reveal there (3/2/1 columns). */
 	@media (min-width: 901px) {
 		.scrap-grid > :global(.scrap-item:nth-child(-n + 3)) {
-			animation: none;
+			animation: var(--reveal-load);
 		}
 	}
 	@media (min-width: 561px) and (max-width: 900px) {
 		.scrap-grid > :global(.scrap-item:nth-child(-n + 2)) {
-			animation: none;
+			animation: var(--reveal-load);
 		}
 	}
 	@media (max-width: 560px) {
 		.scrap-grid > :global(.scrap-item:nth-child(1)) {
-			animation: none;
+			animation: var(--reveal-load);
 		}
 	}
 </style>

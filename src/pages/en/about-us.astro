@@ -30,11 +30,11 @@ const waMessage = "Hello Pondok Rasamala, I'd like to ask about the resort. Than
 
 <Base title={copy.title} description={copy.meta} locale={locale}>
 	<div class="container about">
-		<h1 class="page-title">{copy.title}</h1>
-		<div class="about-visual">
+		<h1 class="page-title reveal-load">{copy.title}</h1>
+		<div class="about-visual reveal-load" style="--reveal-delay: 0.06s">
 			<PhotoPlaceholder label="Resort atmosphere: photo to follow" ratio="16 / 8" />
 		</div>
-		<p class="statement">{copy.statement}</p>
+		<p class="statement reveal-load" style="--reveal-delay: 0.12s">{copy.statement}</p>
 		<div class="prose">
 			<p>{copy.body1}</p>
 			<p>{copy.body2}</p>

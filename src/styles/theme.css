@@ -66,10 +66,28 @@
 	color: var(--color-text);
 }
 
-/* Scroll reveals: CSS scroll-driven, fade only. Decorative, so content is fully
-   visible by default (no JS, no support, reduced motion) and there is no
-   fallback. Keep `reveal` off first-viewport / LCP elements. */
+/* Reveals, fade only, decorative: content is fully visible by default (no JS,
+   no support, reduced motion) and nothing is gated on JS.
+   - .reveal      below the fold: scroll-driven (view timeline), plays as it enters.
+   - .reveal-load first viewport / LCP candidates: a short time-based fade at
+                  load. Starts at the first frame, no waiting, so the LCP cost is
+                  one frame. Stagger with style="--reveal-delay: .08s".
+   --reveal-load is only defined when motion is allowed, so scoped rules can use
+   `animation: var(--reveal-load)` (e.g. first grid row) and get nothing under
+   prefers-reduced-motion. */
 @media (prefers-reduced-motion: no-preference) {
+	:root {
+		--reveal-load: reveal-load 0.6s ease both;
+	}
+	@keyframes reveal-load {
+		from {
+			opacity: 0;
+		}
+	}
+	.reveal-load {
+		animation: var(--reveal-load);
+		animation-delay: var(--reveal-delay, 0s);
+	}
 	@supports ((animation-timeline: view()) and (animation-range: entry)) {
 		@keyframes reveal-in {
 			from {

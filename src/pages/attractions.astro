@@ -22,17 +22,17 @@ const copy = {
 
 <Base title={copy.title} description={copy.meta} locale={locale}>
 	<div class="container page">
-		<h1 class="page-title">{copy.title}</h1>
-		<div class="page-visual">
+		<h1 class="page-title reveal-load">{copy.title}</h1>
+		<div class="page-visual reveal-load" style="--reveal-delay: 0.06s">
 			<PhotoPlaceholder
 				label="Atraksi sekitar resort: foto menyusul"
 				ratio="16 / 8"
 			/>
 		</div>
-		<p class="statement">{copy.statement}</p>
+		<p class="statement reveal-load" style="--reveal-delay: 0.12s">{copy.statement}</p>
 		<div class="attraction-rows">
 			{attractions.map((a, i) => (
-				<article class:list={["attraction-row", { reveal: i > 0 }]}>
+				<article class:list={["attraction-row", i === 0 ? "reveal-load" : "reveal"]}>
 					<span class="row-index" aria-hidden="true">
 						{String(i + 1).padStart(2, "0")}
 					</span>

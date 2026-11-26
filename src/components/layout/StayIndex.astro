@@ -240,17 +240,17 @@ const T = {
 	/* First row sits in the first viewport: no reveal there (3/2/1 columns). */
 	@media (min-width: 961px) {
 		.stay-grid > :global(.stay-card:nth-child(-n + 3)) {
-			animation: none;
+			animation: var(--reveal-load);
 		}
 	}
 	@media (min-width: 601px) and (max-width: 960px) {
 		.stay-grid > :global(.stay-card:nth-child(-n + 2)) {
-			animation: none;
+			animation: var(--reveal-load);
 		}
 	}
 	@media (max-width: 600px) {
 		.stay-grid > :global(.stay-card:nth-child(1)) {
-			animation: none;
+			animation: var(--reveal-load);
 		}
 	}
 </style>
