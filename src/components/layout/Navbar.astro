@@ -700,9 +700,11 @@ const activeContact = inGroup(["/contact-us/"]);
 	}
 
 	/* Right-hand drawer in a modal <dialog> that spans the viewport: the scrim
-	   fades, the panel slides in from the right. Closing is quicker (240ms)
-	   than opening (400ms). `display`/`overlay` with allow-discrete keep the
-	   dialog rendered in the top layer while the close transition runs.
+	   fades and the panel eases in from the right. The motion is deliberately
+	   small: the panel travels only 2rem while it fades, instead of crossing its
+	   whole width, on an ease-in-out curve. Closing (200ms) is quicker than
+	   opening (280ms). `display`/`overlay` with allow-discrete keep the dialog
+	   rendered in the top layer while the close transition runs.
 	   Reset the UA dialog box (inset, size, margin, border, padding, colours). */
 	.mobile-nav {
 		inset: 0;
@@ -717,8 +719,8 @@ const activeContact = inGroup(["/contact-us/"]);
 		color: var(--color-text);
 		overflow: hidden;
 		transition:
-			display 240ms allow-discrete,
-			overlay 240ms allow-discrete;
+			display 200ms allow-discrete,
+			overlay 200ms allow-discrete;
 	}
 	/* Contain scroll chaining instead of locking <html>/<body> overflow. */
 	.mobile-nav:modal {
@@ -735,7 +737,7 @@ const activeContact = inGroup(["/contact-us/"]);
 		inset: 0;
 		background: rgba(10, 12, 10, 0.45);
 		opacity: 0;
-		transition: opacity 240ms ease;
+		transition: opacity 200ms cubic-bezier(0.645, 0.045, 0.355, 1);
 	}
 	.mobile-drawer {
 		position: absolute;
@@ -750,23 +752,28 @@ const activeContact = inGroup(["/contact-us/"]);
 		border-left: 1px solid var(--color-border);
 		padding: max(1rem, env(safe-area-inset-top)) max(var(--spacing-lg), env(safe-area-inset-right))
 			max(var(--spacing-xl), env(safe-area-inset-bottom)) var(--spacing-lg);
-		transform: translateX(100%);
-		transition: transform 240ms cubic-bezier(0.23, 1, 0.32, 1);
+		opacity: 0;
+		transform: translateX(2rem);
+		transition:
+			transform 200ms cubic-bezier(0.645, 0.045, 0.355, 1),
+			opacity 200ms cubic-bezier(0.645, 0.045, 0.355, 1);
 	}
 	.mobile-nav[open] .mobile-scrim {
 		opacity: 1;
+		transition-duration: 280ms;
 	}
 	.mobile-nav[open] .mobile-drawer {
+		opacity: 1;
 		transform: none;
-		transition-duration: 400ms;
-		transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+		transition-duration: 280ms;
 	}
 	@starting-style {
 		.mobile-nav[open] .mobile-scrim {
 			opacity: 0;
 		}
 		.mobile-nav[open] .mobile-drawer {
-			transform: translateX(100%);
+			opacity: 0;
+			transform: translateX(2rem);
 		}
 	}
 	.drawer-top {
