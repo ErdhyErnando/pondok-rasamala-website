@@ -108,8 +108,15 @@ const activeContact = inGroup(["/contact-us/"]);
 					<div class="mega-grid">
 						{stayCards.map((c) => (
 							<a class="mega-card" href={c.href} aria-current={here(c.href) ? "page" : undefined}>
-								<span class="mega-tile" data-tile={c.tile} aria-hidden="true">
-									<span class="mega-tile-mark"></span>
+								<span class="mega-tile" aria-hidden="true">
+									<img
+										class="mega-tile-art"
+										data-tile={c.tile}
+										src={`/brand/nav/${c.tile}.svg`}
+										alt=""
+										width="96"
+										height="96"
+									/>
 								</span>
 								<span class="mega-body">
 									<span class="mega-title">{c.title}</span>
@@ -147,8 +154,15 @@ const activeContact = inGroup(["/contact-us/"]);
 				<div class="mega-grid cols-2">
 					{groupCards.map((c) => (
 							<a class="mega-card" href={c.href} aria-current={here(c.href) ? "page" : undefined}>
-								<span class="mega-tile" data-tile={c.tile} aria-hidden="true">
-									<span class="mega-tile-mark"></span>
+								<span class="mega-tile" aria-hidden="true">
+									<img
+										class="mega-tile-art"
+										data-tile={c.tile}
+										src={`/brand/nav/${c.tile}.svg`}
+										alt=""
+										width="96"
+										height="96"
+									/>
 								</span>
 								<span class="mega-body">
 									<span class="mega-title">{c.title}</span>
@@ -186,8 +200,15 @@ const activeContact = inGroup(["/contact-us/"]);
 				<div class="mega-grid cols-2">
 					{exploreCards.map((c) => (
 						<a class="mega-card" href={c.href} aria-current={here(c.href) ? "page" : undefined}>
-							<span class="mega-tile" data-tile={c.tile} aria-hidden="true">
-								<span class="mega-tile-mark"></span>
+							<span class="mega-tile" aria-hidden="true">
+								<img
+									class="mega-tile-art"
+									data-tile={c.tile}
+									src={`/brand/nav/${c.tile}.svg`}
+									alt=""
+									width="96"
+									height="96"
+								/>
 							</span>
 							<span class="mega-body">
 								<span class="mega-title">{c.title}</span>
@@ -575,9 +596,8 @@ const activeContact = inGroup(["/contact-us/"]);
 	.mega-card[aria-current="page"] .mega-title {
 		color: var(--color-brand);
 	}
-	/* Tile placeholder: fixed 96px slot in the brand-soft wash.
-	   AI-ILLUSTRATION SWAP POINT, replace .mega-tile-mark with an
-	   <img data-tile="…"> at 96px, object-fit cover, same radius. */
+	/* Illustration tile: fixed 96px slot in the brand-soft wash.
+	   Badge SVGs live in public/brand/nav and are keyed by data-tile. */
 	.mega-tile {
 		display: flex;
 		align-items: center;
@@ -586,17 +606,14 @@ const activeContact = inGroup(["/contact-us/"]);
 		width: 96px;
 		height: 96px;
 		border-radius: 20px;
-		color: var(--color-wood);
 		background:
 			radial-gradient(120% 100% at 50% 0%, var(--color-brand-soft) 0%, transparent 60%),
 			var(--color-surface);
-		border: 1px dashed var(--color-border);
 	}
-	.mega-tile-mark {
-		width: 40px;
-		height: 40px;
-		border-radius: 12px;
-		background: var(--color-brand-soft);
+	.mega-tile-art {
+		display: block;
+		width: 100%;
+		height: 100%;
 	}
 	.mega-body {
 		display: flex;
