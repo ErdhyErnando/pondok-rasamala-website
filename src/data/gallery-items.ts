@@ -93,6 +93,15 @@ export const galleryItems: GalleryItem[] = [
 		image: "",
 	},
 	{
+		id: "sate-bakar-sosis", category: "events",
+		caption: T("Sosis dan jagung bakar, camilan wajib malam api unggun.", "Grilled sausages and corn, the must-have bonfire-night snack."),
+		photo: photo("gallery/sate-bakar-sosis/01-sate-bakar-sosis", {
+			id: "Sosis tusuk dan jagung manis dipanggang di atas panggangan.",
+			en: "Skewered sausages and sweet corn grilling over a barbecue.",
+		}),
+		image: "",
+	},
+	{
 		id: "sarapan-tenda", category: "glamping",
 		caption: T("Sarapan hangat di depan tenda.", "Warm breakfast in front of the tent."),
 		// No photo exists yet: the grid shows this label until one is added to the manifest.

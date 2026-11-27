@@ -2532,9 +2532,19 @@
       "dataFile": "src/data/packages.ts",
       "photos": [
         {
+          "source": "2021/01/outbound_IMG-20190203-WA0181.jpg",
+          "wpId": "1217",
+          "role": "hero",
+          "name": "games-lingkaran",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Owner-picked hero for Company Outing (same file as the Outbound and School packages)."
+        },
+        {
           "source": "2021/01/aulaKalapa_IMG_8807.jpg",
           "wpId": "1211",
-          "role": "hero",
+          "role": "gallery",
           "name": "aula-meja-panjang",
           "width": 5472,
           "height": 3648,
@@ -2796,6 +2806,23 @@
           "height": 578,
           "focal": "center",
           "note": "Owner-requested addition (old gallery '03_galery'), 1024x578."
+        }
+      ]
+    },
+    {
+      "section": "gallery",
+      "slug": "sate-bakar-sosis",
+      "dataFile": "src/data/gallery-items.ts",
+      "photos": [
+        {
+          "source": "2021/01/package_2016_1202_21300300.jpg",
+          "wpId": "1219",
+          "role": "hero",
+          "name": "sate-bakar-sosis",
+          "width": 1776,
+          "height": 1184,
+          "focal": "center",
+          "note": "Owner-requested addition to the gallery (also in Company Outing), 1776x1184."
         }
       ]
     },

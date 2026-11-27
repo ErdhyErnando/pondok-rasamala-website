@@ -155,32 +155,36 @@ export const packages = [
 			id: ["Team building", "Paintball", "Makan bersama", "Api unggun"],
 			en: ["Team building", "Paintball", "Shared meals", "Bonfire"],
 		},
-		hero: photo("package/company-outing/01-aula-meja-panjang", {
-			id: "Aula kayu lapang dengan meja dan bangku kayu panjang di bawah rangka atap tinggi dan lampu gantung.",
-			en: "Spacious timber hall with a long wooden table and benches under a high roof frame and hanging lamps.",
+		hero: photo("package/company-outing/01-games-lingkaran", {
+			id: "Peserta berkaus merah muda dan biru berdiri melingkar di lapangan untuk permainan kekompakan.",
+			en: "Participants in pink and blue shirts stand in a circle on the field for a teamwork game.",
 		}),
 		gallery: [
-				photo("package/company-outing/02-sesi-pertemuan", {
+				photo("package/company-outing/02-aula-meja-panjang", {
+					id: "Aula kayu lapang dengan meja dan bangku kayu panjang di bawah rangka atap tinggi dan lampu gantung.",
+					en: "Spacious timber hall with a long wooden table and benches under a high roof frame and hanging lamps.",
+				}),
+				photo("package/company-outing/03-sesi-pertemuan", {
 					id: "Peserta rapat duduk mengelilingi meja putih berbentuk U di aula beratap tenda, dengan kebun hijau di baliknya.",
 					en: "Attendees at a meeting around a U-shaped white table in the tent-roofed hall, with a green garden beyond.",
 				}),
-				photo("package/company-outing/03-tim-bola", {
+				photo("package/company-outing/04-tim-bola", {
 					id: "Tim berkaus hitam dan bertopi biru berdiri mengelilingi bola di atas tiang dalam permainan kerja sama di hutan pinus.",
 					en: "A team in black shirts and blue caps gathers around a ball on a pole in a pine-forest teamwork game.",
 				}),
-				photo("package/company-outing/04-tali-games", {
+				photo("package/company-outing/05-tali-games", {
 					id: "Seorang peserta tergantung pada tali pengaman sambil disaksikan rekan satu tim, di hutan pinus.",
 					en: "A participant hangs from a safety rope as teammates look on, in a pine forest.",
 				}),
-				photo("package/company-outing/05-sate-bakar-sosis", {
+				photo("package/company-outing/06-sate-bakar-sosis", {
 					id: "Sosis tusuk dan jagung manis dipanggang di atas panggangan.",
 					en: "Skewered sausages and sweet corn grilling over a barbecue.",
 				}),
-				photo("package/company-outing/06-sate-bakar-daging", {
+				photo("package/company-outing/07-sate-bakar-daging", {
 					id: "Sate daging berbumbu kecokelatan dipanggang berjajar di atas panggangan.",
 					en: "Rows of seasoned, browned meat skewers grilling on a barbecue.",
 				}),
-				photo("package/company-outing/07-api-unggun-malam", {
+				photo("package/company-outing/08-api-unggun-malam", {
 					id: "Peserta berdiri setengah lingkaran menyaksikan api unggun menyala di tanah lapang pada malam hari.",
 					en: "Participants stand in an arc watching a bonfire burn on an open field at night.",
 				}),
