@@ -13,7 +13,7 @@
     "preview": "astro preview",
     "deploy": "astro build && wrangler deploy",
     "typecheck": "astro check",
-    "photos:import": "node scripts/photos/import.mjs --sections=villa,aula,glamping,campsite,package,gallery"
+    "photos:import": "node scripts/photos/import.mjs --sections=villa,aula,glamping,campsite,package,gallery,home-activity"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.3.1",

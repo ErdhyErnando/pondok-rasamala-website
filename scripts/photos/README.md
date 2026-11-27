@@ -6,7 +6,7 @@ with `photo(...)` calls (`src/lib/photos.ts`). Nothing else is needed: the build
 responsive sizes.
 
 Currently covered: sections `villa`, `aula`, `glamping`, `campsite`, `package` and `gallery`
-(data files `villas.ts`, `glamping.ts`, `campsite.ts`, `packages.ts`, `gallery-items.ts`). Manifest
+(data files `villas.ts`, `glamping.ts`, `campsite.ts`, `packages.ts`, `gallery-items.ts`). Section `home-activity` holds the photos of the home page's activity cards (`home.ts`). Manifest
 sections not listed in the `photos:import` script in `package.json` (`home`, `about`, `post`,
 `activity`) are planned but not wired yet: add them to `--sections=` when you start one.
 

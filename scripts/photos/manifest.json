@@ -2970,6 +2970,40 @@
       ]
     },
     {
+      "section": "home-activity",
+      "slug": "play",
+      "dataFile": "src/data/home.ts",
+      "photos": [
+        {
+          "source": "2016/08/IMG_7261a.jpg",
+          "wpId": "449",
+          "role": "hero",
+          "name": "outbound-games",
+          "width": 5472,
+          "height": 3648,
+          "focal": "center",
+          "note": "Owner-picked (id 449) for the home Play card; same file as the Outbound package and gallery photos."
+        }
+      ]
+    },
+    {
+      "section": "home-activity",
+      "slug": "gather",
+      "dataFile": "src/data/home.ts",
+      "photos": [
+        {
+          "source": "2016/05/IMG-20160319-WA0000.jpg",
+          "wpId": "234",
+          "role": "hero",
+          "name": "api-unggun-malam",
+          "width": 1024,
+          "height": 683,
+          "focal": "center",
+          "note": "Owner-picked (id 234) for the home Gather card: people around a bonfire, 1024x683 (below 1600); faces small."
+        }
+      ]
+    },
+    {
       "section": "home",
       "slug": "hero",
       "dataFile": "src/data/home.ts",
@@ -3034,57 +3068,6 @@
           "height": 853,
           "focal": "center",
           "note": "Re-uses the campsite hero."
-        }
-      ]
-    },
-    {
-      "section": "activity",
-      "slug": "home-activity-play",
-      "dataFile": "src/data/home.ts",
-      "photos": [
-        {
-          "source": "2016/08/IMG_7261a.jpg",
-          "wpId": "449",
-          "role": "hero",
-          "name": "outbound-games",
-          "width": 5472,
-          "height": 3648,
-          "focal": "center",
-          "note": "Re-uses the rope-games shot."
-        }
-      ]
-    },
-    {
-      "section": "activity",
-      "slug": "home-activity-explore",
-      "dataFile": "src/data/home.ts",
-      "photos": [
-        {
-          "source": "2021/01/wisataSekitar_IMG-20190520-WA0046.jpg",
-          "wpId": "1215",
-          "role": "hero",
-          "name": "trekking-curug",
-          "width": 1280,
-          "height": 853,
-          "focal": "center",
-          "note": "Generic waterfall group; the card label says Curug Seribu and this photo is not confirmed to be there."
-        }
-      ]
-    },
-    {
-      "section": "activity",
-      "slug": "home-activity-gather",
-      "dataFile": "src/data/home.ts",
-      "photos": [
-        {
-          "source": "2021/01/aulaKalapa_IMG_8801.jpg",
-          "wpId": "1210",
-          "role": "hero",
-          "name": "aula-gathering",
-          "width": 5472,
-          "height": 3648,
-          "focal": "center",
-          "note": "Re-uses the Aula hero."
         }
       ]
     },
@@ -3304,6 +3287,11 @@
       "section": "post",
       "slug": "blog-index-hero",
       "reason": "src/pages/blog/index.astro hero (16/8): not tied to a post; owner can reuse a post hero."
+    },
+    {
+      "section": "home-activity",
+      "slug": "explore",
+      "reason": "Owner chose to leave the waterfall card empty for now; it keeps its placeholder."
     }
   ]
 }
