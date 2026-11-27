@@ -11,7 +11,7 @@ import type { Locale } from "../../lib/i18n";
 // centered serif H1 + short sub + one forest CTA over a scenic panel.
 // The panel is layered, back to front: a dark base, five resort photos that
 // cross-fade slowly at low opacity, four drifting colour blobs (a CSS take on
-// the "grainient" look: no JS, no canvas), the Salak ridges, film grain, then
+// the "grainient" look: no JS, no canvas), film grain, then
 // the scrim that keeps the white text contrast-safe. All motion is CSS and
 // stops under prefers-reduced-motion (one still photo stays).
 interface Props {
@@ -57,7 +57,6 @@ if (slides.length !== 5) throw new Error("HeroSection: hero-fade keyframes are w
 			<div class="blob blob-mint"></div>
 			<div class="blob blob-amber"></div>
 			<div class="blob blob-cream"></div>
-			<div class="hero-ridges"></div>
 			<div class="hero-grain"></div>
 		</div>
 		<div class="hero-scrim" aria-hidden="true"></div>
@@ -172,22 +171,6 @@ if (slides.length !== 5) throw new Error("HeroSection: hero-fade keyframes are w
 	}
 	@keyframes drift-d {
 		to { transform: translate3d(24vmax, -16vmax, 0) scale(1.15); }
-	}
-	/* Salak ridges: translucent, so the photos and colour show through them. */
-	.hero-ridges::before,
-	.hero-ridges::after {
-		content: "";
-		position: absolute;
-		inset: auto 0 0;
-		height: 52%;
-	}
-	.hero-ridges::before {
-		background: linear-gradient(180deg, rgba(29, 74, 55, 0.7), rgba(20, 55, 40, 0.8));
-		clip-path: polygon(0 62%, 12% 38%, 26% 55%, 40% 22%, 55% 48%, 70% 30%, 84% 52%, 100% 36%, 100% 100%, 0 100%);
-	}
-	.hero-ridges::after {
-		background: linear-gradient(180deg, rgba(13, 40, 30, 0.88), rgba(7, 23, 15, 0.96));
-		clip-path: polygon(0 78%, 15% 58%, 30% 74%, 46% 50%, 62% 72%, 78% 56%, 100% 74%, 100% 100%, 0 100%);
 	}
 	/* Film grain: a static SVG noise tile (data: URI, allowed by img-src). */
 	.hero-grain {
