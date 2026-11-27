@@ -133,15 +133,15 @@ export const villas = [
 			"Villa Cendana adalah unit terbesar di Pondok Rasamala: 7 kamar tidur, 3 kamar mandi, dapur, dan 2 ruang keluarga untuk 14–28 orang. Dirancang untuk gathering perusahaan, reuni akbar, dan acara sekolah yang butuh satu atap untuk semua peserta. Satu villa menampung panitia, peserta, dan ruang kumpul tanpa harus berpencar.",
 			"Villa Cendana is the largest unit at Pondok Rasamala: 7 bedrooms, 3 bathrooms, a kitchen, and 2 living rooms for 14–28 guests. Built for company outings, grand reunions, and school events that need everyone under one roof. One villa holds the committee, the participants, and the gathering space, nobody split up.",
 		),
-		amenities: { id: ["7 kamar tidur", "3 kamar mandi", "Dapur", "2 ruang keluarga"], en: ["7 bedrooms", "3 bathrooms", "Kitchen", "2 living rooms"] }, hero: photo("villa/cendana/01-tampak-depan", {
-			id: "Bangunan kayu bertingkat Villa Cendana di antara pakis dan tanaman tropis, dengan saung beratap genteng di sampingnya.",
-			en: "Villa Cendana's two-storey timber building among tree ferns and tropical plants, with a tiled pavilion beside it.",
-		}),
-		gallery: [
-			photo("villa/cendana/02-tampak-pohon-pakis", {
+		amenities: { id: ["7 kamar tidur", "3 kamar mandi", "Dapur", "2 ruang keluarga"], en: ["7 bedrooms", "3 bathrooms", "Kitchen", "2 living rooms"] }, hero: photo("villa/cendana/01-tampak-pohon-pakis", {
 				id: "Villa Cendana dua lantai berdinding batu dan balkon kayu, dinaungi daun pakis besar.",
 				en: "Two-storey stone-walled Villa Cendana with a wooden balcony, sheltered by large fern fronds.",
 			}),
+		gallery: [
+			photo("villa/cendana/02-tampak-depan", {
+			id: "Bangunan kayu bertingkat Villa Cendana di antara pakis dan tanaman tropis, dengan saung beratap genteng di sampingnya.",
+			en: "Villa Cendana's two-storey timber building among tree ferns and tropical plants, with a tiled pavilion beside it.",
+		}),
 			photo("villa/cendana/03-teras-pintu-kayu", {
 				id: "Teras Villa Cendana dengan pintu ganda kayu, dinding batu kali, dan dua kursi kayu bercabang.",
 				en: "Villa Cendana porch with double wooden doors, river-stone walls and two rustic branch-wood chairs.",
@@ -188,18 +188,18 @@ export const villas = [
 			"Villa Dayak memadukan 2 kamar tidur, ruang tamu, dapur, dan kamar mandi dalam satu bangunan kayu yang hangat. Kapasitas 4–6 orang membuatnya pas untuk dua keluarga kecil atau rombongan sahabat. Ruang tamunya jadi tempat ngobrol sampai malam tanpa mengganggu yang sudah tidur.",
 			"Villa Dayak combines 2 bedrooms, a guest room, kitchen, and bathroom in one warm timber building. Sleeping 4–6, it suits two small families or a group of friends. The guest room becomes the late-night chat spot without disturbing early sleepers.",
 		),
-		amenities: { id: ["2 kamar tidur", "Ruang tamu", "1 kamar mandi", "Dapur"], en: ["2 bedrooms", "Guest room", "1 bathroom", "Kitchen"] }, hero: photo("villa/dayak/01-tampak-depan-jalan", {
+		amenities: { id: ["2 kamar tidur", "Ruang tamu", "1 kamar mandi", "Dapur"], en: ["2 bedrooms", "Guest room", "1 bathroom", "Kitchen"] }, hero: photo("villa/dayak/01-halaman-api-unggun", {
+				id: "Halaman rumput Villa Dayak dengan lingkaran batu untuk api unggun dan jalan batu menuju rumah A-frame.",
+				en: "Villa Dayak lawn with a stone fire ring and a flagstone path leading to the A-frame house.",
+			}),
+		gallery: [
+			photo("villa/dayak/02-tampak-depan-jalan", {
 			id: "Pondok A-frame Villa Dayak di antara pepohonan, terlihat dari jalan paving di dalam resor.",
 			en: "A-frame Villa Dayak among the trees, seen from the paved road inside the resort.",
 		}),
-		gallery: [
-			photo("villa/dayak/02-tampak-a-frame", {
+			photo("villa/dayak/03-tampak-a-frame", {
 				id: "Villa Dayak beratap runcing di taman rimbun, dengan papan nama kayu di depan dan pakis di sekelilingnya.",
 				en: "Pointed-roof Villa Dayak in a leafy garden with a wooden name sign and ferns around it.",
-			}),
-			photo("villa/dayak/03-halaman-api-unggun", {
-				id: "Halaman rumput Villa Dayak dengan lingkaran batu untuk api unggun dan jalan batu menuju rumah A-frame.",
-				en: "Villa Dayak lawn with a stone fire ring and a flagstone path leading to the A-frame house.",
 			}),
 			photo("villa/dayak/04-ruang-tamu", {
 				id: "Ruang tamu Villa Dayak berdinding anyaman bambu dengan bangku kayu, pintu ganda, dan lantai ubin abu-abu.",
@@ -439,15 +439,15 @@ export const villas = [
 			"Villa Puspa A mungil dan tenang: 2 kamar tidur, teras, dan 2 kamar mandi untuk 4–8 orang. Paling cocok untuk pasangan atau keluarga kecil yang mau kabur dari bising kota tanpa anggaran besar. Sore hari di teras Puspa, ditemani suara serangga dan udara gunung, adalah definisi liburan pelan.",
 			"Villa Puspa A is small and quiet: 2 bedrooms, a terrace, and 2 bathrooms for 4–8 guests. Best for couples or small families escaping city noise on a modest budget. An afternoon on Puspa's terrace, insects humming, mountain air cool, is the definition of a slow holiday.",
 		),
-		amenities: { id: ["2 kamar tidur", "2 kamar mandi", "Teras"], en: ["2 bedrooms", "2 bathrooms", "Terrace"] }, hero: photo("villa/puspa-a/01-lorong-pintu-kamar", {
-			id: "Lorong batu di Villa Puspa A dengan dua pintu kamar berdampingan, tiang kayu bercabang, dan bunga heliconia di rak kayu.",
-			en: "Stone-walled corridor at Villa Puspa A with two bedroom doors, branching timber posts and heliconia flowers on a shelf.",
-		}),
-		gallery: [
-			photo("villa/puspa-a/02-teras-pagar-bambu", {
+		amenities: { id: ["2 kamar tidur", "2 kamar mandi", "Teras"], en: ["2 bedrooms", "2 bathrooms", "Terrace"] }, hero: photo("villa/puspa-a/01-teras-pagar-bambu", {
 				id: "Teras panjang Villa Puspa A beratap ilalang dengan pagar bambu bulat dan jalan batu pipih di sampingnya.",
 				en: "Long porch at Villa Puspa A under a thatched roof with a round-bamboo railing and a flagstone path beside it.",
 			}),
+		gallery: [
+			photo("villa/puspa-a/02-lorong-pintu-kamar", {
+			id: "Lorong batu di Villa Puspa A dengan dua pintu kamar berdampingan, tiang kayu bercabang, dan bunga heliconia di rak kayu.",
+			en: "Stone-walled corridor at Villa Puspa A with two bedroom doors, branching timber posts and heliconia flowers on a shelf.",
+		}),
 			photo("villa/puspa-a/03-teras-bunga", {
 				id: "Teras Villa Puspa A berdinding batu dengan meja dan bangku kayu akar, serta heliconia kuning di dalam vas.",
 				en: "Stone-walled porch at Villa Puspa A with root-wood table and benches and yellow heliconia in a vase.",
@@ -486,12 +486,12 @@ export const villas = [
 			"Villa Puspa B mungil dan tenang: 2 kamar tidur, teras, dan 2 kamar mandi untuk 4–8 orang. Paling cocok untuk pasangan atau keluarga kecil yang mau kabur dari bising kota tanpa anggaran besar. Sore hari di teras Puspa, ditemani suara serangga dan udara gunung, adalah definisi liburan pelan.",
 			"Villa Puspa B is small and quiet: 2 bedrooms, a terrace, and 2 bathrooms for 4–8 guests. Best for couples or small families escaping city noise on a modest budget. An afternoon on Puspa's terrace, insects humming, mountain air cool, is the definition of a slow holiday.",
 		),
-		amenities: { id: ["2 kamar tidur", "2 kamar mandi", "Teras"], en: ["2 bedrooms", "2 bathrooms", "Terrace"] }, hero: photo("villa/puspa-a/01-lorong-pintu-kamar", {
+		amenities: { id: ["2 kamar tidur", "2 kamar mandi", "Teras"], en: ["2 bedrooms", "2 bathrooms", "Terrace"] }, hero: photo("villa/puspa-a/02-lorong-pintu-kamar", {
 			id: "Lorong batu di Villa Puspa B dengan dua pintu kamar berdampingan, tiang kayu bercabang, dan bunga heliconia di rak kayu.",
 			en: "Stone-walled corridor at Villa Puspa B with two bedroom doors, branching timber posts and heliconia flowers on a shelf.",
 		}),
 		gallery: [
-			photo("villa/puspa-a/02-teras-pagar-bambu", {
+			photo("villa/puspa-a/01-teras-pagar-bambu", {
 				id: "Teras panjang Villa Puspa B beratap ilalang dengan pagar bambu bulat dan jalan batu pipih di sampingnya.",
 				en: "Long porch at Villa Puspa B under a thatched roof with a round-bamboo railing and a flagstone path beside it.",
 			}),
@@ -533,12 +533,16 @@ export const villas = [
 			"Villa Puspa C mungil dan tenang: 2 kamar tidur, teras, dan 2 kamar mandi untuk 4–8 orang. Paling cocok untuk pasangan atau keluarga kecil yang mau kabur dari bising kota tanpa anggaran besar. Sore hari di teras Puspa, ditemani suara serangga dan udara gunung, adalah definisi liburan pelan.",
 			"Villa Puspa C is small and quiet: 2 bedrooms, a terrace, and 2 bathrooms for 4–8 guests. Best for couples or small families escaping city noise on a modest budget. An afternoon on Puspa's terrace, insects humming, mountain air cool, is the definition of a slow holiday.",
 		),
-		amenities: { id: ["2 kamar tidur", "2 kamar mandi", "Teras"], en: ["2 bedrooms", "2 bathrooms", "Terrace"] }, hero: photo("villa/puspa-a/01-lorong-pintu-kamar", {
+		amenities: { id: ["2 kamar tidur", "2 kamar mandi", "Teras"], en: ["2 bedrooms", "2 bathrooms", "Terrace"] }, hero: photo("villa/puspa-a/09-tampak-depan", {
+				id: "Tampak depan Villa Puspa C: pondok dua tingkat beratap ilalang dengan pagar bambu bulat, dinaungi pakis pohon.",
+				en: "Front of Villa Puspa C: a two-tier thatched cottage with a round-bamboo railing, shaded by a tree fern.",
+			}),
+		gallery: [
+			photo("villa/puspa-a/02-lorong-pintu-kamar", {
 			id: "Lorong batu di Villa Puspa C dengan dua pintu kamar berdampingan, tiang kayu bercabang, dan bunga heliconia di rak kayu.",
 			en: "Stone-walled corridor at Villa Puspa C with two bedroom doors, branching timber posts and heliconia flowers on a shelf.",
 		}),
-		gallery: [
-			photo("villa/puspa-a/02-teras-pagar-bambu", {
+			photo("villa/puspa-a/01-teras-pagar-bambu", {
 				id: "Teras panjang Villa Puspa C beratap ilalang dengan pagar bambu bulat dan jalan batu pipih di sampingnya.",
 				en: "Long porch at Villa Puspa C under a thatched roof with a round-bamboo railing and a flagstone path beside it.",
 			}),
@@ -565,10 +569,6 @@ export const villas = [
 			photo("villa/puspa-a/08-taman-pinus", {
 				id: "Taman Villa Puspa C di bawah pohon pinus, dengan deretan tanaman daun merah muda dan pondok ilalang di belakang.",
 				en: "Garden at Villa Puspa C under pine trees, with a border of pink-and-green foliage and a thatched hut behind.",
-			}),
-			photo("villa/puspa-a/09-tampak-depan", {
-				id: "Tampak depan Villa Puspa C: pondok dua tingkat beratap ilalang dengan pagar bambu bulat, dinaungi pakis pohon.",
-				en: "Front of Villa Puspa C: a two-tier thatched cottage with a round-bamboo railing, shaded by a tree fern.",
 			}),
 		],
 	},
@@ -623,15 +623,15 @@ export const villas = [
 			"Villa Gaharu dirancang fleksibel: 2 kamar tidur plus 2 extra bed, dapur, ruang keluarga, dan kamar mandi untuk 6–7 orang. Extra bed-nya menyelamatkan tim kecil atau keluarga yang jumlahnya tanggung. Ruang keluarganya luas, cukup untuk briefing pagi sebelum outbound.",
 			"Villa Gaharu is flexibly arranged: 2 bedrooms plus 2 extra beds, kitchen, living room, and bathroom for 6–7 guests. The extra beds save small teams or odd-numbered families. Its living room is generous, big enough for a morning briefing before outbound.",
 		),
-		amenities: { id: ["2 kamar tidur", "2 extra bed", "1 kamar mandi", "Dapur", "Ruang keluarga"], en: ["2 bedrooms", "2 extra beds", "1 bathroom", "Kitchen", "Living room"] }, hero: photo("villa/gaharu/01-tampak-malam", {
-			id: "Villa Gaharu, rumah panggung kayu yang menyala hangat di malam hari dengan tangga luar, di antara pohon pinus.",
-			en: "Villa Gaharu, a timber stilt house glowing warmly at night with an outdoor stair, among pine trees.",
-		}),
-		gallery: [
-			photo("villa/gaharu/02-tampak-siang", {
+		amenities: { id: ["2 kamar tidur", "2 extra bed", "1 kamar mandi", "Dapur", "Ruang keluarga"], en: ["2 bedrooms", "2 extra beds", "1 bathroom", "Kitchen", "Living room"] }, hero: photo("villa/gaharu/01-tampak-siang", {
 				id: "Villa Gaharu dua lantai berbalkon kayu di antara pohon pinus dan taman pakis dengan bunga merah.",
 				en: "Two-storey Villa Gaharu with a wooden balcony among pine trees and a fern garden with red flowers.",
 			}),
+		gallery: [
+			photo("villa/gaharu/02-tampak-malam", {
+			id: "Villa Gaharu, rumah panggung kayu yang menyala hangat di malam hari dengan tangga luar, di antara pohon pinus.",
+			en: "Villa Gaharu, a timber stilt house glowing warmly at night with an outdoor stair, among pine trees.",
+		}),
 			photo("villa/gaharu/03-tampak-samping-pinus", {
 				id: "Sisi Villa Gaharu yang bertumpu pada panggung kayu dengan jendela kaca lebar, berdiri di antara batang pinus.",
 				en: "Side of Villa Gaharu raised on timber stilts, with wide glass windows, standing among pine trunks.",
@@ -780,15 +780,15 @@ export const villas = [
 			"Villa Kimerak punya 3 kamar tidur, 2 kamar mandi, ruang keluarga, dapur, dan teras luas untuk 6–7 orang. Terasnya menghadap ke hijaunya resort, tempat terbaik untuk kopi pagi sebelum aktivitas. Ukurannya pas untuk gathering kecil yang ingin suasana villa besar.",
 			"Villa Kimerak offers 3 bedrooms, 2 bathrooms, a living room, kitchen, and a wide terrace for 6–7 guests. The terrace faces the resort's greenery, the best seat for morning coffee before activities. Sized right for small gatherings wanting a big-villa feel.",
 		),
-		amenities: { id: ["3 kamar tidur", "2 kamar mandi", "Ruang keluarga", "Teras", "Dapur"], en: ["3 bedrooms", "2 bathrooms", "Living room", "Terrace", "Kitchen"] }, hero: photo("villa/kimerak/01-tampak-pemandangan", {
+		amenities: { id: ["3 kamar tidur", "2 kamar mandi", "Ruang keluarga", "Teras", "Dapur"], en: ["3 bedrooms", "2 bathrooms", "Living room", "Terrace", "Kitchen"] }, hero: photo("villa/kimerak/01-tampak-depan-bunga", {
+				id: "Villa Kimerak berdinding kayu dan bata dengan atap merah, di balik bunga ungu dan tanah merah.",
+				en: "Timber-and-brick Villa Kimerak with a red roof, behind purple flowers and red soil.",
+			}, "50% 40%"),
+		gallery: [
+			photo("villa/kimerak/02-tampak-pemandangan", {
 			id: "Villa Kimerak berbentuk A beratap merah di antara tanaman tropis, dengan perbukitan dan langit biru di kejauhan.",
 			en: "A-shaped, red-roofed Villa Kimerak among tropical plants, with hills and blue sky in the distance.",
 		}),
-		gallery: [
-			photo("villa/kimerak/02-tampak-depan-bunga", {
-				id: "Villa Kimerak berdinding kayu dan bata dengan atap merah, di balik bunga ungu dan tanah merah.",
-				en: "Timber-and-brick Villa Kimerak with a red roof, behind purple flowers and red soil.",
-			}),
 			photo("villa/kimerak/03-teras-api-unggun", {
 				id: "Tempat api unggun dari batu dengan bangku beton di halaman bata Villa Kimerak, di samping teras kayu.",
 				en: "Stone fire pit with concrete benches on Villa Kimerak's brick patio, beside the timber porch.",

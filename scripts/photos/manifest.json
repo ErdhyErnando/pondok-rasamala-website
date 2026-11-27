@@ -138,24 +138,24 @@
       "dataFile": "src/data/villas.ts",
       "photos": [
         {
-          "source": "2021/08/cendana-Image-2021-08-02-at-12.17.05-PM.jpeg",
-          "wpId": "1342",
-          "role": "hero",
-          "name": "tampak-depan",
-          "width": 1280,
-          "height": 720,
-          "focal": "center",
-          "note": "Old featured image, 1280x720 (below 1600)."
-        },
-        {
           "source": "2020/12/Cendana-Image-2020-12-04-at-11.44.05-PM.jpeg",
           "wpId": "873",
-          "role": "gallery",
+          "role": "hero",
           "name": "tampak-pohon-pakis",
           "width": 1280,
           "height": 853,
           "focal": "center",
           "note": ""
+        },
+        {
+          "source": "2021/08/cendana-Image-2021-08-02-at-12.17.05-PM.jpeg",
+          "wpId": "1342",
+          "role": "gallery",
+          "name": "tampak-depan",
+          "width": 1280,
+          "height": 720,
+          "focal": "center",
+          "note": "Old featured image, 1280x720 (below 1600)."
         },
         {
           "source": "2020/12/Cendana-Image-2020-12-04-at-11.44.05-PM-1.jpeg",
@@ -255,9 +255,19 @@
       "dataFile": "src/data/villas.ts",
       "photos": [
         {
+          "source": "2021/01/dayak_IMG-20201119-WA0016.jpg",
+          "wpId": "1249",
+          "role": "hero",
+          "name": "halaman-api-unggun",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": ""
+        },
+        {
           "source": "2021/01/dayak_IMG_8901.jpg",
           "wpId": "1250",
-          "role": "hero",
+          "role": "gallery",
           "name": "tampak-depan-jalan",
           "width": 5472,
           "height": 3648,
@@ -273,16 +283,6 @@
           "height": 720,
           "focal": "center",
           "note": "Old featured, 1280x720."
-        },
-        {
-          "source": "2021/01/dayak_IMG-20201119-WA0016.jpg",
-          "wpId": "1249",
-          "role": "gallery",
-          "name": "halaman-api-unggun",
-          "width": 1280,
-          "height": 853,
-          "focal": "center",
-          "note": ""
         },
         {
           "source": "2020/12/Dayak-Image-2020-12-04-at-11.40.19-PM-2.jpeg",
@@ -780,24 +780,24 @@
       "dataFile": "src/data/villas.ts",
       "photos": [
         {
-          "source": "2020/12/Puspa-Image-2020-12-11-at-3.53.23-PM.jpeg",
-          "wpId": "969",
-          "role": "hero",
-          "name": "lorong-pintu-kamar",
-          "width": 1280,
-          "height": 853,
-          "focal": "center",
-          "note": "Stone corridor with two cottage doors; best landscape that shows the unit itself (>=1200)."
-        },
-        {
           "source": "2016/05/01_puspa-1.jpg",
           "wpId": "97",
-          "role": "gallery",
+          "role": "hero",
           "name": "teras-pagar-bambu",
           "width": 1024,
           "height": 683,
           "focal": "center",
           "note": "1024 px."
+        },
+        {
+          "source": "2020/12/Puspa-Image-2020-12-11-at-3.53.23-PM.jpeg",
+          "wpId": "969",
+          "role": "gallery",
+          "name": "lorong-pintu-kamar",
+          "width": 1280,
+          "height": 853,
+          "focal": "center",
+          "note": "Stone corridor with two cottage doors; best landscape that shows the unit itself (>=1200)."
         },
         {
           "source": "2020/12/Puspa-Image-2020-12-11-at-3.53.22-PM.jpeg",
@@ -976,24 +976,24 @@
       "dataFile": "src/data/villas.ts",
       "photos": [
         {
-          "source": "2020/11/Gaharu-Image-2020-11-18-at-2.54.20-PM-3.jpeg",
-          "wpId": "840",
-          "role": "hero",
-          "name": "tampak-malam",
-          "width": 1440,
-          "height": 954,
-          "focal": "center",
-          "note": "Old featured image, night shot 1440x954."
-        },
-        {
           "source": "2020/11/Gaharu-Image-2020-11-18-at-2.54.21-PM-1.jpeg",
           "wpId": "842",
-          "role": "gallery",
+          "role": "hero",
           "name": "tampak-siang",
           "width": 1080,
           "height": 720,
           "focal": "center",
           "note": "1080x720."
+        },
+        {
+          "source": "2020/11/Gaharu-Image-2020-11-18-at-2.54.20-PM-3.jpeg",
+          "wpId": "840",
+          "role": "gallery",
+          "name": "tampak-malam",
+          "width": 1440,
+          "height": 954,
+          "focal": "center",
+          "note": "Old featured image, night shot 1440x954."
         },
         {
           "source": "2016/11/1480006818516.jpg",
@@ -1307,24 +1307,24 @@
       "dataFile": "src/data/villas.ts",
       "photos": [
         {
+          "source": "2022/01/kimerak-2022-01-09-at-8.26.38-AM-1.jpeg",
+          "wpId": "1354",
+          "role": "hero",
+          "name": "tampak-depan-bunga",
+          "width": 960,
+          "height": 1280,
+          "focal": "50% 40%",
+          "note": "Old featured, portrait 960x1280. Portrait 960x1280 used as hero: cropped to a landscape band with focal 50% 40% (house + flowers)."
+        },
+        {
           "source": "2022/01/kimerak-2022-01-09-at-8.26.39-AM.jpeg",
           "wpId": "1357",
-          "role": "hero",
+          "role": "gallery",
           "name": "tampak-pemandangan",
           "width": 1280,
           "height": 960,
           "focal": "center",
           "note": "Only landscape in the set (1280x960, 4:3). Everything else is portrait."
-        },
-        {
-          "source": "2022/01/kimerak-2022-01-09-at-8.26.38-AM-1.jpeg",
-          "wpId": "1354",
-          "role": "gallery",
-          "name": "tampak-depan-bunga",
-          "width": 960,
-          "height": 1280,
-          "focal": "center",
-          "note": "Old featured, portrait 960x1280."
         },
         {
           "source": "2022/01/kimerak-2022-01-09-at-8.26.39-AM-1.jpeg",
@@ -2733,6 +2733,23 @@
     },
     {
       "section": "gallery",
+      "slug": "bunga-agapanthus",
+      "dataFile": "src/data/gallery-items.ts",
+      "photos": [
+        {
+          "source": "2016/05/IMG_2831.jpg",
+          "wpId": "351",
+          "role": "hero",
+          "name": "bunga-agapanthus",
+          "width": 720,
+          "height": 512,
+          "focal": "center",
+          "note": "Owner-requested addition, 720x512."
+        }
+      ]
+    },
+    {
+      "section": "gallery",
       "slug": "tenda-salak",
       "dataFile": "src/data/gallery-items.ts",
       "photos": [
@@ -2767,6 +2784,23 @@
     },
     {
       "section": "gallery",
+      "slug": "bakar-bakaran",
+      "dataFile": "src/data/gallery-items.ts",
+      "photos": [
+        {
+          "source": "2016/05/03_galery.jpg",
+          "wpId": "176",
+          "role": "hero",
+          "name": "bakar-bakaran",
+          "width": 1024,
+          "height": 578,
+          "focal": "center",
+          "note": "Owner-requested addition (old gallery '03_galery'), 1024x578."
+        }
+      ]
+    },
+    {
+      "section": "gallery",
       "slug": "outbound-games",
       "dataFile": "src/data/gallery-items.ts",
       "photos": [
@@ -2779,6 +2813,23 @@
           "height": 3648,
           "focal": "center",
           "note": "Unused pool IMG_7261a, 5472x3648."
+        }
+      ]
+    },
+    {
+      "section": "gallery",
+      "slug": "tim-kompak",
+      "dataFile": "src/data/gallery-items.ts",
+      "photos": [
+        {
+          "source": "2016/04/01-people.jpg",
+          "wpId": "44",
+          "role": "hero",
+          "name": "kekompakan-tim",
+          "width": 800,
+          "height": 600,
+          "focal": "center",
+          "note": "Owner-requested addition. 800x600; faces visible; the old Pondok Rasamala logo is printed in the top-left corner."
         }
       ]
     },
@@ -2818,6 +2869,23 @@
     },
     {
       "section": "gallery",
+      "slug": "monyet-hutan",
+      "dataFile": "src/data/gallery-items.ts",
+      "photos": [
+        {
+          "source": "2016/05/01_galery.jpg",
+          "wpId": "174",
+          "role": "hero",
+          "name": "monyet-hutan",
+          "width": 1024,
+          "height": 661,
+          "focal": "center",
+          "note": "Owner-requested addition (old gallery '01_galery'), 1024x661."
+        }
+      ]
+    },
+    {
+      "section": "gallery",
       "slug": "sungai-jernih",
       "dataFile": "src/data/gallery-items.ts",
       "photos": [
@@ -2830,6 +2898,23 @@
           "height": 3648,
           "focal": "center",
           "note": "Unused pool IMG_9879, 5472x3648, from the same shoot as the Aula and tent photos."
+        }
+      ]
+    },
+    {
+      "section": "gallery",
+      "slug": "marigold",
+      "dataFile": "src/data/gallery-items.ts",
+      "photos": [
+        {
+          "source": "2016/05/IMG_2855.jpg",
+          "wpId": "354",
+          "role": "hero",
+          "name": "marigold",
+          "width": 512,
+          "height": 720,
+          "focal": "center",
+          "note": "Owner-requested addition, portrait 512x720 (cropped to a square in the grid)."
         }
       ]
     },
@@ -2864,6 +2949,23 @@
           "height": 683,
           "focal": "center",
           "note": "1024x683; bonfire, no guitar visible."
+        }
+      ]
+    },
+    {
+      "section": "gallery",
+      "slug": "bunga-putih",
+      "dataFile": "src/data/gallery-items.ts",
+      "photos": [
+        {
+          "source": "2016/05/IMG_2842.jpg",
+          "wpId": "360",
+          "role": "hero",
+          "name": "bunga-putih",
+          "width": 720,
+          "height": 514,
+          "focal": "center",
+          "note": "Owner-requested addition, 720x514."
         }
       ]
     },
@@ -3157,6 +3259,14 @@
     {
       "slug": "aula",
       "issue": "Owner decision 2026-11-26: the Aula page shows Aula Kalapa only (timber hall, tile floor). Tent-roof deck photos removed pending management decision on listing the glamping tent aula: 2020/12/Aula-Image-2020-12-16-at-6.30.23-AM.jpeg, 2018/06/20180423_164421aulagl.jpg, 2020/12/Aula-Image-2020-12-16-at-6.30.24-AM-1.jpeg, 2020/12/Aula-Image-2020-12-16-at-6.30.24-AM-2.jpeg"
+    },
+    {
+      "slug": "tim-kompak",
+      "issue": "Photo 44 shows the old Pondok Rasamala logo in its top-left corner and visible faces; confirm the right to publish."
+    },
+    {
+      "slug": "gallery",
+      "issue": "Added photos 44, 174, 176, 351, 354, 360 are small (512-1024 px). Fine in the square grid, soft when the lightbox enlarges them."
     }
   ],
   "emptySlots": [

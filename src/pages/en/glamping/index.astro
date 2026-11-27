@@ -18,6 +18,6 @@ const sizes = getSizeBuckets("glamping", locale);
 
 <StayIndex locale={locale} title={copy.title} description={copy.description} meta={copy.meta} ctaKind="glamping" sizes={sizes}>
 	{cards.map((c) => (
-		<StayCard href={c.href} name={c.name} blurb={c.blurb} imageLabel={c.imageLabel} facts={c.facts} paxMin={c.paxMin} paxMax={c.paxMax} minPrice={c.minPrice} />
+		<StayCard href={c.href} name={c.name} blurb={c.blurb} imageLabel={c.imageLabel} photo={c.photo} locale={locale} facts={c.facts} paxMin={c.paxMin} paxMax={c.paxMax} minPrice={c.minPrice} />
 	))}
 </StayIndex>

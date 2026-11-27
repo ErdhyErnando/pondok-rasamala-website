@@ -1,11 +1,12 @@
 ---
 import Base from "./Base.astro";
+import Lightbox from "../components/ui/Lightbox.astro";
 import PackageCard from "../components/ui/PackageCard.astro";
-import PhotoPlaceholder from "../components/ui/PhotoPlaceholder.astro";
+import Photo from "../components/ui/Photo.astro";
 import WhatsAppButton from "../components/ui/WhatsAppButton.astro";
 import { formatIDR } from "../lib/format";
 import { packageCardProps } from "../lib/packages";
-import { localizePath, type Locale } from "../lib/i18n";
+import { getStrings, localizePath, type Locale } from "../lib/i18n";
 import { packages, type PackageRow } from "../data/packages";
 
 // Shared package detail wrapper: hero → includes + tiers + activities → CTA.
@@ -23,6 +24,8 @@ const t = {
 	includes: en ? "What's included" : "Termasuk dalam paket",
 	tiers: en ? "Options & pricing" : "Pilihan & harga",
 	activities: en ? "Activities" : "Aktivitas",
+	gallery: en ? "Gallery" : "Galeri",
+	close: en ? "Close" : "Tutup",
 	other: en ? "Other packages" : "Paket lainnya",
 	verifyNote: en ? "Web anchor, confirmed via WhatsApp" : "Acuan web, konfirmasi via WhatsApp",
 	quoteCta: en ? "Request a quote" : "Minta penawaran",
@@ -32,6 +35,14 @@ const waMessage = en
 	? `Hello Pondok Rasamala, I'd like to ask about the ${pkg.name.en} package. Thank you.`
 	: `Halo Pondok Rasamala, saya mau bertanya tentang ${pkg.name.id}. Terima kasih.`;
 const others = packages.filter((p) => p.slug !== pkg.slug);
+const ui = getStrings(locale).actions;
+// Hero first; the strip below starts at the second photo and the lightbox holds all of them.
+const items = [pkg.hero, ...pkg.gallery].map((p) => ({ label: p.alt[locale], photo: p }));
+// Hero: 1200 px container with 24 px padding. Strip: inside .pkg-main (max 44rem), 3 columns
+// with 16 px gaps; 2 columns under 601 px. Related cards sit in a 3-column grid (1 column under 901 px).
+const heroSizes = "(min-width: 1200px) 1152px, calc(100vw - 48px)";
+const stripSizes = "(min-width: 1200px) 224px, (min-width: 901px) calc((100vw - 48px) * 1.6 / 2.6 / 3 - 24px), (min-width: 601px) calc((100vw - 80px) / 3), calc((100vw - 64px) / 2)";
+const relatedSizes = "(min-width: 1200px) 154px, (min-width: 901px) calc(((100vw - 112px) / 3 - 24px) * 5 / 11), (min-width: 481px) calc((min(560px, 100vw - 48px) - 24px) * 5 / 11), min(560px, calc(100vw - 48px))";
 ---
 
 <Base title={pkg.name[locale]} description={pkg.tagline[locale]} locale={locale}>
@@ -45,10 +56,18 @@ const others = packages.filter((p) => p.slug !== pkg.slug);
 		</nav>
 
 		<div class="pkg-hero">
-			<PhotoPlaceholder
-				label={en ? `${pkg.name.en}: hero photo to follow` : `${pkg.name.id}: foto utama menyusul`}
-				ratio="16 / 8"
-			/>
+			<button type="button" class="hero-open" data-lightbox-open="0" aria-haspopup="dialog">
+				<Photo
+					photo={pkg.hero}
+					locale={locale}
+					sizes={heroSizes}
+					widths={[960, 1600, 2400]}
+					loading="eager"
+					fetchpriority="high"
+					ratio="16 / 8"
+					class="hero-img"
+				/>
+			</button>
 		</div>
 
 		<div class="pkg-grid">
@@ -66,6 +85,21 @@ const others = packages.filter((p) => p.slug !== pkg.slug);
 				<ul class="pill-list">
 					{pkg.activities[locale].map((item) => <li>{item}</li>)}
 				</ul>
+
+				{pkg.gallery.length > 0 && (
+					<>
+						<h2>{t.gallery}</h2>
+						<Lightbox
+							items={items}
+							locale={locale}
+							stripFrom={1}
+							stripSizes={stripSizes}
+							closeLabel={t.close}
+							prevLabel={ui.previousPhoto}
+							nextLabel={ui.nextPhoto}
+						/>
+					</>
+				)}
 			</div>
 
 			<aside class="pkg-sidebar">
@@ -99,12 +133,23 @@ const others = packages.filter((p) => p.slug !== pkg.slug);
 			<h2>{t.other}</h2>
 			<div class="related-grid">
 				{others.map((o) => (
-					<PackageCard {...packageCardProps(o, locale)} />
+					<PackageCard {...packageCardProps(o, locale)} sizes={relatedSizes} />
 				))}
 			</div>
 		</section>
 	</div>
 </Base>
+
+<script>
+	// The hero opens the lightbox at the first photo (the Lightbox listens on its strip).
+	document.querySelectorAll<HTMLElement>("[data-lightbox-open]").forEach((btn) => {
+		btn.addEventListener("click", () => {
+			document
+				.querySelector("[data-strip]")
+				?.dispatchEvent(new CustomEvent("lightbox-open", { detail: Number(btn.dataset.lightboxOpen) }));
+		});
+	});
+</script>
 
 <style>
 	.breadcrumb {
@@ -123,9 +168,23 @@ const others = packages.filter((p) => p.slug !== pkg.slug);
 		color: var(--color-text);
 		font-weight: 600;
 	}
-	.pkg-hero :global(.photo-placeholder) {
-		min-height: min(50vh, 440px);
+	.hero-open {
+		display: block;
+		width: 100%;
+		padding: 0;
+		border: 0;
+		background: none;
+		font: inherit;
+		cursor: zoom-in;
+	}
+	.pkg-hero :global(img.hero-img) {
 		border-radius: var(--radius-lg);
+	}
+	@media (max-width: 600px) {
+		/* The inline 16 / 8 would leave a thin strip on a phone. */
+		.pkg-hero :global(img.hero-img) {
+			aspect-ratio: 4 / 3 !important;
+		}
 	}
 	.pkg-grid {
 		display: grid;

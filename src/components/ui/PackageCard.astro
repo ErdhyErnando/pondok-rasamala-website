@@ -1,5 +1,7 @@
 ---
-import PhotoPlaceholder from "./PhotoPlaceholder.astro";
+import Photo from "./Photo.astro";
+import type { Locale } from "../../lib/i18n";
+import type { Photo as PhotoData } from "../../lib/photos";
 
 // Package card (artifact layout): photo beside the text, solid rule on top.
 // Name, tagline, up to three activity chips, then "From Rp… per person".
@@ -12,14 +14,32 @@ interface Props {
 	priceSummary: string;
 	priceUnit?: string;
 	imageLabel: string;
+	/** Real photo; without one the card shows the labelled placeholder. */
+	photo?: PhotoData;
+	locale?: Locale;
+	/** Photo width per breakpoint. The default matches the 2-column index:
+	 *  1200 px container, 24 px padding, 32 px gap, text and photo split 6 : 5
+	 *  with a 24 px gap, and a single column under 901 px (photo on top under 481 px). */
+	sizes?: string;
 }
 
-const { href, name, tagline, activities = [], priceSummary, priceUnit, imageLabel } = Astro.props;
+const {
+	href,
+	name,
+	tagline,
+	activities = [],
+	priceSummary,
+	priceUnit,
+	imageLabel,
+	photo,
+	locale = "id",
+	sizes = "(min-width: 1200px) 243px, (min-width: 901px) calc(((100vw - 80px) / 2 - 24px) * 5 / 11), (min-width: 481px) calc((100vw - 72px) * 5 / 11), calc(100vw - 48px)",
+} = Astro.props;
 ---
 
 <article class="pk reveal">
 	<a href={href} class="pk-visual" aria-hidden="true" tabindex="-1">
-		<PhotoPlaceholder label={imageLabel} ratio="4 / 5" />
+		<Photo photo={photo} locale={locale} sizes={sizes} widths={[480, 960]} ratio={photo ? "4 / 3" : "4 / 5"} label={imageLabel} />
 	</a>
 	<div class="pk-body">
 		<h3><a href={href}>{name}</a></h3>
@@ -49,11 +69,13 @@ const { href, name, tagline, activities = [], priceSummary, priceUnit, imageLabe
 	.pk-visual {
 		display: block;
 	}
-	.pk-visual :global(.photo-placeholder) {
+	.pk-visual :global(.photo-placeholder),
+	.pk-visual :global(.photo-img) {
 		border-radius: var(--radius);
 		transition: transform var(--transition-base);
 	}
-	.pk:hover .pk-visual :global(.photo-placeholder) {
+	.pk:hover .pk-visual :global(.photo-placeholder),
+	.pk:hover .pk-visual :global(.photo-img) {
 		transform: translateY(-2px);
 	}
 	.pk-body {
@@ -112,7 +134,8 @@ const { href, name, tagline, activities = [], priceSummary, priceUnit, imageLabe
 		}
 	}
 	@media (prefers-reduced-motion: reduce) {
-		.pk-visual :global(.photo-placeholder) {
+		.pk-visual :global(.photo-placeholder),
+		.pk-visual :global(.photo-img) {
 			transition: none;
 		}
 	}

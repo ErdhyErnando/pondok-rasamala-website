@@ -1,4 +1,5 @@
 import { z } from "astro/zod";
+import { photo, photoSchema } from "../lib/photos";
 
 const text = z.object({ id: z.string().min(1), en: z.string().min(1) });
 
@@ -12,8 +13,9 @@ export const PackageTierSchema = z.object({
 });
 
 /** EXACT future-Emdash `packages` shape (Week-2 migration is mechanical):
- *  slug/name/description/heroImage/includes/price-tiers/duration/activities,
- *  all copy fields {id, en}. Local file is the ship vehicle. */
+ *  slug/name/description/hero/includes/price-tiers/duration/activities,
+ *  all copy fields {id, en}. Local file is the ship vehicle. `hero` and
+ *  `gallery` are site photos (src/lib/photos.ts), imported from the manifest. */
 export const PackageSchema = z.object({
 	slug: z.string(),
 	name: text,
@@ -23,8 +25,9 @@ export const PackageSchema = z.object({
 	includes: z.object({ id: z.array(z.string()), en: z.array(z.string()) }),
 	tiers: z.array(PackageTierSchema).min(1),
 	activities: z.object({ id: z.array(z.string()), en: z.array(z.string()) }),
-	heroImage: z.string(),
-	images: z.array(z.string()),
+	hero: photoSchema,
+	/** Photos after the hero. */
+	gallery: z.array(photoSchema),
 });
 
 export type Package = z.infer<typeof PackageSchema>;
@@ -53,8 +56,44 @@ export const packages = [
 			id: ["Team building", "Paintball", "Fun games", "Api unggun"],
 			en: ["Team building", "Paintball", "Fun games", "Bonfire"],
 		},
-		heroImage: "",
-		images: [],
+		hero: photo("package/outbound/01-peserta-lingkaran-lapangan", {
+			id: "Peserta outbound berkaus gelap dan bertopi biru berdiri melingkar di lapangan rumput, dikelilingi pakis dan pepohonan.",
+			en: "Outbound participants in dark shirts and blue caps standing in a circle on the grass field, ringed by ferns and trees.",
+		}),
+		gallery: [
+				photo("package/outbound/02-tali-games", {
+					id: "Seorang peserta tergantung pada tali pengaman sambil disaksikan rekan satu tim, di hutan pinus.",
+					en: "A participant hangs from a safety rope as teammates look on, in a pine forest.",
+				}),
+				photo("package/outbound/03-tim-bola", {
+					id: "Tim berkaus hitam dan bertopi biru berdiri mengelilingi bola di atas tiang dalam permainan kerja sama di hutan pinus.",
+					en: "A team in black shirts and blue caps gathers around a ball on a pole in a pine-forest teamwork game.",
+				}),
+				photo("package/outbound/04-briefing-hutan-pinus", {
+					id: "Sekelompok peserta berkumpul untuk arahan di tanah lapang yang basah di tengah hutan pinus.",
+					en: "A group of participants gathers for a briefing on a wet clearing in the pine forest.",
+				}),
+				photo("package/outbound/05-jembatan-tali", {
+					id: "Dua peserta berjabat tangan sambil meniti tali rintangan di hutan pinus.",
+					en: "Two participants clasp hands while crossing a rope obstacle in the pine forest.",
+				}),
+				photo("package/outbound/06-holi-warna", {
+					id: "Peserta berbaju putih bersorak di antara semburan bubuk warna-warni di bawah pohon pinus, dengan spanduk di tangan.",
+					en: "Participants in white cheer amid bursts of coloured powder beneath pine trees, holding a banner.",
+				}),
+				photo("package/outbound/07-games-lingkaran", {
+					id: "Peserta berkaus merah muda dan biru berdiri melingkar di lapangan tanah untuk permainan kelompok.",
+					en: "Participants in pink and blue shirts stand in a circle on the dirt field for a group game.",
+				}),
+				photo("package/outbound/08-tim-biru", {
+					id: "Kelompok peserta berseragam gelap dan berponco biru berkumpul di antara batang pinus berlumut.",
+					en: "A group in dark outfits and blue ponchos gathers between moss-covered pine trunks.",
+				}),
+				photo("package/outbound/09-susur-sungai-curug", {
+					id: "Peserta berkaus oranye membentuk barisan melengkung di kolam sungai di bawah air terjun.",
+					en: "Participants in orange shirts form curving lines in the stream pool below a waterfall.",
+				}),
+		],
 	},
 	{
 		slug: "special-school-package",
@@ -77,8 +116,24 @@ export const packages = [
 			id: ["Trekking edukasi", "Fun games", "Api unggun"],
 			en: ["Educational treks", "Fun games", "Bonfire"],
 		},
-		heroImage: "",
-		images: [],
+		hero: photo("package/special-school-package/01-foto-bersama-peserta", {
+			id: "Foto bersama peserta yang mengangkat tangan di hutan pinus, dengan dua spanduk kegiatan di belakang mereka.",
+			en: "Group photo of participants with raised arms in a pine forest, with two event banners behind them.",
+		}),
+		gallery: [
+				photo("package/special-school-package/02-games-lingkaran", {
+					id: "Peserta berkaus merah muda dan biru berdiri melingkar di lapangan untuk permainan kekompakan.",
+					en: "Participants in pink and blue shirts stand in a circle on the field for a teamwork game.",
+				}),
+				photo("package/special-school-package/03-susur-sungai-curug", {
+					id: "Peserta berkaus oranye membentuk barisan melengkung di kolam sungai di bawah air terjun.",
+					en: "Participants in orange shirts form curving lines in the stream pool below a waterfall.",
+				}),
+				photo("package/special-school-package/04-api-unggun-malam", {
+					id: "Api unggun menyala oranye terang di tengah malam yang gelap.",
+					en: "A bonfire burning bright orange in the dark of night.",
+				}),
+		],
 	},
 	{
 		slug: "company-outing",
@@ -100,8 +155,36 @@ export const packages = [
 			id: ["Team building", "Paintball", "Makan bersama", "Api unggun"],
 			en: ["Team building", "Paintball", "Shared meals", "Bonfire"],
 		},
-		heroImage: "",
-		images: [],
+		hero: photo("package/company-outing/01-aula-meja-panjang", {
+			id: "Aula kayu lapang dengan meja dan bangku kayu panjang di bawah rangka atap tinggi dan lampu gantung.",
+			en: "Spacious timber hall with a long wooden table and benches under a high roof frame and hanging lamps.",
+		}),
+		gallery: [
+				photo("package/company-outing/02-sesi-pertemuan", {
+					id: "Peserta rapat duduk mengelilingi meja putih berbentuk U di aula beratap tenda, dengan kebun hijau di baliknya.",
+					en: "Attendees at a meeting around a U-shaped white table in the tent-roofed hall, with a green garden beyond.",
+				}),
+				photo("package/company-outing/03-tim-bola", {
+					id: "Tim berkaus hitam dan bertopi biru berdiri mengelilingi bola di atas tiang dalam permainan kerja sama di hutan pinus.",
+					en: "A team in black shirts and blue caps gathers around a ball on a pole in a pine-forest teamwork game.",
+				}),
+				photo("package/company-outing/04-tali-games", {
+					id: "Seorang peserta tergantung pada tali pengaman sambil disaksikan rekan satu tim, di hutan pinus.",
+					en: "A participant hangs from a safety rope as teammates look on, in a pine forest.",
+				}),
+				photo("package/company-outing/05-sate-bakar-sosis", {
+					id: "Sosis tusuk dan jagung manis dipanggang di atas panggangan.",
+					en: "Skewered sausages and sweet corn grilling over a barbecue.",
+				}),
+				photo("package/company-outing/06-sate-bakar-daging", {
+					id: "Sate daging berbumbu kecokelatan dipanggang berjajar di atas panggangan.",
+					en: "Rows of seasoned, browned meat skewers grilling on a barbecue.",
+				}),
+				photo("package/company-outing/07-api-unggun-malam", {
+					id: "Peserta berdiri setengah lingkaran menyaksikan api unggun menyala di tanah lapang pada malam hari.",
+					en: "Participants stand in an arc watching a bonfire burn on an open field at night.",
+				}),
+		],
 	},
 	{
 		slug: "family",
@@ -123,8 +206,36 @@ export const packages = [
 			id: ["Trekking santai", "Berenang", "Api unggun"],
 			en: ["Easy treks", "Swimming", "Bonfire"],
 		},
-		heroImage: "",
-		images: [],
+		hero: photo("package/family/01-kolam-renang-gedung", {
+			id: "Kolam renang berair toska dengan bangunan kayu beratap sirap dan pakis pohon di tepinya.",
+			en: "Turquoise swimming pool with a shingle-roofed timber building and tree ferns along its edge.",
+		}),
+		gallery: [
+				photo("package/family/02-kolam-renang", {
+					id: "Kolam renang biru berlantai paving batu dengan pepohonan tinggi di bawah langit cerah, dua orang berdiri di kejauhan.",
+					en: "Blue swimming pool with a stone-paved deck and tall trees under a clear sky, two people standing in the distance.",
+				}),
+				photo("package/family/03-kolam-renang-taman", {
+					id: "Tepi kolam renang toska dengan pot tanaman besar, di depan taman bambu dan pakis yang rimbun.",
+					en: "Turquoise pool edge with large potted plants in front of a lush backdrop of bamboo and ferns.",
+				}),
+				photo("package/family/04-aliran-sungai-kecil", {
+					id: "Aliran kecil berundak di antara bebatuan dan tanaman tropis, dengan bangunan kayu bertiang bata di sisi kanan.",
+					en: "A small stepped stream among rocks and tropical plants, with a timber building on brick pillars at the right.",
+				}),
+				photo("package/family/05-taman-batu-pijakan", {
+					id: "Hamparan rumput hijau dengan batu pijakan menuju rumah kayu panggung berpagar di antara tanaman tropis.",
+					en: "Green lawn with stepping stones leading to a railed timber stilt house among tropical plants.",
+				}),
+				photo("package/family/06-villa-dan-palem", {
+					id: "Villa kayu beratap genteng gelap di antara pakis sarang burung dan palem, dengan halaman paving di depannya.",
+					en: "Timber villa with a dark tiled roof among bird's-nest ferns and palms, with a paved yard in front.",
+				}),
+				photo("package/family/07-api-unggun-malam", {
+					id: "Api unggun menyala oranye terang di tengah malam yang gelap.",
+					en: "A bonfire burning bright orange in the dark of night.",
+				}),
+		],
 	},
 ];
 

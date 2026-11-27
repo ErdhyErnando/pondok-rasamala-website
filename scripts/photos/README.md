@@ -5,9 +5,10 @@ optimised WebP files in `src/assets/photos/`, and the data files point at those 
 with `photo(...)` calls (`src/lib/photos.ts`). Nothing else is needed: the build makes the
 responsive sizes.
 
-Currently covered: sections `villa` and `aula` (`src/data/villas.ts`). Other sections use
-the same steps with the data file named in their manifest entry (`dataFile`); widen
-`--sections=` in the `photos:import` script in `package.json` when you start one.
+Currently covered: sections `villa`, `aula`, `glamping`, `campsite`, `package` and `gallery`
+(data files `villas.ts`, `glamping.ts`, `campsite.ts`, `packages.ts`, `gallery-items.ts`). Manifest
+sections not listed in the `photos:import` script in `package.json` (`home`, `about`, `post`,
+`activity`) are planned but not wired yet: add them to `--sections=` when you start one.
 
 ## Replace or add a photo
 
@@ -35,8 +36,8 @@ the same steps with the data file named in their manifest entry (`dataFile`); wi
    are already up to date and deletes files the manifest no longer lists. If you replaced a photo
    with a file that is *older* than the existing output, add `--force`
    (`pnpm photos:import --force`). It prints the total size.
-3. **Update the alt text in the matching data file** (`src/data/villas.ts` for villas and the
-   Aula). Each photo is one call; the hero is `hero:`, the rest are in `gallery: [...]`:
+3. **Update the alt text in the matching data file** (the entry's `dataFile`, for example
+   `src/data/villas.ts` for villas and the Aula, `src/data/glamping.ts` for tents). Each photo is one call; the hero is `hero:`, the rest are in `gallery: [...]`:
 
    ```ts
    photo("villa/pinus/04-teras", {
@@ -52,4 +53,4 @@ the same steps with the data file named in their manifest entry (`dataFile`); wi
 4. **Run `pnpm build`.** It fails if a key has no file or an alt text is under 10 characters.
    Open the page (`pnpm dev`, or `pnpm preview` after the build) and check the photo.
 5. **Commit** the three things together: `scripts/photos/manifest.json`, the data file
-   (`src/data/villas.ts`) and the changed files under `src/assets/photos/`.
+   (for example `src/data/villas.ts`) and the changed files under `src/assets/photos/`.

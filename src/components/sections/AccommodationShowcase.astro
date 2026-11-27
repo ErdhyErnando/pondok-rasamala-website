@@ -58,6 +58,7 @@ const toCard = (f: Featured): Card => {
 		name: `Glamping ${g.name}`,
 		blurb: tx(f.blurb, locale),
 		imageLabel: `Glamping ${g.name}: foto menyusul`,
+		photo: g.hero,
 	};
 };
 
@@ -77,6 +78,7 @@ const campsiteCards: Card[] = [
 				? "Tent and breakfast for 4 guests, bonfire included."
 				: `${lot4.includes}.`,
 		imageLabel: "Campsite 4 orang: foto menyusul",
+		photo: campsite.hero,
 	},
 	{
 		href: L("/campsite/"),
@@ -89,6 +91,7 @@ const campsiteCards: Card[] = [
 				? `Tents for ${restPax.slice(0, -1).join(", ")} or ${restPax.at(-1)} guests with breakfast and a bonfire.`
 				: `Tenda ${restPax.slice(0, -1).join(", ")} atau ${restPax.at(-1)} pax dengan makan pagi dan api unggun.`,
 		imageLabel: "Campsite 6–10 orang: foto menyusul",
+		photo: campsite.gallery[0],
 	},
 ];
 ---

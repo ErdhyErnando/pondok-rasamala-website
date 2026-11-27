@@ -207,9 +207,9 @@ export function resolveStay(segment: string, locale: Locale): StayPage | null {
 			waMessage: en
 				? `Hello Pondok Rasamala, I'd like to ask about availability at ${name} for ..., ... guests. Thank you.`
 				: `Halo Pondok Rasamala, saya mau tanya ketersediaan ${name} untuk tanggal ..., ... orang.`,
-			gallery: [1, 2, 3].map((i) => ({
-				label: en ? `${name}: photo ${i} to follow` : `${name}: foto ${i} menyusul`,
-			})),
+			gallery: [isCamp ? campsite.hero : g!.hero, ...(isCamp ? campsite.gallery : g!.gallery)].map(
+				(p) => ({ label: p.alt[locale], photo: p }),
+			),
 			metaDescription: `${name}: ${(isCamp ? campsite.tagline[locale] : g!.tagline[locale])}.`,
 			labels: {
 				home: en ? "Home" : "Beranda",
@@ -287,6 +287,7 @@ export function tentStayCard(slug: string, locale: Locale): StayCard {
 		paxMax: Math.max(...pax),
 		minPrice: min,
 		imageLabel: en ? `${name}: photo to follow` : `${name}: foto menyusul`,
+		photo: g.hero,
 		kind: "glamping",
 	};
 }
