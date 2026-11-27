@@ -248,6 +248,11 @@ const relatedSizes = "(min-width: 1200px) 154px, (min-width: 901px) calc(((100vw
 		color: var(--color-brand);
 		border-radius: var(--radius-full);
 	}
+	/* Stretch to the row height (the grid aligns items to the start), so the
+	   sticky card has room to travel while the long left column scrolls. */
+	.pkg-sidebar {
+		align-self: stretch;
+	}
 	.price-card {
 		position: sticky;
 		top: 96px;

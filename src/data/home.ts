@@ -49,10 +49,10 @@ export type Featured = z.infer<typeof FeaturedSchema>;
 export const featured = z.array(FeaturedSchema).parse([
 	{
 		kind: "villa",
-		slug: "bambu-a",
+		slug: "dayak",
 		blurb: T(
-			"Villa bambu 2 kamar untuk keluarga kecil, bisa disewa per kamar.",
-			"Two-bedroom bamboo villa for small families, rentable per room.",
+			"Villa kayu 2 kamar untuk 4–6 orang, dengan halaman api unggun sendiri.",
+			"Two-bedroom timber villa for 4–6 guests, with its own bonfire yard.",
 		),
 	},
 	{
