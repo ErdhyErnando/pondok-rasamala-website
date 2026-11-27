@@ -1,5 +1,6 @@
 import { z } from "astro/zod";
 import type { Locale } from "../lib/i18n";
+import { photo } from "../lib/photos";
 
 const text = z.object({ id: z.string().min(1), en: z.string().min(1) });
 export type Text = z.infer<typeof text>;
@@ -49,10 +50,10 @@ export type Featured = z.infer<typeof FeaturedSchema>;
 export const featured = z.array(FeaturedSchema).parse([
 	{
 		kind: "villa",
-		slug: "bambu-a",
+		slug: "dayak",
 		blurb: T(
-			"Villa bambu 2 kamar untuk keluarga kecil, bisa disewa per kamar.",
-			"Two-bedroom bamboo villa for small families, rentable per room.",
+			"Villa kayu 2 kamar untuk 4–6 orang, dengan halaman api unggun sendiri.",
+			"Two-bedroom timber villa for 4–6 guests, with its own bonfire yard.",
 		),
 	},
 	{
@@ -123,6 +124,10 @@ export const activities = {
 			href: "/package/outbound/",
 			linkLabel: T("Paket outbound", "Outbound package"),
 			imageLabel: T("Foto menyusul · outbound di lapangan", "Photo coming · outbound on the field"),
+			photo: photo("home-activity/play/01-outbound-games", {
+				id: "Seorang peserta tergantung pada tali pengaman sambil disaksikan rekan satu tim, di hutan pinus.",
+				en: "A participant hangs from a safety rope as teammates look on, in a pine forest.",
+			}),
 			title: T("Outbound & team building", "Outbound & team building"),
 			body: T(
 				"Lapangan bola, area games, dan pemandu untuk rombongan kantor dan sekolah.",
@@ -134,6 +139,7 @@ export const activities = {
 			href: "/attractions/",
 			linkLabel: T("Lihat atraksi", "See attractions"),
 			imageLabel: T("Foto menyusul · Curug Seribu", "Photo coming · Curug Seribu"),
+			photo: undefined, // left empty for now: the card keeps its placeholder
 			title: T("Trekking curug", "Waterfall treks"),
 			body: T(
 				"Kawah Ratu, Curug Seribu, dan Curug Ngumpet, semua dalam jangkauan singkat.",
@@ -145,6 +151,10 @@ export const activities = {
 			href: "/package/company-outing/",
 			linkLabel: T("Company outing", "Company outing"),
 			imageLabel: T("Foto menyusul · api unggun malam", "Photo coming · evening bonfire"),
+			photo: photo("home-activity/gather/01-api-unggun-malam", {
+				id: "Peserta berdiri setengah lingkaran menyaksikan api unggun menyala di tanah lapang pada malam hari.",
+				en: "Participants stand in an arc watching a bonfire burn on an open field at night.",
+			}),
 			title: T("Gathering & api unggun", "Gatherings & bonfires"),
 			body: T(
 				"Aula dengan soundsystem, saung-saung, dan api unggun untuk malam kebersamaan.",

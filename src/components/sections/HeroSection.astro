@@ -1,13 +1,19 @@
 ---
+import Photo from "../ui/Photo.astro";
 import WhatsAppButton from "../ui/WhatsAppButton.astro";
+import { campsite } from "../../data/campsite";
+import { glamping } from "../../data/glamping";
 import { hero, tx } from "../../data/home";
+import { villas } from "../../data/villas";
 import type { Locale } from "../../lib/i18n";
 
 // Full-bleed overlay hero (Paper DS v1, Well Traveled ref):
 // centered serif H1 + short sub + one forest CTA over a scenic panel.
-// The panel is CSS art until Day 6 photography lands, swap .hero-bg
-// for <Image image={{ src, alt }} /> (object, not string) from
-// "emdash/ui" and keep the scrim so white text stays contrast-safe.
+// The panel is layered, back to front: a dark base, five resort photos that
+// cross-fade slowly at low opacity, four drifting colour blobs (a CSS take on
+// the "grainient" look: no JS, no canvas), film grain, then
+// the scrim that keeps the white text contrast-safe. All motion is CSS and
+// stops under prefers-reduced-motion (one still photo stays).
 interface Props {
 	locale?: Locale;
 }
@@ -17,11 +23,42 @@ const message =
 	locale === "en"
 		? "Hello Pondok Rasamala, I'd like to ask about staying over. Thank you."
 		: "Halo Pondok Rasamala, saya mau bertanya tentang menginap. Terima kasih.";
+
+// Five slides: the cross-fade keyframes (hero-fade) assume exactly five.
+const pickVilla = (slug: string) => villas.find((v) => v.slug === slug)!.hero;
+const slides = [
+	pickVilla("cendana"),
+	pickVilla("kihyang"),
+	pickVilla("kilanang"),
+	campsite.gallery[0],
+	glamping.find((g) => g.slug === "cikuray")!.hero,
+];
+if (slides.length !== 5) throw new Error("HeroSection: hero-fade keyframes are written for five slides");
 ---
 
 <section class="hero-overlay">
 	<div class="hero-panel">
-		<div class="hero-bg" aria-hidden="true"></div>
+		<div class="hero-art" aria-hidden="true">
+			<div class="hero-photos">
+				{slides.map((photo, i) => (
+					<div class="hero-slide" style={`--i: ${i}`}>
+						<Photo
+							photo={photo}
+							locale={locale}
+							sizes="100vw"
+							widths={[640, 960, 1600]}
+							loading={i === 0 ? "eager" : "lazy"}
+							fetchpriority={i === 0 ? "high" : undefined}
+						/>
+					</div>
+				))}
+			</div>
+			<div class="blob blob-green"></div>
+			<div class="blob blob-mint"></div>
+			<div class="blob blob-amber"></div>
+			<div class="blob blob-cream"></div>
+			<div class="hero-grain"></div>
+		</div>
 		<div class="hero-scrim" aria-hidden="true"></div>
 		<div class="hero-inner">
 			<h1 class="reveal-load">{tx(hero.title, locale)}</h1>
@@ -48,32 +85,116 @@ const message =
 		background: #0c211a;
 		isolation: isolate;
 	}
-	/* Salak-ridge CSS art: amber glow through leaves, back + front ridges.
-	   Day 6: replace with a real <Image> and delete ::before/::after. */
-	.hero-bg {
+	/* Layers share one absolutely positioned box; DOM order is the stacking order. */
+	.hero-art {
 		position: absolute;
 		inset: 0;
 		z-index: 0;
-		background:
-			radial-gradient(90% 55% at 72% 16%, rgba(232, 147, 12, 0.32), transparent 60%),
-			radial-gradient(70% 50% at 18% 88%, rgba(1, 103, 71, 0.6), transparent 65%),
-			linear-gradient(180deg, #16402f 0%, #0e2c22 45%, #0a1d16 100%);
+		overflow: hidden;
+		/* #120f17 / #016747 / #3d9c6c / #e8930c / #f6d9a8 */
+		background: linear-gradient(165deg, #120f17 0%, #0c211a 55%, #0a1d16 100%);
+		--photo-opacity: 0.4;
 	}
-	.hero-bg::before,
-	.hero-bg::after {
-		content: "";
+	/* Photos: one is visible at a time, 6 s each (30 s loop, 5 slides), cross-fading
+	   into the next while it slowly zooms. Slides 2-5 start hidden and lazy-load. */
+	.hero-slide {
 		position: absolute;
-		inset: auto 0 0;
-		height: 52%;
+		inset: 0;
+		opacity: 0;
+		animation: hero-fade 30s linear infinite;
+		animation-delay: calc(var(--i) * 6s);
+		will-change: opacity, transform;
 	}
-	.hero-bg::before {
-		background: linear-gradient(180deg, #1d4a37, #143728);
-		clip-path: polygon(0 62%, 12% 38%, 26% 55%, 40% 22%, 55% 48%, 70% 30%, 84% 52%, 100% 36%, 100% 100%, 0 100%);
-		opacity: 0.9;
+	.hero-slide :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
 	}
-	.hero-bg::after {
-		background: linear-gradient(180deg, #0d281e, #07170f);
-		clip-path: polygon(0 78%, 15% 58%, 30% 74%, 46% 50%, 62% 72%, 78% 56%, 100% 74%, 100% 100%, 0 100%);
+	@keyframes hero-fade {
+		0% { opacity: 0; transform: scale(1); }
+		6% { opacity: var(--photo-opacity); }
+		20% { opacity: var(--photo-opacity); }
+		26% { opacity: 0; transform: scale(1.07); }
+		100% { opacity: 0; transform: scale(1.07); }
+	}
+	/* Colour blobs: big soft radial gradients drifting on transform only. */
+	.blob {
+		position: absolute;
+		width: 90vmax;
+		height: 90vmax;
+		border-radius: 50%;
+		will-change: transform;
+		animation-timing-function: ease-in-out;
+		animation-iteration-count: infinite;
+		animation-direction: alternate;
+	}
+	.blob-green {
+		top: -40vmax;
+		left: -35vmax;
+		background: radial-gradient(closest-side, rgba(1, 103, 71, 0.85), rgba(1, 103, 71, 0));
+		animation-name: drift-a;
+		animation-duration: 34s;
+	}
+	.blob-mint {
+		right: -40vmax;
+		bottom: -45vmax;
+		background: radial-gradient(closest-side, rgba(61, 156, 108, 0.6), rgba(61, 156, 108, 0));
+		animation-name: drift-b;
+		animation-duration: 41s;
+	}
+	.blob-amber {
+		top: -30vmax;
+		right: -25vmax;
+		width: 70vmax;
+		height: 70vmax;
+		background: radial-gradient(closest-side, rgba(232, 147, 12, 0.5), rgba(232, 147, 12, 0));
+		animation-name: drift-c;
+		animation-duration: 29s;
+	}
+	.blob-cream {
+		left: 20%;
+		bottom: -35vmax;
+		width: 60vmax;
+		height: 60vmax;
+		background: radial-gradient(closest-side, rgba(246, 217, 168, 0.32), rgba(246, 217, 168, 0));
+		animation-name: drift-d;
+		animation-duration: 37s;
+	}
+	@keyframes drift-a {
+		to { transform: translate3d(32vmax, 18vmax, 0) scale(1.18); }
+	}
+	@keyframes drift-b {
+		to { transform: translate3d(-30vmax, -22vmax, 0) scale(0.9); }
+	}
+	@keyframes drift-c {
+		to { transform: translate3d(-34vmax, 24vmax, 0) scale(1.25); }
+	}
+	@keyframes drift-d {
+		to { transform: translate3d(24vmax, -16vmax, 0) scale(1.15); }
+	}
+	/* Film grain: a static SVG noise tile (data: URI, allowed by img-src). */
+	.hero-grain {
+		position: absolute;
+		inset: 0;
+		opacity: 0.16;
+		mix-blend-mode: overlay;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+		background-size: 200px 200px;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.blob {
+			animation: none;
+		}
+		/* One still photo; the others never load (display: none keeps lazy images off the network). */
+		.hero-slide {
+			animation: none;
+		}
+		.hero-slide:first-child {
+			opacity: var(--photo-opacity);
+		}
+		.hero-slide:not(:first-child) {
+			display: none;
+		}
 	}
 	.hero-scrim {
 		position: absolute;

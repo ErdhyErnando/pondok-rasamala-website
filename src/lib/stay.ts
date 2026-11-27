@@ -3,6 +3,7 @@ import { glamping, glampingPath } from "../data/glamping";
 import { isVillaCategory, villas, villaPath } from "../data/villas";
 import { formatIDR } from "./format";
 import { localizePath, type Locale } from "./i18n";
+import type { Photo } from "./photos";
 import { parseSpec } from "./specs";
 import { waInquiry, waInquiryEn } from "./whatsapp";
 
@@ -33,6 +34,8 @@ export interface StayCard {
 	paxMax: number;
 	minPrice: number;
 	imageLabel: string;
+	/** Real photo when the unit has one; cards fall back to the placeholder. */
+	photo?: Photo;
 	kind: StayKind;
 }
 export interface StayPage {
@@ -52,7 +55,8 @@ export interface StayPage {
 	priceNote: string;
 	waHref: string;
 	waMessage: string;
-	gallery: Array<{ label: string }>;
+	/** Hero first. Entries without a `photo` render as placeholders. */
+	gallery: Array<{ label: string; photo?: Photo }>;
 	metaDescription: string;
 	labels: {
 		home: string;
@@ -145,9 +149,7 @@ export function resolveStay(segment: string, locale: Locale): StayPage | null {
 			waMessage: en
 				? `Hello Pondok Rasamala, I'd like to ask about availability at ${name} for ..., ... guests. Thank you.`
 				: `Halo Pondok Rasamala, saya mau tanya ketersediaan ${name} untuk tanggal ..., ... orang.`,
-			gallery: [1, 2, 3].map((i) => ({
-				label: en ? `${name}: photo ${i} to follow` : `${name}: foto ${i} menyusul`,
-			})),
+			gallery: [villa.hero, ...villa.gallery].map((p) => ({ label: p.alt[locale], photo: p })),
 			metaDescription: `${name}: ${villa.tagline[locale]}. ${formatIDR(villa.price)}/malam.`,
 			labels: {
 				home: en ? "Home" : "Beranda",
@@ -205,9 +207,9 @@ export function resolveStay(segment: string, locale: Locale): StayPage | null {
 			waMessage: en
 				? `Hello Pondok Rasamala, I'd like to ask about availability at ${name} for ..., ... guests. Thank you.`
 				: `Halo Pondok Rasamala, saya mau tanya ketersediaan ${name} untuk tanggal ..., ... orang.`,
-			gallery: [1, 2, 3].map((i) => ({
-				label: en ? `${name}: photo ${i} to follow` : `${name}: foto ${i} menyusul`,
-			})),
+			gallery: [isCamp ? campsite.hero : g!.hero, ...(isCamp ? campsite.gallery : g!.gallery)].map(
+				(p) => ({ label: p.alt[locale], photo: p }),
+			),
 			metaDescription: `${name}: ${(isCamp ? campsite.tagline[locale] : g!.tagline[locale])}.`,
 			labels: {
 				home: en ? "Home" : "Beranda",
@@ -257,6 +259,7 @@ export function villaStayCard(slug: string, locale: Locale): StayCard {
 		paxMax: v.paxMax,
 		minPrice: v.price,
 		imageLabel: en ? `${name}: photo to follow` : `${name}: foto menyusul`,
+		photo: v.hero,
 		kind: "villa",
 	};
 }
@@ -284,6 +287,7 @@ export function tentStayCard(slug: string, locale: Locale): StayCard {
 		paxMax: Math.max(...pax),
 		minPrice: min,
 		imageLabel: en ? `${name}: photo to follow` : `${name}: foto menyusul`,
+		photo: g.hero,
 		kind: "glamping",
 	};
 }

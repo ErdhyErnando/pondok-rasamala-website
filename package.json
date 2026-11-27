@@ -12,7 +12,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "deploy": "astro build && wrangler deploy",
-    "typecheck": "astro check"
+    "typecheck": "astro check",
+    "photos:import": "node scripts/photos/import.mjs --sections=villa,aula,glamping,campsite,package,gallery,home-activity"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.3.1",
@@ -30,6 +31,7 @@
     "@astrojs/check": "^0.9.10",
     "@cloudflare/workers-types": "^5.20260820.1",
     "@tailwindcss/vite": "^4.3.3",
+    "sharp": "0.35.4",
     "tailwindcss": "^4.3.3",
     "wrangler": "^4.125.0"
   },

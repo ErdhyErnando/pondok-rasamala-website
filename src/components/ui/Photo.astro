@@ -1,0 +1,78 @@
+---
+import { Image } from "astro:assets";
+import PhotoPlaceholder from "./PhotoPlaceholder.astro";
+import type { Locale } from "../../lib/i18n";
+import type { Photo } from "../../lib/photos";
+
+// One <img> with a WebP srcset built at compile time (cloudflare
+// `imageService: "compile"`), the page language's alt text, and intrinsic
+// width/height so the browser reserves the space before the file arrives.
+// `sizes` has no default on purpose: a wrong guess makes phones download
+// desktop-sized files, so each call site states its layout.
+// With no `photo` (section not filled yet) it falls back to the placeholder.
+interface Props {
+	photo?: Photo;
+	locale: Locale;
+	/** The `sizes` attribute: how wide the image renders at each breakpoint. */
+	sizes: string;
+	widths?: number[];
+	loading?: "lazy" | "eager";
+	fetchpriority?: "high" | "low" | "auto";
+	class?: string;
+	/** CSS aspect-ratio (e.g. "4 / 3"). Crops with object-fit: cover. Omit to
+	 *  show the photo at its natural ratio. */
+	ratio?: string;
+	/** Placeholder text, used only when `photo` is undefined. */
+	label?: string;
+}
+
+const {
+	photo,
+	locale,
+	sizes,
+	widths = [480, 960, 1600, 2400],
+	loading = "lazy",
+	fetchpriority,
+	class: className = "",
+	ratio,
+	label = "",
+} = Astro.props;
+
+// The plain `src` is the fallback for browsers that ignore srcset; keep it
+// mid-sized (about 960 px) so it is not a 2400 px file. Never above the
+// original, because Astro would not enlarge it.
+const fallbackWidth = photo
+	? Math.min(photo.src.width, widths.find((w) => w >= 960) ?? widths[widths.length - 1])
+	: 0;
+const style = [ratio ? `aspect-ratio: ${ratio}` : "", photo?.position ? `object-position: ${photo.position}` : ""]
+	.filter(Boolean)
+	.join("; ");
+---
+
+{photo ? (
+	<Image
+		src={photo.src}
+		alt={photo.alt[locale]}
+		width={fallbackWidth}
+		widths={widths}
+		sizes={sizes}
+		format="webp"
+		loading={loading}
+		fetchpriority={fetchpriority}
+		class:list={["photo-img", className]}
+		style={style || undefined}
+	/>
+) : (
+	<PhotoPlaceholder label={label} ratio={ratio} class={className} />
+)}
+
+<style is:global>
+	/* Zero specificity so any call site can override size and ratio. */
+	:where(img.photo-img) {
+		display: block;
+		width: 100%;
+		height: auto;
+		object-fit: cover;
+		background: var(--color-surface);
+	}
+</style>

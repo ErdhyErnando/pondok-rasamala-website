@@ -10,7 +10,11 @@ import emdash from "emdash/astro";
 export default defineConfig({
 	site: "https://pondokrasamala.com",
 	output: "server",
-	adapter: cloudflare(),
+	// Build: local images get WebP srcsets from sharp at compile time and are
+	// served as static files. Runtime: /_image keeps using the Cloudflare Images
+	// binding, which the EmDash admin needs for resized media thumbnails (a
+	// passthrough endpoint answers 403 to its same-origin absolute href).
+	adapter: cloudflare({ imageService: { build: "compile", runtime: "cloudflare-binding" } }),
 	image: {
 		layout: "constrained",
 		responsiveStyles: true,

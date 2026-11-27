@@ -1,5 +1,5 @@
 ---
-import PhotoPlaceholder from "../ui/PhotoPlaceholder.astro";
+import Photo from "../ui/Photo.astro";
 import { activities, tx } from "../../data/home";
 import { localizePath, type Locale } from "../../lib/i18n";
 
@@ -12,6 +12,9 @@ interface Props {
 
 const { locale = "id" } = Astro.props;
 const L = (p: string) => localizePath(p, locale);
+// Card image: 3 columns inside a 1200 px container with 24 px padding (32 px of
+// padding between columns); one padded, bordered card per row under 901 px.
+const sizes = "(min-width: 1200px) 352px, (min-width: 901px) calc((100vw - 48px) / 3 - 32px), calc(100vw - 98px)";
 ---
 
 <section class="activities">
@@ -27,7 +30,7 @@ const L = (p: string) => localizePath(p, locale);
 			{activities.cards.map((c) => (
 				<li class="act reveal">
 					<span class="act-word">{tx(c.word, locale)}</span>
-					<PhotoPlaceholder label={tx(c.imageLabel, locale)} ratio="3 / 2" class="act-photo" />
+					<Photo photo={c.photo} locale={locale} sizes={sizes} widths={[480, 960]} ratio="3 / 2" class="act-photo" label={tx(c.imageLabel, locale)} />
 					<h3>{tx(c.title, locale)}</h3>
 					<p>{tx(c.body, locale)}</p>
 					<a href={L(c.href)} class="act-more">{tx(c.linkLabel, locale)}</a>

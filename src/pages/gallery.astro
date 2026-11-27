@@ -1,6 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import Lightbox from "../components/ui/Lightbox.astro";
+import Photo from "../components/ui/Photo.astro";
 import SectionHeader from "../components/ui/SectionHeader.astro";
 import { getStrings } from "../lib/i18n";
 import { galleryCategories, galleryItems } from "../data/gallery-items";
@@ -12,7 +13,7 @@ const copy = {
 	title: "Galeri",
 	eyebrow: "Suasana",
 	meta: "Galeri foto Pondok Rasamala: villa, glamping, aktivitas, alam, dan acara. Filter per kategori.",
-	description: "Potongan suasana resort, dari teras villa sampai api unggun. (Foto final menyusul Day 6.)",
+	description: "Potongan suasana resort, dari teras villa sampai api unggun.",
 	all: "Semua",
 	categories: {
 		villa: "Villa",
@@ -24,7 +25,12 @@ const copy = {
 	close: "Tutup",
 };
 const ui = getStrings(locale).actions;
-const lightboxItems = galleryItems.map((g) => ({ label: g.caption.id }));
+// Card image width: grid of 3 columns (2 under 901 px, 1 under 561 px, max 420 px)
+// inside a 1200 px container with 24 px padding and 32 px gaps; each card has
+// 8 px padding and a 1 px border per side (18 px total).
+const photoSizes =
+	"(min-width: 1200px) 345px, (min-width: 901px) calc((100vw - 112px) / 3 - 18px), (min-width: 561px) calc((100vw - 80px) / 2 - 18px), min(402px, calc(100vw - 66px))";
+const lightboxItems = galleryItems.map((g) => ({ label: g.caption.id, photo: g.photo }));
 ---
 
 <Base title={copy.title} description={copy.meta} locale={locale}>
@@ -46,8 +52,12 @@ const lightboxItems = galleryItems.map((g) => ({ label: g.caption.id }));
 			<div class="scrap-grid" data-grid>
 				{galleryItems.map((g, i) => (
 					<figure class="scrap-item reveal" data-category={g.category} data-index={i}>
-						<button type="button" class="scrap-btn" data-lightbox-open={i} aria-label={g.caption.id}>
-							<span class="scrap-photo">{g.label.id}</span>
+						<button type="button" class="scrap-btn" data-lightbox-open={i} aria-label={g.photo ? undefined : g.caption.id}>
+							{g.photo ? (
+								<Photo photo={g.photo} locale={locale} sizes={photoSizes} widths={[480, 960]} ratio="1 / 1" class="scrap-img" />
+							) : (
+								<span class="scrap-photo">{g.label?.id}</span>
+							)}
 						</button>
 						<figcaption>{g.caption.id}</figcaption>
 					</figure>
@@ -56,6 +66,7 @@ const lightboxItems = galleryItems.map((g) => ({ label: g.caption.id }));
 			<div class="lightbox-mount">
 				<Lightbox
 					items={lightboxItems}
+					locale={locale}
 					closeLabel={copy.close}
 					prevLabel={ui.previousPhoto}
 					nextLabel={ui.nextPhoto}
@@ -95,7 +106,10 @@ const lightboxItems = galleryItems.map((g) => ({ label: g.caption.id }));
 		padding-top: var(--section-pad);
 		padding-bottom: var(--section-pad);
 		background: var(--color-surface);
-		border-bottom: 1px solid var(--color-border);
+	}
+	/* The footer sits on the same tint as the gallery, so there is no seam between them. */
+	:global(:root) {
+		--footer-bg: var(--color-surface);
 	}
 	.filter-pills {
 		display: flex;
@@ -183,6 +197,9 @@ const lightboxItems = galleryItems.map((g) => ({ label: g.caption.id }));
 		color: var(--color-wood);
 		background: var(--color-surface);
 		border: 1px dashed var(--color-border);
+		border-radius: 2px;
+	}
+	.scrap-btn :global(.scrap-img) {
 		border-radius: 2px;
 	}
 	.scrap-item figcaption {

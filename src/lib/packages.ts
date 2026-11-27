@@ -23,5 +23,7 @@ export function packageCardProps(p: PackageRow, locale: Locale) {
 				: "Penawaran khusus",
 		priceUnit: cheapest ? cheapest.unit[locale] : undefined,
 		imageLabel: en ? `${name}: photo to follow` : `${name}: foto menyusul`,
+		photo: p.hero,
+		locale,
 	};
 }

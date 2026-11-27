@@ -2,13 +2,15 @@
 import Base from "./Base.astro";
 import CTASection from "../components/sections/CTASection.astro";
 import DatePicker from "../components/ui/DatePicker.astro";
+import Lightbox from "../components/ui/Lightbox.astro";
+import Photo from "../components/ui/Photo.astro";
 import PhotoPlaceholder from "../components/ui/PhotoPlaceholder.astro";
 import Select from "../components/ui/Select.astro";
 import StayCard from "../components/ui/StayCard.astro";
 import { stayDetailCta } from "../data/stay-cta";
 import { SITE } from "../lib/constants";
 import { formatIDR } from "../lib/format";
-import type { Locale } from "../lib/i18n";
+import { getStrings, type Locale } from "../lib/i18n";
 import type { StayCard as StayCardData, StayPage } from "../lib/stay";
 
 // Shared villa / glamping / aula layout (artifact "lookbook" detail):
@@ -25,6 +27,25 @@ interface Props {
 
 const { locale = "id", stay, related } = Astro.props;
 const en = locale === "en";
+const ui = getStrings(locale).actions;
+const gridItems = stay.gallery.slice(0, 3);
+const hasPhotos = stay.gallery.some((g) => g.photo);
+const hasMore = stay.gallery.length > 3 && hasPhotos;
+// Grid layout (see .d-gal): 1200 px container, 24 px padding, 12 px gaps.
+// >700 px: one 2fr tile + two 1fr tiles. <=700 px: hero full width, two halves.
+const heroSizes = "(max-width: 700px) calc(100vw - 48px), (min-width: 1200px) 760px, calc((100vw - 60px) * 2 / 3)";
+const tileSizes = "(max-width: 700px) calc((100vw - 60px) / 2), (min-width: 1200px) 380px, calc((100vw - 60px) / 3)";
+// Strip sits in .d-main: 7 of 12 columns above 960 px, full width below.
+const stripSizes = "(min-width: 1200px) 209px, (min-width: 961px) calc(19.44vw - 24px), (min-width: 601px) calc((100vw - 80px) / 3), calc((100vw - 64px) / 2)";
+const lightboxProps = {
+	items: stay.gallery,
+	locale,
+	stripFrom: 3,
+	stripSizes,
+	closeLabel: stay.labels.close,
+	prevLabel: ui.previousPhoto,
+	nextLabel: ui.nextPhoto,
+};
 const isAula = stay.segment === "aula";
 const cta = stayDetailCta(isAula ? "aula" : stay.kind, stay.name, locale);
 
@@ -85,8 +106,23 @@ const estimateLabel = (n: number) =>
 		</header>
 
 		<div class="d-gal reveal-load">
-			{stay.gallery.slice(0, 3).map((g) => (
-				<PhotoPlaceholder label={g.label} ratio="4 / 3" class="gal-item" />
+			{gridItems.map((g, i) => (
+				<div class="gal-cell">
+					{g.photo ? (
+						<button type="button" class="gal-open" data-lightbox-open={i} aria-haspopup="dialog">
+							<Photo
+								photo={g.photo}
+								locale={locale}
+								sizes={i === 0 ? heroSizes : tileSizes}
+								loading={i === 0 ? "eager" : "lazy"}
+								fetchpriority={i === 0 ? "high" : undefined}
+								class="gal-item"
+							/>
+						</button>
+					) : (
+						<PhotoPlaceholder label={g.label} ratio="4 / 3" class="gal-item" />
+					)}
+				</div>
 			))}
 		</div>
 
@@ -105,6 +141,15 @@ const estimateLabel = (n: number) =>
 						))}
 					</dl>
 				</section>
+
+				{hasMore ? (
+					<section class="d-block">
+						<h2>{stay.labels.gallery}</h2>
+						<Lightbox {...lightboxProps} />
+					</section>
+				) : hasPhotos ? (
+					<Lightbox {...lightboxProps} />
+				) : null}
 
 				{stay.amenities.length > 0 && (
 					<section class="d-block">
@@ -189,7 +234,7 @@ const estimateLabel = (n: number) =>
 			<h2>{stay.labels.related}</h2>
 			<div class="stay-grid">
 				{related.map((c) => (
-					<StayCard href={c.href} name={c.name} blurb={c.blurb} imageLabel={c.imageLabel} facts={c.facts} />
+					<StayCard href={c.href} name={c.name} blurb={c.blurb} imageLabel={c.imageLabel} photo={c.photo} locale={locale} facts={c.facts} />
 				))}
 			</div>
 		</section>
@@ -276,6 +321,15 @@ const estimateLabel = (n: number) =>
 		update();
 	}
 
+	// Grid photos open the lightbox (the Lightbox component listens on its strip).
+	document.querySelectorAll<HTMLElement>("[data-lightbox-open]").forEach((btn) => {
+		btn.addEventListener("click", () => {
+			document
+				.querySelector("[data-strip]")
+				?.dispatchEvent(new CustomEvent("lightbox-open", { detail: Number(btn.dataset.lightboxOpen) }));
+		});
+	});
+
 	// Mobile bar: shown while the price card is off-screen and the page
 	// hasn't reached "other stays" / the closing CTA yet.
 	const bar = document.querySelector<HTMLElement>("[data-mbar]");
@@ -338,13 +392,30 @@ const estimateLabel = (n: number) =>
 		grid-template-rows: repeat(2, clamp(150px, 18vw, 250px));
 		gap: 12px;
 	}
+	.gal-cell {
+		min-width: 0;
+		min-height: 0;
+	}
+	.gal-cell:first-child {
+		grid-row: 1 / span 2;
+	}
+	.gal-open {
+		display: block;
+		width: 100%;
+		height: 100%;
+		padding: 0;
+		border: 0;
+		background: none;
+		font: inherit;
+		cursor: zoom-in;
+	}
 	.d-gal :global(.gal-item) {
 		aspect-ratio: auto !important;
+		width: 100%;
 		height: 100%;
 		border-radius: var(--radius);
 	}
-	.d-gal :global(.gal-item:first-child) {
-		grid-row: 1 / span 2;
+	.gal-cell:first-child :global(.gal-item) {
 		border-radius: var(--radius-lg);
 	}
 	@media (max-width: 700px) {
@@ -352,7 +423,7 @@ const estimateLabel = (n: number) =>
 			grid-template-columns: 1fr 1fr;
 			grid-template-rows: clamp(220px, 60vw, 340px) 110px;
 		}
-		.d-gal :global(.gal-item:first-child) {
+		.gal-cell:first-child {
 			grid-column: 1 / -1;
 			grid-row: auto;
 		}
